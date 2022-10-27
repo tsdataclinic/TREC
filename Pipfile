@@ -4,6 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+pandas = "*"
+geopandas = "*"
+cenpy = "*"
+osmnx = "*"
 
 [dev-packages]
 
