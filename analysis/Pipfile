@@ -9,6 +9,7 @@ geopandas = "*"
 cenpy = "*"
 osmnx = "*"
 jupyterlab = "*"
+cookiecutter = "*"
 
 [dev-packages]
 
