@@ -154,3 +154,8 @@ dmypy.json
 /app/yarn-error.log*
 
 #######
+
+# Data and Cache
+analysis/cache/
+analysis/data/
+analysis/notebooks/cache/
