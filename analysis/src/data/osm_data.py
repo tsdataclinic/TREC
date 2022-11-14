@@ -59,6 +59,7 @@ def main():
     
     opts = parser.parse_args()
     G = get_walk_graph(opts.extent)
+    print("Graph created. Writing it") 
     nx.write_gpickle(G, opts.out)
     
 if __name__ == "__main__":
