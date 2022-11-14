@@ -10,6 +10,11 @@ cenpy = "*"
 osmnx = "*"
 jupyterlab = "*"
 cookiecutter = "*"
+openpyxl = "*"
+plotly = "*"
+ipywidgets = "*"
+kaleido = "*"
+folium = "*"
 
 [dev-packages]
 
