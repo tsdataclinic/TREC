@@ -10,19 +10,11 @@ cenpy = "*"
 osmnx = "*"
 jupyterlab = "*"
 cookiecutter = "*"
-
-openpyxl = "*"
-plotly = "*"
-ipywidgets = "*"
-kaleido = "*"
-folium = "*"
-
 boto3 = "*"
 descartes = "*"
 scikit-learn = "*"
 peartree = "*"
 pygeos = "*"
-
 
 [dev-packages]
 
