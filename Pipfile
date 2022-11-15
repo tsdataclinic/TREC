@@ -10,6 +10,10 @@ cenpy = "*"
 osmnx = "*"
 jupyterlab = "*"
 cookiecutter = "*"
+boto3 = "*"
+descartes = "*"
+scikit-learn = "*"
+peartree = "*"
 
 [dev-packages]
 
