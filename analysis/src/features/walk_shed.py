@@ -3,11 +3,32 @@ import geopandas as gpd
 import networkx as nx
 import osmnx as ox
 from descartes import PolygonPatch
+import argparse
 from shapely.geometry import Point, LineString, Polygon, MultiPolygon
 import sys
 from shapely.ops import unary_union
 ox.config(log_console=True)
 ox.__version__
+
+
+def points_to_nodes(points,graph):
+    """
+    Mapping each point to the nearest node on a graph to reduce the number of walksheds to calculate.
+    
+    Parameters
+    ----------
+    points: GeoDataFrame
+        Set of points for which the walkshed needs to be computed
+    graph: NX graph
+        A NX graph object of the walkgraph
+    Returns
+    ----------
+    GeoDataFrame
+        For each row in points, the osmid of its nearest node
+    """
+    nodes = ox.graph_to_gdfs(graph,nodes=True,edges=False).reset_index()
+    nearest_nodes = points.sjoin_nearest(nodes,how='left')
+    return nearest_nodes
 
 
 def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
@@ -38,25 +59,27 @@ def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
     for u, v, k, data in graph.edges(data=True, keys=True):
         data['time'] = data['length'] / meters_per_minute
     
-    gdf_nodes = ox.graph_to_gdfs(graph, edges=False)
+    nearest_nodes = points_to_nodes(points,graph)
+    unique_nodes = nearest_nodes.osmid.unique()
     isochrone_polys = []
-    for idx, h in points.iterrows():
-        node = ox.distance.nearest_nodes(graph, h.geometry.x, h.geometry.y)
-        subgraph = nx.ego_graph(graph, node, radius=trip_time, distance='time')
+    for n in unique_nodes:
+        subgraph = nx.ego_graph(graph, n, radius=trip_time, distance='time')
         node_points = [Point((data['x'], data['y'])) for node, data in subgraph.nodes(data=True)]
         bounding_poly = gpd.GeoSeries(node_points).unary_union.convex_hull
         isochrone_polys.append(bounding_poly) 
         
     walksheds = gpd.GeoDataFrame(geometry=isochrone_polys)
+    walksheds['osmid'] = unique_nodes
     
     if combine==True:
         walksheds['to_combine'] = 1
         combined_walkshed = walksheds.dissolve(by='to_combine')
         return combined_walkshed
     else:
-        points['walkshed_geometry'] = isochrone_polys
-        points = hr_hosp_gdf.drop(columns=['geometry']).rename(columns={'walkshed_geometry':'geometry'}).set_geometry(col='geometry')
-        return points
+        nearest_nodes = nearest_nodes.drop(columns=['geometry'])
+        point_walkshed = nearest_nodes.merge(walksheds,how='left', on='osmid')
+        point_walkshed = point_walkshed.set_geometry(col='geometry')
+        return point_walkshed
     
 
 def main():
