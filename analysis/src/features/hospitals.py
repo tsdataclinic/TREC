@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 import networkx as nx
 import osmnx as ox
+import argparse
 from shapely.geometry import Point, LineString, Polygon, MultiLineString
 import sys
 sys.path.append('../')
@@ -50,4 +51,5 @@ def main():
     
 if __name__ == "__main__":
     main()
-    
+
+# python3 features/hospitals.py --poi='/home/data/points_of_interest/NationalFile_20210825.txt' --extent='/home/data/census/nyc/geo/tracts.geojson' --out='/home/data/results/hospitals/hospitals_nyc.geojson'

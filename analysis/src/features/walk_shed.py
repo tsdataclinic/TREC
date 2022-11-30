@@ -7,6 +7,7 @@ import argparse
 from shapely.geometry import Point, LineString, Polygon, MultiPolygon
 import sys
 from shapely.ops import unary_union
+import numpy as np
 ox.config(log_console=True)
 ox.__version__
 
@@ -26,6 +27,11 @@ def points_to_nodes(points,graph):
     GeoDataFrame
         For each row in points, the osmid of its nearest node
     """
+    if 'index_left' in points.columns:
+        points = points.drop(columns=['index_left'])
+    if 'index_right' in points.columns:
+        points = points.drop(columns=['index_right'])
+        
     nodes = ox.graph_to_gdfs(graph,nodes=True,edges=False).reset_index()
     nearest_nodes = points.sjoin_nearest(nodes,how='left')
     return nearest_nodes
@@ -95,8 +101,12 @@ def main():
     
     G = nx.read_gpickle(opts.graph)
     points = gpd.read_file(opts.points)
-    gdf = create_walk_shed(points=points, graph=G, speed=opts.speed, trip_time=opts.time, combine=opts.combine)
+    t = float(opts.time)
+    
+    gdf = create_walk_shed(points=points, graph=G, speed=opts.speed, trip_time=t, combine=opts.combine)
     gdf.to_file(opts.out,driver='GeoJSON')
     
 if __name__ == "__main__":
     main()
+
+# python3 features/walk_shed.py --points='/home/data/results/hospitals/hospitals_hampton_roads.geojson' --graph='/home/data/osm/nyc/NYC_walk_graph.gpickle' --out='/home/data/osm/nyc/walksheds/hospitals_combined_10m.geojson' --time=10 --combine=True
