@@ -27,8 +27,10 @@ def tag_points_to_polygon(points, point_id, polygons, polygon_id):
 
     points = points.to_crs("EPSG:4326") # WGS 84
     polygons = polygons.to_crs("EPSG:4326")
-    
-    return points.overlay(polygons)[[point_id, polygon_id]]
+    cols = list(points.columns)
+    cols.append(polygon_id)
+    point_crosswalk = points.sjoin(polygons,how='left')[cols]
+    return point_crosswalk
 
 def process_NRI(NRI_data):
     """
@@ -69,10 +71,10 @@ def create_NRI_points(NRI_data, polygons, points, quantile = 4, point_id = "stop
 
     NRI_processed = process_NRI(NRI_data)
     point_crosswalk = tag_points_to_polygon(points, point_id, polygons, polygon_id)
-    merged = NRI_processed.merge(point_crosswalk, left_on = NRI_tract_id, right_on = polygon_id) 
+    merged = point_crosswalk.merge(NRI_processed, left_on = NRI_tract_id, right_on = polygon_id,how='left') 
     build_cols = [col for col in merged.columns if col[-4:] == "EALB"]
     for col in build_cols:
-        merged[col[0:4] + "_damage_quantile"] = pd.qcut(merged[col], quantile, duplicates = "drop")
+        merged[col[0:4] + "_damage_quantile"] = pd.qcut(merged[col], quantile, duplicates = "drop",labels=False)
     
     return merged
 
