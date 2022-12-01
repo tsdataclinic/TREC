@@ -104,7 +104,7 @@ def get_tract_path(feed_path):
     else:
         raise Exception("Error: Please add tract geojson paths to get_tract_path")
         
-def process_feeds(base_paths=BASE_PATHS):
+def process_feeds(base_paths=BASE_PATHS, city_list=CITY_LIST):
     """
     Takes list of paths containing (potentially) multiple GTFS feed folders and, for each such folder, applies make_stops() and concatenates the result into full table
     
@@ -122,7 +122,7 @@ def process_feeds(base_paths=BASE_PATHS):
     idx = 0
     for path in base_paths:
         feeds = feeds + [path + feed for feed in os.listdir(path) if os.path.isdir(path + feed)]
-        cities = cities + [CITY_LIST[idx] for feed in os.listdir(path) if os.path.isdir(path + feed)]
+        cities = cities + [city_list[idx] for feed in os.listdir(path) if os.path.isdir(path + feed)]
         idx = idx + 1
     
     feed_names = [f.split('/')[-1] for f in feeds]
