@@ -101,9 +101,9 @@ def main():
     
     G = nx.read_gpickle(opts.graph)
     points = gpd.read_file(opts.points)
-    t = float(opts.time)
-    
-    gdf = create_walk_shed(points=points, graph=G, speed=opts.speed, trip_time=t, combine=opts.combine)
+
+    gdf = create_walk_shed(points=points, graph=G, speed=opts.speed, 
+                           trip_time=float(opts.time), combine=bool(opts.combine))
     gdf.to_file(opts.out,driver='GeoJSON')
     
 if __name__ == "__main__":
