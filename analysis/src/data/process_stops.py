@@ -3,16 +3,16 @@ import geopandas as geopd
 import os
 import argparse
 
-ROUTE_DICT = {0 : "Tram",
-1 : "Subway",
-2 : "Rail",
-3 : "Bus",
-4 : "Ferry",
-5 : "Cable tram",
-6 : "Aerial lift",
-7 : "Funicular",
-11: "Trolleybus",
-12: "Monorail"}
+ROUTE_DICT = {"0" : "Tram",
+"1" : "Subway",
+"2" : "Rail",
+"3" : "Bus",
+"4" : "Ferry",
+"5" : "Cable tram",
+"6" : "Aerial lift",
+"7" : "Funicular",
+"11": "Trolleybus",
+"12": "Monorail"}
 
 BASE_PATHS = ["/home/data/transit_feed_data/mta_feeds/", "/home/data/transit_feed_data/hrt_feeds/"]
 
@@ -36,28 +36,31 @@ def make_stops(folder_path):
     stops = pd.read_csv(folder_path + "/stops.txt", dtype = "str")
     trips = pd.read_csv(folder_path + "/trips.txt", dtype = "str")
     stop_times = pd.read_csv(folder_path + "/stop_times.txt", dtype = "str")
-    
+
     # Get route types
     routes["route_id"] = routes["route_id"].astype(str)
     routes_types = routes[["route_id", "route_type"]].drop_duplicates()
-    routes_types =routes_types.replace({"route_type" : ROUTE_DICT})
+    routes_types = routes_types.replace({"route_type" : ROUTE_DICT})
     
     # Get most common services for each line
-    mode_trips = trips[["route_id", "service_id"]].groupby(["route_id"]).agg(pd.Series.mode).reset_index()
-    trips_to_include = mode_trips.merge(trips, on = "route_id").query("service_id_y.isin(service_id_x)")[["route_id", "trip_id"]]
+    mode_trips = trips.groupby(['route_id','direction_id','shape_id']).count().reset_index().sort_values(
+    ['route_id','direction_id','service_id'],ascending=False).drop_duplicates(
+    subset=['route_id','direction_id'])[['route_id','direction_id','shape_id']]
+    trips_to_include = mode_trips.merge(trips, on = "route_id")[["route_id", "trip_id"]]
     
     # Final df
     trips_with_stops = trips_to_include.merge(stop_times)
     stops_with_trips = trips_with_stops.merge(stops).merge(routes_types)[["route_id", "stop_id", "route_type", "stop_name", "stop_lat", "stop_lon"]].drop_duplicates().reset_index(drop = True)
-    
+
     # Add geometry
     stops_with_trips["geometry"] = geopd.points_from_xy(stops_with_trips.stop_lon, stops_with_trips.stop_lat, crs="EPSG:4326")
     stops_with_trips = geopd.GeoDataFrame(stops_with_trips, geometry = "geometry")
-    
+
     # Routes as strings
     stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
     stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates().reset_index().drop("index", axis = 1)
     stops_with_trips["feed_name"] = feed_name
+    
     return stops_with_trips
 
 def tag_with_tracts(stops, tracts_path):
@@ -145,4 +148,4 @@ def main():
 if __name__ == "__main__":
     main()
     
-# python3 -m analysis.src.data.process_stops --output_path "/home/data/results/GTFS_stops_processed.geojson"
+# python3 -m analysis.src.data.process_stops --output_path "/home/data/results/"
