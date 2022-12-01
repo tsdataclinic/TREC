@@ -1,4 +1,6 @@
-import areal_interpolation as areal
+import sys
+sys.path.append('../')
+from src.features import areal_interpolation as areal
 import geopandas as geopd
 import pandas as pd
 import argparse
