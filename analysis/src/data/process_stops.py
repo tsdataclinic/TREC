@@ -15,6 +15,7 @@ ROUTE_DICT = {'0' : "Tram",
 '12': "Monorail"}
 
 BASE_PATHS = ["/home/data/transit_feed_data/mta_feeds/", "/home/data/transit_feed_data/hrt_feeds/"]
+CITY_LIST = ['NYC', 'Hampton Roads']
 
 def make_stops(folder_path):
     """
@@ -117,9 +118,15 @@ def process_feeds(base_paths=BASE_PATHS):
     """
     
     feeds = []
+    cities = []
+    idx = 0
     for path in base_paths:
         feeds = feeds + [path + feed for feed in os.listdir(path) if os.path.isdir(path + feed)]
-        
+        cities = cities + [CITY_LIST[idx] for feed in os.listdir(path) if os.path.isdir(path + feed)]
+        idx = idx + 1
+    
+    feed_names = [f.split('/')[-1] for f in feeds]
+    feed_city_mapping = pd.DataFrame({'feed_name':feed_names,'city':cities})
     stops_out = geopd.GeoDataFrame()
     
     for feed in feeds:
@@ -131,6 +138,7 @@ def process_feeds(base_paths=BASE_PATHS):
         stops_out = pd.concat([stops_out, stops])
     
     stops_out = stops_out.reset_index(drop=True)
+    stops_out = stops_out.merge(feed_city_mapping, how='left', on='feed_name')
     return stops_out
 
 def main():
