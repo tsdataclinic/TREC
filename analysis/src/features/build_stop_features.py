@@ -142,7 +142,7 @@ def get_stops_features():
     stops = add_fs_flood_risk(stops)
     stops = add_NRI_flood_risk(stops)
     stops = add_hospital_access(stops)
-    # stops = add_jobs_feature(stops)
+    stops = add_jobs_feature(stops)
     
     return stops
     

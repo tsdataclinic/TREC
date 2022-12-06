@@ -110,3 +110,7 @@ if __name__ == "__main__":
     main()
 
 # python3 features/walk_shed.py --points='/home/data/results/hospitals/hospitals_hampton_roads.geojson' --graph='/home/data/osm/nyc/NYC_walk_graph.gpickle' --out='/home/data/osm/nyc/walksheds/hospitals_combined_10m.geojson' --time=10 --combine=True
+
+# python3 features/walk_shed.py --points='/home/data/results/stop_features/all_nyc_stops.geojson' --graph='/home/data/osm/nyc/NYC_walk_graph.gpickle' --out='/home/data/osm/nyc/walksheds/transit_walkshed.geojson' --time=15 --combine=False
+
+# python3 features/walk_shed.py --points='/home/data/results/stop_features/all_hr_stops.geojson' --graph='/home/data/osm/hampton_roads/HR_walk_graph.gpickle' --out='/home/data/osm/hampton_roads/walksheds/transit_walkshed.geojson' --time=15 --combine=False
