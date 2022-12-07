@@ -93,9 +93,9 @@ def main():
     parser.add_argument("--points", required=True)
     parser.add_argument("--graph",  required=True)
     parser.add_argument("--out",  required=True)
-    parser.add_argument("--speed",  required=False, default=4.5)
-    parser.add_argument("--time",  required=False, default=15)
-    parser.add_argument("--combine",  required=False, default=False)
+    parser.add_argument("--speed",  required=False, default=4.5, type=float)
+    parser.add_argument("--time",  required=False, default=15, type=float)
+    parser.add_argument("--combine",  required=False, default=False, type=lambda x: (str(x).lower() == 'true'))
     
     opts = parser.parse_args()
     
@@ -103,7 +103,7 @@ def main():
     points = gpd.read_file(opts.points)
 
     gdf = create_walk_shed(points=points, graph=G, speed=opts.speed, 
-                           trip_time=float(opts.time), combine=bool(opts.combine))
+                           trip_time=opts.time, combine=opts.combine)
     gdf.to_file(opts.out,driver='GeoJSON')
     
 if __name__ == "__main__":

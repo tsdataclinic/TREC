@@ -56,10 +56,14 @@ def make_stops(folder_path):
     # Add geometry
     stops_with_trips["geometry"] = geopd.points_from_xy(stops_with_trips.stop_lon, stops_with_trips.stop_lat, crs="EPSG:4326")
     stops_with_trips = geopd.GeoDataFrame(stops_with_trips, geometry = "geometry")
-
-    # Routes as strings
-    stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
-    stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates().reset_index().drop("index", axis = 1)
+    
+    # Routes as list
+    routes_list = stops_with_trips.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
+    stops_with_trips = stops_with_trips.merge(routes_list,how='left',on='stop_id')
+    stops_with_trips.routes_serviced = stops_with_trips.routes_serviced.apply(str)
+    
+    # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
+    stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
     stops_with_trips["feed_name"] = feed_name
     
     return stops_with_trips

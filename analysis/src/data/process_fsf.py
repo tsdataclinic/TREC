@@ -60,7 +60,9 @@ def process_fsf(path='/home/data/national_risk_index/fsf_flood_tract_summary.csv
     fsf = fsf.merge(fsf_sum[['GEOID','risk_score']], how='left', on='GEOID')
     
     fsf["pct_moderate_plus"] = fsf["pct_moderate"] + fsf["pct_moderate"] + fsf["pct_severe"] + fsf["pct_extreme"]
-        
-    fsf["risk_category"] = pd.cut(fsf["pct_moderate_plus"], bins = [-1, 0, .15, 1], labels = ["Low", "Medium", "High"]).astype(str)
+    fsf["pct_moderate_plus"] = fsf["pct_moderate_plus"].fillna(0)
+    fsf["risk_category"] = pd.cut(fsf["pct_moderate_plus"], bins = [-1, 0, .15, 1], labels = [0, 1, 2])
+    fsf["risk_category"] = fsf.risk_category.cat.codes
+    
     
     return fsf
