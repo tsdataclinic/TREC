@@ -4,9 +4,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Lato', 'sans-serif']
+        sans: ["Lato", "sans-serif"],
       },
-    }
+      colors: {
+        "app-header": "#33424e",
+      },
+    },
   },
   plugins: [],
-}
+};

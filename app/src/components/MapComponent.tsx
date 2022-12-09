@@ -1,7 +1,7 @@
 import mapboxgl from "mapbox-gl";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Layer, RemoteLayer } from "../App";
+import { Layer, RemoteLayer } from "./MainPage";
 import { createRoot } from "react-dom/client";
 import Tooltip from "./Tooltip";
 import { SLConfigType } from "../utils/sourceLayerConfigs";
@@ -139,4 +139,3 @@ function MapComponent({
 }
 
 export default MapComponent;
-

@@ -1,4 +1,4 @@
-import { Layer } from "../App";
+import { Layer } from "./MainPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 type Props = {
