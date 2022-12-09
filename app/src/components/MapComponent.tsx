@@ -10,9 +10,10 @@ const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 type MapProps = {
   layers: Record<string, Layer>,
   remoteLayers: Array<RemoteLayer>;
+  sourceLayerConfigs: Record<string, any>
 }
 
-function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
+function MapComponent({ remoteLayers, layers, sourceLayerConfigs } : MapProps) : JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
   const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15}));
   let [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -20,10 +21,9 @@ function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
   useEffect(() => {
     if (!map.current) {
       map.current = new mapboxgl.Map({
-        accessToken: MAPBOX_KEY,
+        accessToken: '',
         container: 'map',
-        style: 'mapbox://styles/mapbox/basic-v8',
-        // style: 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json',
+        style: 'mapbox://styles/mapbox/light-v11',
         center: [-74.01, 40.72],
         zoom: 11,
         bearing: 0,
@@ -33,18 +33,17 @@ function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
       map.current.on('load', () => {
         if (!map.current) return;
         setIsMapLoaded(true);
-        // load svg icons
-        // map.current.
+        // load svg icons if needed
       })
       
       map.current.on('click', e => {
         if (!map.current) {
           return;
         }
+        const layerNames = Object.values(layers).map(l => l.layerName);
         const features = map.current.queryRenderedFeatures(e.point)
-          .filter(f => f.source !== 'mapbox'); // TODO - 
+          .filter(f => layerNames.includes(f.source));
         if (features.length > 0) {
-
           const feature = features[0];
 
           const tooltipNode = document.createElement('div');
@@ -54,12 +53,9 @@ function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
 
           tooltipRef.current.setLngLat(e.lngLat).setDOMContent(tooltipNode).addTo(map.current);
         }
-        // else {
-        //   tooltipRef.current.remove();
-        // }
       })
     }
-  }, []);
+  }, [layers]);
 
   useEffect(() => {
     if (isMapLoaded) {
@@ -76,7 +72,7 @@ function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
             });
           }
           // add layers
-          layer.sourceLayerConfig.forEach((slConfig: SLConfigType) => {
+          sourceLayerConfigs[layer.layerName].forEach((slConfig: SLConfigType) => {
             if (!map.current) return;
             if (!map.current.getLayer(slConfig.layerId)) {
 
@@ -100,7 +96,7 @@ function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
           });
         } else {
           // remove layers
-          layer.sourceLayerConfig.forEach((slConfig: SLConfigType) => {
+          sourceLayerConfigs[layer.layerName].forEach((slConfig: SLConfigType) => {
             if (map.current?.getLayer(slConfig.layerId)) {
               map.current?.removeLayer(slConfig.layerId);
             }
@@ -112,7 +108,7 @@ function MapComponent({ remoteLayers, layers } : MapProps) : JSX.Element {
         }
       });
     }
-  }, [isMapLoaded, layers, remoteLayers])
+  }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs])
 
   return (
     <div id="map" className='!absolute -z-50 h-screen top-0 bottom-0 left-0 right-0'/>
