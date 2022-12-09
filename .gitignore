@@ -154,3 +154,5 @@ dmypy.json
 /app/yarn-error.log*
 
 #######
+/app/public/results/hospitals.geojson
+/app/public/results/stop_features.geojson
