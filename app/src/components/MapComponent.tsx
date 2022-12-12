@@ -12,13 +12,9 @@ type MapProps = {
   layers: Record<string, Layer>;
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
-};
+}
 
-function MapComponent({
-  remoteLayers,
-  layers,
-  sourceLayerConfigs,
-}: MapProps): JSX.Element {
+function MapComponent({ remoteLayers, layers, sourceLayerConfigs } : MapProps) : JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
   const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
   let [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -70,6 +66,18 @@ function MapComponent({
     if (isMapLoaded) {
       Object.values(layers).forEach((layer: Layer) => {
         if (!map.current) return;
+        // remove layers
+        sourceLayerConfigs[layer.layerName].forEach(
+          (slConfig: SLConfigType) => {
+            if (map.current?.getLayer(slConfig.layerId)) {
+              map.current?.removeLayer(slConfig.layerId);
+            }
+          }
+        );
+        // remove source
+        if (map.current?.getSource(layer.layerName)) {
+          map.current.removeSource(layer.layerName);
+        }
         if (layer.isVisible) {
           // add source if it doesn't exist
           if (!map.current?.getSource(layer.layerName)) {
@@ -109,22 +117,18 @@ function MapComponent({
                     );
                   }
                 });
+                if (slConfig.filters) {
+                  slConfig.filters.forEach(filter => {
+                    if (map.current) {
+                      map.current.setFilter(slConfig.layerId, filter)
+                    }
+                  })
+                }
               }
             }
           );
         } else {
-          // remove layers
-          sourceLayerConfigs[layer.layerName].forEach(
-            (slConfig: SLConfigType) => {
-              if (map.current?.getLayer(slConfig.layerId)) {
-                map.current?.removeLayer(slConfig.layerId);
-              }
-            }
-          );
-          // remove source
-          if (map.current?.getSource(layer.layerName)) {
-            map.current.removeSource(layer.layerName);
-          }
+          
         }
       });
     }

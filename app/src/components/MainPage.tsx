@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ContextPane from "./ContextPane";
 import Filter from "./Filter";
 import MapComponent from "./MapComponent";
@@ -41,12 +41,12 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
 export default function MainPage(): JSX.Element {
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
-      "risk_score",
+      // "risk_score",
       "risk_category",
       "access_to_hospital",
-      "route_type",
-      "routes_serviced",
-      "jobs",
+      // "route_type",
+      // "routes_serviced",
+      // "jobs",
       "jobs_cat",
     ])
   );
@@ -54,11 +54,21 @@ export default function MainPage(): JSX.Element {
     "risk_category",
     "access_to_hospital",
   ]);
+  const [filters, setFilters] = useState<Record<string, any>>({
+    "risk_category": 0,
+    "access_to_hospital": 0,
+  });
+
+  // const [selectedRoutes, setSelectedRoutes] = useState();
   // const [selectedRanges, setSelectedRanges] = useState([[], []])
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers);
   // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
-  let sourceLayerConfigs = useSourceLayerConfigs(); //(layers, remoteLayers, remoteLayerPropertyValues);
+  let sourceLayerConfigs = useSourceLayerConfigs(
+    [['all',
+      ...Object.keys(filters).map((f: any) => ['>=', ['get', f], isNaN(filters[f]) ? 0 : filters[f]])
+    ]]
+  );
 
   const updateLayer = useCallback(
     (newLayer: Layer) => {
@@ -70,11 +80,11 @@ export default function MainPage(): JSX.Element {
   );
 
   return (
-    <main className="h-full relative flex">
+    <main className="h-full flex">
       <ContextPane
         layers={layers}
         updateLayer={updateLayer}
-        availableProperties={availableProperties}
+      availableProperties={availableProperties}
         selectedProperties={selectedProperties}
         setSelectedProperties={setSelectedProperties}
       />
@@ -83,7 +93,12 @@ export default function MainPage(): JSX.Element {
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
       />
-      <Filter selectedProperties={selectedProperties} />
+      <Filter
+        setFilter={(value: Record<string, any>) => setFilters({
+          ...filters,
+          ...value
+        })}
+        selectedProperties={selectedProperties} />
     </main>
   );
 }

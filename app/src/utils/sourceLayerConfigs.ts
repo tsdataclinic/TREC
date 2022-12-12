@@ -19,12 +19,14 @@ export type SLConfigType = {
     layerType: "circle"|"symbol"|"line"|"fill";
     layoutProperties: Array<Record<string, any>>,
     paintProperties: Array<Record<string, any>>,
+    filters: Array<any>
 }
 
 export function useSourceLayerConfigs(
     // layers: Record<string, Layer>,
     // remoteLayers: RemoteLayer[],
     // remoteLayerPropertyValues: Record<any, any>
+    filters: Array<any>
 ) {
     let output = useMemo(() => {
       let output: Record<string, any> = {};
@@ -56,9 +58,12 @@ export function useSourceLayerConfigs(
                 layoutProperties: [
                 ],
                 paintProperties: [
-                    { name: 'circle-opacity', value: .66},
+                    // { name: 'circle-opacity', value: .66},
                     { name: 'circle-radius', value: {
                         stops: [
+                            // [1, 2],
+                            // [5, 3],
+                            // [15, 15],
                             [1, .8],
                             [5, 1.12],
                             [15, 5],
@@ -70,21 +75,22 @@ export function useSourceLayerConfigs(
                         ['get', 'risk_category'],
                         0, 
                             ['case',
-                            ['==', ['get','access_to_hospital'], 'Low'], `${COLORS.lightblue}`,
-                            ['==', ['get','access_to_hospital'], 'Medium'], `${COLORS.mediumblue}`,
-                            `${COLORS.darkblue}`],
+                            ['==', ['get','access_to_hospital'], 0], `${COLORS.lightgreen}`,
+                            ['==', ['get','access_to_hospital'], 1], `${COLORS.lightblue}`,
+                            `${COLORS.lightred}`],
                         1, 
                         ['case',
-                            ['==', ['get','access_to_hospital'], 'Low'], `${COLORS.lightgreen}`,
-                            ['==', ['get','access_to_hospital'], 'Medium'], `${COLORS.mediumgreen}`,
-                            `${COLORS.darkgreen}`],
+                            ['==', ['get','access_to_hospital'], 0], `${COLORS.mediumgreen}`,
+                            ['==', ['get','access_to_hospital'], 1], `${COLORS.mediumblue}`,
+                            `${COLORS.mediumred}`],
                         2, 
                         ['case',
-                            ['==', ['get','access_to_hospital'], 'Low'], `${COLORS.lightred}`,
-                            ['==', ['get','access_to_hospital'], 'Medium'], `${COLORS.mediumred}`,
+                            ['==', ['get','access_to_hospital'], 0], `${COLORS.darkgreen}`,
+                            ['==', ['get','access_to_hospital'], 1], `${COLORS.darkblue}`,
                             `${COLORS.darkred}`],
                     ]},
-                ]
+                ],
+                filters
             }
         ],
         'hospitals': [
@@ -103,6 +109,6 @@ export function useSourceLayerConfigs(
         ],
       }
       return output;
-    }, [])
+    }, [filters])
     return output;
   }
