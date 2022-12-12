@@ -38,7 +38,13 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   },
 };
 
+const AVAILABLE_REGIONS : Record<string, [number, number]> = {
+  "New York City": [-73.95, 40.72],
+  "Hampton Roads": [-76.39, 36.96],
+}
+
 export default function MainPage(): JSX.Element {
+  const [selectedRegion, setSelectedRegion] = useState<[number, number]>(AVAILABLE_REGIONS['New York City']);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       // "risk_score",
@@ -84,13 +90,16 @@ export default function MainPage(): JSX.Element {
   return (
     <main className="h-full flex">
       <ContextPane
+        regions={AVAILABLE_REGIONS}
+        setSelectedRegion={setSelectedRegion}
         layers={layers}
         updateLayer={updateLayer}
-      availableProperties={availableProperties}
+        availableProperties={availableProperties}
         selectedProperties={selectedProperties}
         setSelectedProperties={setSelectedProperties}
       />
       <MapComponent
+        center={selectedRegion}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}

@@ -8,6 +8,8 @@ type Props = {
   selectedProperties: Array<string>;
   layers: Record<string, Layer>;
   updateLayer: (layer: Layer) => void;
+  regions: Record<string, [number, number]>;
+  setSelectedRegion: React.Dispatch<React.SetStateAction<[number, number]>>;
 };
 
 function ContextPane({
@@ -16,6 +18,8 @@ function ContextPane({
   availableProperties,
   selectedProperties,
   setSelectedProperties,
+  regions,
+  setSelectedRegion
 }: Props): JSX.Element {
   return (
     <div
@@ -24,9 +28,14 @@ function ContextPane({
     >
       {/* TODO - move map to centroid of selected area on select */}
       <div className="p-4 border-b border-b-slate-400">
-        <select className="text-2xl">
-          <option>New York City area</option>
-          <option>Hampton Roads area</option>
+        <select 
+          onChange={(e) => {
+            setSelectedRegion(regions[e.target.value])
+          }}
+          className="text-2xl">
+          {
+            Object.keys(regions).map(r => <option value={r}>{r}</option>)
+          }
         </select>
       </div>
 
@@ -86,7 +95,6 @@ function ContextPane({
               placeholder={"Select a field..."}
               defaultValue={selectedProperties[1]}
             >
-              <option></option>
               {Array.from(availableProperties).map((p) => (
                 <option selected={p === selectedProperties[1]}>{p}</option>
               ))}

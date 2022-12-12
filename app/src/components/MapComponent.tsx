@@ -12,9 +12,10 @@ type MapProps = {
   layers: Record<string, Layer>;
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
+  center: [number, number];
 }
 
-function MapComponent({ remoteLayers, layers, sourceLayerConfigs } : MapProps) : JSX.Element {
+function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : MapProps) : JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
   const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
   let [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -25,10 +26,11 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs } : MapProps) :
         accessToken: MAPBOX_KEY,
         container: "map",
         style: "mapbox://styles/mapbox/light-v11",
-        center: [-73.95, 40.72],
-        zoom: 11,
+        center: center, // [-73.95, 40.72],
+        zoom: 10,
         bearing: 0,
         pitch: 0,
+        pitchWithRotate: false,
       });
 
       map.current.on("load", () => {
@@ -60,7 +62,14 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs } : MapProps) :
         }
       });
     }
-  }, [layers]);
+  }, [center, layers]);
+
+  useEffect(() => {
+    if (map.current) {
+      map.current.setCenter(center);
+      map.current.setZoom(10);
+    }
+  }, [center])
 
   useEffect(() => {
     if (isMapLoaded) {
@@ -127,8 +136,6 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs } : MapProps) :
               }
             }
           );
-        } else {
-          
         }
       });
     }
