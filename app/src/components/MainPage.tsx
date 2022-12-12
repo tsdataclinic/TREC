@@ -105,6 +105,7 @@ export default function MainPage(): JSX.Element {
         sourceLayerConfigs={sourceLayerConfigs}
       />
       <Filter
+        filters={filters}
         setFilter={(value: Record<string, any>) => setFilters({
           ...filters,
           ...value
