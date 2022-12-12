@@ -70,7 +70,7 @@ export default function MainPage(): JSX.Element {
   );
 
   return (
-    <main>
+    <main className="h-full relative">
       <ContextPane
         layers={layers}
         updateLayer={updateLayer}

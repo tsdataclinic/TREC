@@ -4,7 +4,7 @@ import MainPage from "./components/MainPage";
 
 function App() {
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <Header />
       <Routes>
         <Route path="/" element={<MainPage />} />

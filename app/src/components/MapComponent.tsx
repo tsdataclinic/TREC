@@ -131,10 +131,7 @@ function MapComponent({
   }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs]);
 
   return (
-    <div
-      id="map"
-      className="!absolute -z-50 h-screen top-0 bottom-0 left-0 right-0"
-    />
+    <div id="map" className="-z-50 !absolute top-0 bottom-0 left-0 right-0" />
   );
 }
 
