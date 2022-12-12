@@ -56,8 +56,9 @@ function ContextPane({
 
         <div className="flex flex-col space-y-2">
           <label>
-            Field 1:
+            <div><b>Climate Risk:</b></div>
             <select
+              disabled={true}
               className="ml-2"
               onChange={(e) =>
                 setSelectedProperties([e.target.value, selectedProperties[1]])
@@ -72,7 +73,7 @@ function ContextPane({
             </select>
           </label>
           <label>
-            Field 2:
+            <div><b>Transit Destination:</b></div>
             <select
               className="ml-2"
               onChange={(e) =>
