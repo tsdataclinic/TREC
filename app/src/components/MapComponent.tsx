@@ -130,7 +130,7 @@ function MapComponent({
     }
   }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs]);
 
-  return <div id="map" className="-z-50 h-full w-full" />;
+  return <div id="map" className="h-full w-full" />;
 }
 
 export default MapComponent;
