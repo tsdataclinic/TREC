@@ -29,7 +29,7 @@ function MapComponent({
         accessToken: MAPBOX_KEY,
         container: "map",
         style: "mapbox://styles/mapbox/light-v11",
-        center: [-74.01, 40.72],
+        center: [-73.95, 40.72],
         zoom: 11,
         bearing: 0,
         pitch: 0,
