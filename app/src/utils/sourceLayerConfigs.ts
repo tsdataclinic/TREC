@@ -26,6 +26,7 @@ export function useSourceLayerConfigs(
     // layers: Record<string, Layer>,
     // remoteLayers: RemoteLayer[],
     // remoteLayerPropertyValues: Record<any, any>
+    selectedProperties: Array<string>,
     filters: Array<any>
 ) {
     let output = useMemo(() => {
@@ -72,21 +73,21 @@ export function useSourceLayerConfigs(
                     { name: 'circle-color', value: [
                         'interpolate',
                         ['linear'],
-                        ['get', 'risk_category'],
+                        ['get', selectedProperties[0]],
                         0, 
                             ['case',
-                            ['==', ['get','access_to_hospital'], 0], `${COLORS.lightgreen}`,
-                            ['==', ['get','access_to_hospital'], 1], `${COLORS.lightblue}`,
+                            ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
+                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
                             `${COLORS.lightred}`],
                         1, 
                         ['case',
-                            ['==', ['get','access_to_hospital'], 0], `${COLORS.mediumgreen}`,
-                            ['==', ['get','access_to_hospital'], 1], `${COLORS.mediumblue}`,
+                            ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
+                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
                             `${COLORS.mediumred}`],
                         2, 
                         ['case',
-                            ['==', ['get','access_to_hospital'], 0], `${COLORS.darkgreen}`,
-                            ['==', ['get','access_to_hospital'], 1], `${COLORS.darkblue}`,
+                            ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
+                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
                             `${COLORS.darkred}`],
                     ]},
                 ],

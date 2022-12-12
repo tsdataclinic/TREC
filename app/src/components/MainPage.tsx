@@ -42,7 +42,7 @@ export default function MainPage(): JSX.Element {
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       // "risk_score",
-      "risk_category",
+      // "risk_category",
       "access_to_hospital",
       // "route_type",
       // "routes_serviced",
@@ -57,6 +57,7 @@ export default function MainPage(): JSX.Element {
   const [filters, setFilters] = useState<Record<string, any>>({
     "risk_category": 0,
     "access_to_hospital": 0,
+    "jobs_cat": 0,
   });
 
   // const [selectedRoutes, setSelectedRoutes] = useState();
@@ -65,8 +66,9 @@ export default function MainPage(): JSX.Element {
   let remoteLayers = useRemoteLayers(layers);
   // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
   let sourceLayerConfigs = useSourceLayerConfigs(
+    selectedProperties,
     [['all',
-      ...Object.keys(filters).map((f: any) => ['>=', ['get', f], isNaN(filters[f]) ? 0 : filters[f]])
+      ...Object.keys(filters).filter(f => selectedProperties.includes(f)).map((f: any) => ['>=', ['get', f], isNaN(filters[f]) ? 0 : filters[f]])
     ]]
   );
 
