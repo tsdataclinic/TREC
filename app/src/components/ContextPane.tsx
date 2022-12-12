@@ -35,7 +35,7 @@ function ContextPane({
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers).map((layer) => {
             return (
-              <div>
+              <div className="space-x-2">
                 <FontAwesomeIcon
                   onClick={() => {
                     updateLayer({
@@ -48,7 +48,7 @@ function ContextPane({
                   icon={layer.isVisible ? faEye : faEyeSlash}
                   title={layer.isVisible ? "Hide layer" : "Show layer"}
                 />
-                {layer?.layerName}
+                <span>{layer?.layerName}</span>
               </div>
             );
           })}
