@@ -19,7 +19,7 @@ function ContextPane({
   return (
     <div
       id="ContextPane"
-      className="bg-white w-96 h-5/6 t-100 fixed z-50 left-5 rounded-md"
+      className="bg-white w-1/5 min-w-fit max-w-sm h-full t-100 fixed z-50 shadow"
     >
       {/* TODO - move map to centroid of selected area on select */}
       <select className="text-2xl">
