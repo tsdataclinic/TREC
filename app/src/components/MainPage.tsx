@@ -70,7 +70,7 @@ export default function MainPage(): JSX.Element {
   );
 
   return (
-    <main className="h-full relative">
+    <main className="h-full relative flex">
       <ContextPane
         layers={layers}
         updateLayer={updateLayer}
