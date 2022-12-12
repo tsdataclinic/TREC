@@ -54,43 +54,39 @@ function ContextPane({
           })}
         </div>
 
-        <div>
-          <div>
-            <label>
-              Field 1:
-              <select
-                className="ml-2"
-                onChange={(e) =>
-                  setSelectedProperties([e.target.value, selectedProperties[1]])
-                }
-                placeholder={"Select a field..."}
-                defaultValue={selectedProperties[0]}
-              >
-                <option></option>
-                {Array.from(availableProperties).map((p) => (
-                  <option selected={p === selectedProperties[0]}>{p}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div>
-            <label>
-              Field 2:
-              <select
-                className="ml-2"
-                onChange={(e) =>
-                  setSelectedProperties([selectedProperties[0], e.target.value])
-                }
-                placeholder={"Select a field..."}
-                defaultValue={selectedProperties[1]}
-              >
-                <option></option>
-                {Array.from(availableProperties).map((p) => (
-                  <option selected={p === selectedProperties[1]}>{p}</option>
-                ))}
-              </select>
-            </label>
-          </div>
+        <div className="flex flex-col space-y-2">
+          <label>
+            Field 1:
+            <select
+              className="ml-2"
+              onChange={(e) =>
+                setSelectedProperties([e.target.value, selectedProperties[1]])
+              }
+              placeholder={"Select a field..."}
+              defaultValue={selectedProperties[0]}
+            >
+              <option></option>
+              {Array.from(availableProperties).map((p) => (
+                <option selected={p === selectedProperties[0]}>{p}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Field 2:
+            <select
+              className="ml-2"
+              onChange={(e) =>
+                setSelectedProperties([selectedProperties[0], e.target.value])
+              }
+              placeholder={"Select a field..."}
+              defaultValue={selectedProperties[1]}
+            >
+              <option></option>
+              {Array.from(availableProperties).map((p) => (
+                <option selected={p === selectedProperties[1]}>{p}</option>
+              ))}
+            </select>
+          </label>
         </div>
       </div>
     </div>
