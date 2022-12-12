@@ -20,7 +20,7 @@ function ContextPane({
   return (
     <div
       id="ContextPane"
-      className="bg-white w-1/5 min-w-fit max-w-sm h-full z-50 shadow"
+      className="bg-white w-1/5 min-w-fit max-w-sm h-full shadow"
     >
       {/* TODO - move map to centroid of selected area on select */}
       <div className="p-4 border-b border-b-slate-400">
@@ -56,7 +56,9 @@ function ContextPane({
 
         <div className="flex flex-col space-y-2">
           <label>
-            <div><b>Climate Risk:</b></div>
+            <div>
+              <b>Climate Risk:</b>
+            </div>
             <select
               disabled={true}
               className="ml-2"
@@ -73,7 +75,9 @@ function ContextPane({
             </select>
           </label>
           <label>
-            <div><b>Transit Destination:</b></div>
+            <div>
+              <b>Transit Destination:</b>
+            </div>
             <select
               className="ml-2"
               onChange={(e) =>
