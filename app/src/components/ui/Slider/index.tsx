@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import * as RadixSlider from '@radix-ui/react-slider';
 import styled from 'styled-components';
 
@@ -73,9 +74,17 @@ export default function Slider({
   onValueChange,
   orientation,
 }: Props): JSX.Element {
+  const containerClassName = classNames('flex', {
+    'flex-col items-center': orientation === 'horizontal',
+    'flex-row-reverse h-full items-center': orientation === 'vertical',
+  });
+  const labelClassName = classNames('text-sm', {
+    'transform -ml-12 -rotate-90 relative left-4': orientation === 'vertical',
+  });
+
   return (
-    <>
-      <span className="text-xs">{label}</span>
+    <div className={containerClassName}>
+      <span className={labelClassName}>{label}</span>
       <StyledSlider
         value={value as number[]}
         onValueChange={onValueChange}
@@ -88,6 +97,6 @@ export default function Slider({
         </StyledSliderTrack>
         <StyledSliderThumb />
       </StyledSlider>
-    </>
+    </div>
   );
 }

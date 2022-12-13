@@ -29,13 +29,24 @@ function Filter({
   setFilter,
   filters,
 }: Props): JSX.Element {
+  const colorGrid = (
+    <div className="w-full h-full grid gap-0 grid-cols-3 grid-rows-3">
+      {getFilterGridColors(
+        filters[selectedProperties[0]],
+        filters[selectedProperties[1]],
+      ).map((color, i) => (
+        <span key={i} style={{ backgroundColor: color }} />
+      ))}
+    </div>
+  );
+
   return (
     <div
       id="Filter"
-      className="bg-white w-56 h-56 bottom-16 fixed z-5 right-4 flex flex-col justify-center items-center"
+      className="bg-white w-56 h-56 bottom-16 fixed z-5 right-4 flex flex-col"
     >
-      <div className="w-5/6 h-5/6 flex">
-        <div className="w-1/3 h-2/3">
+      <div className="grid grid-cols-4 grid-rows-4 h-full p-3 pb-0">
+        <div className="row-span-3">
           <Slider
             value={[filters[selectedProperties[0]]]}
             onValueChange={(e: number[]) => {
@@ -47,17 +58,8 @@ function Filter({
             label={selectedProperties[0]}
           />
         </div>
-        <div className="w-2/3 h-2/3 grid gap-0 grid-cols-3 grid-rows-3">
-          {getFilterGridColors(
-            filters[selectedProperties[0]],
-            filters[selectedProperties[1]],
-          ).map(color => (
-            <span style={{ backgroundColor: color }} />
-          ))}
-        </div>
-      </div>
-      <div className="w-5/6 h-1/6 flex justify-end">
-        <div className="w-2/3 h-1/3">
+        <div className="col-span-3 row-span-3">{colorGrid}</div>
+        <div className="col-start-2 col-span-3 pt-1">
           <Slider
             value={[filters[selectedProperties[1]]]}
             onValueChange={(e: number[]) => {
