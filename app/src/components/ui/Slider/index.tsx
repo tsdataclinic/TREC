@@ -73,13 +73,6 @@ export default function Slider({
   onValueChange,
   orientation,
 }: Props): JSX.Element {
-  /*
-  const rangeClassName = classNames('absolute bg-app-slate rounded-r-full', {
-    'w-full': orientation === 'horizontal',
-    'h-full': orientation === 'vertical',
-  });
-   */
-
   return (
     <>
       <span className="text-xs">{label}</span>
