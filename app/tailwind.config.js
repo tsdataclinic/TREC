@@ -7,7 +7,7 @@ module.exports = {
         sans: ["Lato", "sans-serif"],
       },
       colors: {
-        "app-header": "#33424e",
+        "app-slate": "#33424e",
       },
     },
   },
