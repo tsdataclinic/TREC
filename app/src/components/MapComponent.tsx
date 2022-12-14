@@ -36,6 +36,8 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
       map.current.on("load", () => {
         if (!map.current) return;
         setIsMapLoaded(true);
+        map.current.addControl(new mapboxgl.NavigationControl())
+        map.current.addControl(new mapboxgl.GeolocateControl())
         // load svg icons if needed
       });
 
