@@ -8,7 +8,7 @@ type Props = {
   filters: Record<string, any>;
 };
 
-function getFilterGridColors(
+export function getFilterGridColors(
   prop0: number,
   prop1: number,
 ): Array<COLORS | string> {

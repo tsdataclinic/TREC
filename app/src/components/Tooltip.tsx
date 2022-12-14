@@ -1,6 +1,8 @@
 import { MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import * as React from 'react';
+import { getFilterGridColors } from './Filter';
+import { PROPERTY_LABELS } from './MainPage';
 
 function DataRow(props: {
   children: React.ReactNode;
@@ -22,10 +24,11 @@ function RiskSquares(props: {
   color: 'blue' | 'green';
 }): JSX.Element {
   const { color, riskLevel, maxRisk } = props;
-  const colorClassName = color === 'blue' ? 'bg-app-blue' : 'bg-app-green';
   const squares = Array.from({ length: maxRisk + 1 }).map((_, i) => {
-    const squareColor = i <= riskLevel ? colorClassName : EMPTY_RISK_COLOR;
-    return <div key={i} className={`h-4 w-6 ${squareColor}`}></div>;
+    const filterColors = color === 'blue' ? getFilterGridColors(riskLevel, 0) : getFilterGridColors(0, riskLevel);
+    const filterColor = color === 'blue' ? filterColors[0] : filterColors[filterColors.length-1];
+    const squareColor = i <= riskLevel ? filterColor : EMPTY_RISK_COLOR;
+    return <div key={i} className={`h-4 w-6`} style={{ backgroundColor: squareColor }}></div>;
   });
   return <div className="flex space-x-1">{squares}</div>;
 }
@@ -48,21 +51,21 @@ function Tooltip({ feature, onDismiss }: Props): JSX.Element {
       <h3 className="font-bold text-base pb-2">{properties['stop_name']}</h3>
       <dl className="space-y-2">
         <DataRow label="Routes">{properties['routes_serviced']}</DataRow>
-        <DataRow label="Flood risk">
+        <DataRow label={PROPERTY_LABELS['risk_category']}>
           <RiskSquares
             color="blue"
             maxRisk={2}
             riskLevel={properties['risk_category']}
           />
         </DataRow>
-        <DataRow label="Hospital Access">
+        <DataRow label={PROPERTY_LABELS['access_to_hospital']}>
           <RiskSquares
             color="green"
             maxRisk={2}
             riskLevel={properties['access_to_hospital']}
           />
         </DataRow>
-        <DataRow label="Jobs Access">
+        <DataRow label={PROPERTY_LABELS['jobs_cat']}>
           <RiskSquares
             maxRisk={2}
             color="green"
