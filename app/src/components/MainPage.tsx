@@ -85,7 +85,7 @@ export default function MainPage(): JSX.Element {
     [
       ['all',
         ...Object.keys(filters).filter(f => selectedProperties.includes(f)).map((f: any) => ['>=', ['get', f], isNaN(filters[f]) ? 0 : filters[f]]),
-      ],
+      
       ...(selectedRoutes.length > 0 ? 
       [
         ['any',
@@ -97,6 +97,7 @@ export default function MainPage(): JSX.Element {
         ])]
       ]
       : [])
+      ],
     ]
   );
 
