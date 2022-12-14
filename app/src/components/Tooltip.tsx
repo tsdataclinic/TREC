@@ -37,7 +37,6 @@ type Props = {
 
 function Tooltip({ feature, onDismiss }: Props): JSX.Element {
   const { id, properties } = feature;
-  console.log(properties);
 
   if (!properties) {
     // render empty div if there are no properties

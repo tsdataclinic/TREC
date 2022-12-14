@@ -49,7 +49,7 @@ function ContextPane({
 
       <div className="px-4 space-y-4 pt-4 flex flex-col h-full overflow-scroll">
         
-        <div className="border-b border-b-slate-300 pb-4">
+        {/* <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers).map(layer => {
             return (
               <div className="space-x-2">
@@ -69,7 +69,7 @@ function ContextPane({
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         <div className="flex flex-col space-y-2">
           <label>
