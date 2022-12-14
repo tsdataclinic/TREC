@@ -71,7 +71,7 @@ function MethodologyModalContents() {
 
 function Header() {
   return (
-    <header className="px-4 flex justify-between items-center top-0 z-10 bg-app-header text-white">
+    <header className="px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
       <div className="flex space-x-4 items-center">
         <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
         <h1>Census TOP</h1>

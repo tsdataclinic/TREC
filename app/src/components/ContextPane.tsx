@@ -1,6 +1,7 @@
-import { Layer } from "./MainPage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { Layer } from './MainPage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Dropdown from './ui/Dropdown';
 
 type Props = {
   availableProperties: Set<string>;
@@ -19,7 +20,7 @@ function ContextPane({
   selectedProperties,
   setSelectedProperties,
   regions,
-  setSelectedRegion
+  setSelectedRegion,
 }: Props): JSX.Element {
   return (
     <div
@@ -28,21 +29,22 @@ function ContextPane({
     >
       {/* TODO - move map to centroid of selected area on select */}
       <div className="p-4 border-b border-b-slate-400">
-        <select 
-          onChange={(e) => {
-            setSelectedRegion(regions[e.target.value])
+        <select
+          onChange={e => {
+            setSelectedRegion(regions[e.target.value]);
           }}
-          className="text-2xl">
-          {
-            Object.keys(regions).map(r => <option value={r}>{r}</option>)
-          }
+          className="text-2xl"
+        >
+          {Object.keys(regions).map(r => (
+            <option value={r}>{r}</option>
+          ))}
         </select>
       </div>
 
       <div className="px-4 space-y-4 pt-4">
         {/* <div className="text-lg">Select transit routes</div> */}
         <div className="border-b border-b-slate-300 pb-4">
-          {Object.values(layers).map((layer) => {
+          {Object.values(layers).map(layer => {
             return (
               <div className="space-x-2">
                 <FontAwesomeIcon
@@ -53,9 +55,9 @@ function ContextPane({
                     });
                   }}
                   size="1x"
-                  cursor={"pointer"}
+                  cursor={'pointer'}
                   icon={layer.isVisible ? faEye : faEyeSlash}
-                  title={layer.isVisible ? "Hide layer" : "Show layer"}
+                  title={layer.isVisible ? 'Hide layer' : 'Show layer'}
                 />
                 <span>{layer?.layerName}</span>
               </div>
@@ -71,34 +73,35 @@ function ContextPane({
             <select
               disabled={true}
               className="ml-2"
-              onChange={(e) =>
+              onChange={e =>
                 setSelectedProperties([e.target.value, selectedProperties[1]])
               }
-              placeholder={"Select a field..."}
+              placeholder={'Select a field...'}
               defaultValue={selectedProperties[0]}
             >
               <option></option>
-              {Array.from(availableProperties).map((p) => (
+              {Array.from(availableProperties).map(p => (
                 <option selected={p === selectedProperties[0]}>{p}</option>
               ))}
             </select>
           </label>
-          <label>
+          <label className="space-y-2 w-full">
             <div>
               <b>Transit Destination:</b>
             </div>
-            <select
-              className="ml-2"
-              onChange={(e) =>
-                setSelectedProperties([selectedProperties[0], e.target.value])
+
+            <Dropdown
+              className="!w-full"
+              onChange={value =>
+                setSelectedProperties([selectedProperties[0], value])
               }
-              placeholder={"Select a field..."}
+              placeholder="Select a field..."
               defaultValue={selectedProperties[1]}
-            >
-              {Array.from(availableProperties).map((p) => (
-                <option selected={p === selectedProperties[1]}>{p}</option>
-              ))}
-            </select>
+              options={Array.from(availableProperties).map(p => ({
+                value: p,
+                displayValue: p,
+              }))}
+            />
           </label>
         </div>
       </div>

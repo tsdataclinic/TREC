@@ -1,31 +1,38 @@
-import mapboxgl from "mapbox-gl";
-import { useEffect, useState, useRef } from "react";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { Layer, RemoteLayer } from "./MainPage";
-import { createRoot } from "react-dom/client";
-import Tooltip from "./Tooltip";
-import { SLConfigType } from "../utils/sourceLayerConfigs";
+import mapboxgl from 'mapbox-gl';
+import { useEffect, useState, useRef } from 'react';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { Layer, RemoteLayer } from './MainPage';
+import { createRoot } from 'react-dom/client';
+import Tooltip from './Tooltip';
+import { SLConfigType } from '../utils/sourceLayerConfigs';
 
-const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? "";
+const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 
 type MapProps = {
   layers: Record<string, Layer>;
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   center: [number, number];
-}
+};
 
-function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : MapProps) : JSX.Element {
+function MapComponent({
+  remoteLayers,
+  layers,
+  sourceLayerConfigs,
+  center,
+}: MapProps): JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
-  const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  const tooltipRef = useRef(
+    new mapboxgl.Popup({ offset: 15, maxWidth: '400px', closeButton: false }),
+  );
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
   useEffect(() => {
     if (!map.current) {
       map.current = new mapboxgl.Map({
         accessToken: MAPBOX_KEY,
-        container: "map",
-        style: "mapbox://styles/mapbox/light-v11",
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v11',
         center: center, // [-73.95, 40.72],
         zoom: 10,
         bearing: 0,
@@ -33,7 +40,7 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
         pitchWithRotate: false,
       });
 
-      map.current.on("load", () => {
+      map.current.on('load', () => {
         if (!map.current) return;
         setIsMapLoaded(true);
         map.current.addControl(new mapboxgl.NavigationControl())
@@ -41,21 +48,28 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
         // load svg icons if needed
       });
 
-      map.current.on("click", (e) => {
+      map.current.on('click', e => {
         if (!map.current) {
           return;
         }
-        const layerNames = Object.values(layers).map((l) => l.layerName);
+        const layerNames = Object.values(layers).map(l => l.layerName);
         const features = map.current
           .queryRenderedFeatures(e.point)
-          .filter((f) => layerNames.includes(f.source));
+          .filter(f => layerNames.includes(f.source));
         if (features.length > 0) {
           const feature = features[0];
 
-          const tooltipNode = document.createElement("div");
+          const tooltipNode = document.createElement('div');
           const root = createRoot(tooltipNode);
 
-          root.render(<Tooltip feature={feature} />);
+          root.render(
+            <Tooltip
+              feature={feature}
+              onDismiss={() => {
+                tooltipRef.current.remove();
+              }}
+            />,
+          );
 
           tooltipRef.current
             .setLngLat(e.lngLat)
@@ -71,7 +85,7 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
       map.current.setCenter(center);
       map.current.setZoom(10);
     }
-  }, [center])
+  }, [center]);
 
   useEffect(() => {
     if (isMapLoaded) {
@@ -83,7 +97,7 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
             if (map.current?.getLayer(slConfig.layerId)) {
               map.current?.removeLayer(slConfig.layerId);
             }
-          }
+          },
         );
         // remove source
         if (map.current?.getSource(layer.layerName)) {
@@ -93,7 +107,7 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
           // add source if it doesn't exist
           if (!map.current?.getSource(layer.layerName)) {
             map.current.addSource(layer.layerName, {
-              type: "geojson",
+              type: 'geojson',
               data: layer.layerURL,
             });
           }
@@ -114,7 +128,7 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
                       slConfig.layerId,
                       layoutProperty.name,
                       layoutProperty.value,
-                      layoutProperty.options
+                      layoutProperty.options,
                     );
                   }
                 });
@@ -124,19 +138,19 @@ function MapComponent({ remoteLayers, layers, sourceLayerConfigs, center } : Map
                       slConfig.layerId,
                       paintProperty.name,
                       paintProperty.value,
-                      paintProperty.options
+                      paintProperty.options,
                     );
                   }
                 });
                 if (slConfig.filters) {
                   slConfig.filters.forEach(filter => {
                     if (map.current) {
-                      map.current.setFilter(slConfig.layerId, filter)
+                      map.current.setFilter(slConfig.layerId, filter);
                     }
-                  })
+                  });
                 }
               }
-            }
+            },
           );
         }
       });
