@@ -59,17 +59,20 @@ export function useSourceLayerConfigs(
                 layoutProperties: [
                 ],
                 paintProperties: [
-                    // { name: 'circle-opacity', value: .66},
-                    { name: 'circle-radius', value: {
-                        stops: [
-                            // [1, 2],
-                            // [5, 3],
-                            // [15, 15],
-                            [1, .8],
-                            [5, 1.12],
-                            [15, 5],
-                        ]
-                    }},
+                    { name: 'circle-stroke-color', value: 'grey'},
+                    { name: 'circle-stroke-width', value: 1},
+                    { name: 'circle-radius', value: [
+                        'interpolate', 
+                        ['linear'], 
+                        ['zoom'],
+                        0, .1,
+                        7, .5,
+                        14, 5,
+                        15, 10,
+                        16, 12,
+                        17, 20,
+                        19, 25
+                    ]},
                     { name: 'circle-color', value: [
                         'interpolate',
                         ['linear'],
@@ -110,6 +113,6 @@ export function useSourceLayerConfigs(
         ],
       }
       return output;
-    }, [filters])
+    }, [filters, selectedProperties])
     return output;
   }
