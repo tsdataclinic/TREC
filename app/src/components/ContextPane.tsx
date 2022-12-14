@@ -1,7 +1,8 @@
-import { Layer } from './MainPage';
+import { Layer, PROPERTY_LABELS, SelectedRoute } from './MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
+import { RouteRecord } from '../utils/availableRoutes';
 
 type Props = {
   availableProperties: Set<string>;
@@ -11,6 +12,9 @@ type Props = {
   updateLayer: (layer: Layer) => void;
   regions: Record<string, [number, number]>;
   setSelectedRegion: React.Dispatch<React.SetStateAction<[number, number]>>;
+  routes: Array<Record<string, RouteRecord>>;
+  selectedRoutes: SelectedRoute[];
+  setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
 };
 
 function ContextPane({
@@ -21,13 +25,15 @@ function ContextPane({
   setSelectedProperties,
   regions,
   setSelectedRegion,
+  routes,
+  selectedRoutes,
+  setSelectedRoutes,
 }: Props): JSX.Element {
   return (
     <div
       id="ContextPane"
-      className="bg-white w-1/5 min-w-fit max-w-sm h-full shadow"
+      className="bg-white w-1/5 min-w-fit max-w-sm h-full shadow flex flex-col"
     >
-      {/* TODO - move map to centroid of selected area on select */}
       <div className="p-4 border-b border-b-slate-400">
         <select
           onChange={e => {
@@ -41,8 +47,8 @@ function ContextPane({
         </select>
       </div>
 
-      <div className="px-4 space-y-4 pt-4">
-        {/* <div className="text-lg">Select transit routes</div> */}
+      <div className="px-4 space-y-4 pt-4 flex flex-col h-full overflow-scroll">
+        
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers).map(layer => {
             return (
@@ -70,20 +76,19 @@ function ContextPane({
             <div>
               <b>Climate Risk:</b>
             </div>
-            <select
+            <Dropdown
               disabled={true}
-              className="ml-2"
-              onChange={e =>
-                setSelectedProperties([e.target.value, selectedProperties[1]])
+              className="!w-full"
+              onChange={value =>
+                setSelectedProperties([value, selectedProperties[1]])
               }
-              placeholder={'Select a field...'}
+              placeholder="Select a field..."
               defaultValue={selectedProperties[0]}
-            >
-              <option></option>
-              {Array.from(availableProperties).map(p => (
-                <option selected={p === selectedProperties[0]}>{p}</option>
-              ))}
-            </select>
+              options={Array.from(availableProperties).filter(p => p !== selectedProperties[1]).map(p => ({
+                value: p,
+                displayValue: PROPERTY_LABELS[p],
+              }))}
+            />
           </label>
           <label className="space-y-2 w-full">
             <div>
@@ -97,12 +102,57 @@ function ContextPane({
               }
               placeholder="Select a field..."
               defaultValue={selectedProperties[1]}
-              options={Array.from(availableProperties).map(p => ({
+              options={Array.from(availableProperties).filter(p => p !== selectedProperties[0]).map(p => ({
                 value: p,
-                displayValue: p,
+                displayValue: PROPERTY_LABELS[p],
               }))}
             />
           </label>
+        </div>
+        <hr />
+        <div className="text-lg"><b>Highlight Transit line</b></div>
+        <div className='overflow-y-scroll flex-1'>
+          <ul>
+          {
+            routes.map(availableRoute => Object.values(availableRoute).map(routeRecord => {
+              return <details key={routeRecord.city}>
+                <summary>{routeRecord.city}</summary>
+                {routeRecord.route_types.map(type => {
+                  return <details className="ml-2" key={`${routeRecord.city}_${type}`}>
+                    <summary>{type.route_type}</summary>
+                    <ul className="ml-4">
+                      {
+                        type.routes_serviced.map((route, index) => (<li key={`${index}_${route}`}>
+                          <input 
+                            onChange={(e) => {
+                              let newRoutes = [...selectedRoutes];
+                              if (e.target.checked) {
+                                newRoutes.push({
+                                  city: routeRecord.city,
+                                  routeType: type.route_type,
+                                  routeServiced: route
+                                });
+                              } else {
+                                const routeIndex = newRoutes.findIndex(r => r.city === routeRecord.city && 
+                                  r.routeType === type.route_type &&
+                                  r.routeServiced === route);
+                                newRoutes.splice(routeIndex, 1);
+                              }
+                              setSelectedRoutes(newRoutes);
+                              }
+                            }
+                            id={`${index}_${route}`}
+                            type="checkbox"/>
+                          <label htmlFor={`${index}`}>{route}</label>
+                        </li>))
+                      }
+                    </ul>
+                  </details>
+                })}
+              </details>
+            }))
+          }
+          </ul>
         </div>
       </div>
     </div>
