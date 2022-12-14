@@ -1,4 +1,5 @@
 import { COLORS } from '../utils/sourceLayerConfigs';
+import { PROPERTY_LABELS } from './MainPage';
 import Slider from './ui/Slider';
 
 type Props = {
@@ -55,7 +56,7 @@ function Filter({
               });
             }}
             orientation="vertical"
-            label={selectedProperties[0]}
+            label={PROPERTY_LABELS[selectedProperties[0]]}
           />
         </div>
         <div className="col-span-3 row-span-3">{colorGrid}</div>
@@ -68,7 +69,7 @@ function Filter({
               });
             }}
             orientation="horizontal"
-            label={selectedProperties[1]}
+            label={PROPERTY_LABELS[selectedProperties[1]]}
           />
         </div>
       </div>

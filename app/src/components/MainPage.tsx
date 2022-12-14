@@ -60,12 +60,8 @@ export default function MainPage(): JSX.Element {
   const [selectedRegion, setSelectedRegion] = useState<[number, number]>(AVAILABLE_REGIONS['New York City']);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
-      // "risk_score",
-      // "risk_category",
+      "risk_category",
       "access_to_hospital",
-      // "route_type",
-      // "routes_serviced",
-      // "jobs",
       "jobs_cat",
     ])
   );
