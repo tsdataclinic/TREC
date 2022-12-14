@@ -1,8 +1,9 @@
+import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState, useRef } from 'react';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { Layer, RemoteLayer } from './MainPage';
 import { createRoot } from 'react-dom/client';
+
+import { Layer, RemoteLayer } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
 
@@ -43,8 +44,8 @@ function MapComponent({
       map.current.on('load', () => {
         if (!map.current) return;
         setIsMapLoaded(true);
-        map.current.addControl(new mapboxgl.NavigationControl())
-        map.current.addControl(new mapboxgl.GeolocateControl())
+        map.current.addControl(new mapboxgl.NavigationControl());
+        map.current.addControl(new mapboxgl.GeolocateControl());
         // load svg icons if needed
       });
 
