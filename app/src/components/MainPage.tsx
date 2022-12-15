@@ -32,6 +32,7 @@ export type SelectedRoute = {
 export const PROPERTY_LABELS : Record<string, string> = {
   'access_to_hospital': 'Access to Hospital',
   'jobs_cat': 'Access to Jobs',
+  'worker_vulnerability_cat': 'Vulnerable workers',
   'risk_category': 'Flood Risk'
 }
 
@@ -46,7 +47,7 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   "2": {
     id: 2,
     layerName: "stop_features",
-    layerURL: "/results/stop_features.geojson",
+    layerURL: "/results/stop_features_v2.geojson",
     isVisible: true,
   },
 };
@@ -63,6 +64,7 @@ export default function MainPage(): JSX.Element {
       "risk_category",
       "access_to_hospital",
       "jobs_cat",
+      "worker_vulnerability_cat",
     ])
   );
   const [selectedProperties, setSelectedProperties] = useState<Array<string>>([
@@ -73,6 +75,7 @@ export default function MainPage(): JSX.Element {
     "risk_category": 0,
     "access_to_hospital": 0,
     "jobs_cat": 0,
+    "worker_vulnerability_cat": 0,
   });
 
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>([]);
