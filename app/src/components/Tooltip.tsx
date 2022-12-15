@@ -72,6 +72,13 @@ function Tooltip({ feature, onDismiss }: Props): JSX.Element {
             riskLevel={properties['jobs_cat']}
           />
         </DataRow>
+        <DataRow label={PROPERTY_LABELS['worker_vulnerability_cat']}>
+          <RiskSquares
+            maxRisk={2}
+            color="green"
+            riskLevel={properties['worker_vulnerability_cat']}
+          />
+        </DataRow>
       </dl>
       <button
         onClick={onDismiss}
