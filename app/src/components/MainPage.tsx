@@ -47,7 +47,7 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   "2": {
     id: 2,
     layerName: "stop_features",
-    layerURL: "/results/stop_features_v2.geojson",
+    layerURL: "/results/stop_features_v3.geojson",
     isVisible: true,
   },
 };
@@ -96,7 +96,8 @@ export default function MainPage(): JSX.Element {
           ['==', ['get', 'city'], selectedRoute.city],
           ['==', ['get', 'route_type'], selectedRoute.routeType],
           // ['in'] expression doesn't work properly in a comma-separated list, so used 'index-of' instead
-          ['>=', ['index-of', selectedRoute.routeServiced, ['get', 'routes_serviced']], 0], 
+          ['in', selectedRoute.routeServiced, ['get', 'routes_serviced']], 
+          // ['>=', ['index-of', selectedRoute.routeServiced, ['get', 'routes_serviced']], 0], 
         ])]
       ]
       : [])
