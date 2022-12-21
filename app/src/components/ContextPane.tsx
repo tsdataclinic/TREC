@@ -110,7 +110,19 @@ function ContextPane({
           </label>
         </div>
         <hr />
-        <div className="text-lg"><b>Highlight Transit line</b></div>
+        <div className="text-lg flex justify-between">
+          <b>Highlight Transit line</b>
+          <button onClick={() => setSelectedRoutes([])}>Reset</button>
+        </div>
+        <div>
+          {selectedRoutes.map(route => 
+            (<span className="text-xs inline-block py-1 px-2 uppercase rounded bg-slate-200 uppercase last:mr-0 mr-1"
+              title={`${route.routeServiced} - ${route.routeType} | ${route.city}`}>
+              {route.routeServiced}
+            </span>)
+            )
+          }
+        </div>
         <div className='overflow-y-scroll flex-1'>
           <ul>
           {
@@ -141,6 +153,7 @@ function ContextPane({
                               setSelectedRoutes(newRoutes);
                               }
                             }
+                            checked={selectedRoutes.map(r => r.routeServiced).includes(route)}
                             id={`${index}_${route}`}
                             type="checkbox"/>
                           <label htmlFor={`${index}`}>{route}</label>
