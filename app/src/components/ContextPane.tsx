@@ -114,9 +114,9 @@ function ContextPane({
           <b>Highlight Transit line</b>
           <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
-        <div>
+        <div className="grid grid-cols-4 p-3 pb-0 gap-1">
           {selectedRoutes.map(route => 
-            (<span className="text-xs inline-block py-1 px-2 uppercase rounded bg-slate-200 uppercase last:mr-0 mr-1"
+            (<span className="text-xs py-1 px-2 uppercase rounded bg-slate-200 uppercase"
               title={`${route.routeServiced} - ${route.routeType} | ${route.city}`}>
               {route.routeServiced}
             </span>)
