@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Latodisplay=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 
 body {
   margin: 0;
