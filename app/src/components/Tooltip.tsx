@@ -48,6 +48,14 @@ function Tooltip({ feature, onDismiss }: Props): JSX.Element {
 
   return (
     <div id={`tooltip-${id}`} className="relative w-72 px-4 py-2">
+      {/* show hospital details if there's a FEATURE_CLASS property in the data */}
+      {properties['FEATURE_CLASS'] ? 
+        <div>
+          <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3>
+          <h4 className="text-base pb-2">{properties['MAP_NAME']}</h4>
+        </div>
+      : 
+      <>
       <h3 className="font-bold text-base pb-2">{properties['stop_name']}</h3>
       <dl className="space-y-2">
         <DataRow label="Routes">{properties['routes_serviced']}</DataRow>
@@ -86,6 +94,8 @@ function Tooltip({ feature, onDismiss }: Props): JSX.Element {
       >
         x
       </button>
+      </>
+      }
     </div>
   );
 }

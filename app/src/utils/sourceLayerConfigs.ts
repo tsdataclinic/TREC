@@ -103,12 +103,12 @@ export function useSourceLayerConfigs(
                 layerId: 'hospital-icon',
                 layerType: 'symbol',
                 layoutProperties: [
-                    { name: 'icon-image', value: 'hospital-15', options: { sdf: true }},
-                    { name: 'icon-size', value: 2}
+                    { name: 'icon-image', value: 'hospital-icon', options: { sdf: true }},
+                    { name: 'icon-size', value: .25 }
                 ],
                 paintProperties: [
-                    { name: 'icon-color', value: 'red'}
-                ]
+                ],
+                markers: []
             }
         ],
       }

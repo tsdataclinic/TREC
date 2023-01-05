@@ -47,6 +47,11 @@ function MapComponent({
         map.current.addControl(new mapboxgl.NavigationControl());
         map.current.addControl(new mapboxgl.GeolocateControl());
         // load svg icons if needed
+        map.current.loadImage('/icons/hospital@2x.png', (error, image) => {
+          if (error) throw error;
+          if (!image) throw error;
+          if (!map.current?.hasImage('hospital-icon')) map.current?.addImage('hospital-icon', image);
+        })
       });
 
       map.current.on('click', e => {
@@ -155,6 +160,7 @@ function MapComponent({
           );
         }
       });
+
     }
   }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs]);
 
