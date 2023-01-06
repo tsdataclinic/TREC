@@ -104,7 +104,7 @@ export function useSourceLayerConfigs(
                 layerType: 'symbol',
                 layoutProperties: [
                     { name: 'icon-image', value: 'hospital-icon', options: { sdf: true }},
-                    { name: 'icon-size', value: .25 }
+                    { name: 'icon-size', value: .35 }
                 ],
                 paintProperties: [
                 ],
