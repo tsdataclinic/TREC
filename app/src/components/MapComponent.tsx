@@ -45,9 +45,9 @@ function MapComponent({
         if (!map.current) return;
         setIsMapLoaded(true);
         map.current.addControl(new mapboxgl.NavigationControl());
-        map.current.addControl(new mapboxgl.GeolocateControl());
+      map.current.addControl(new mapboxgl.GeolocateControl());
         // load svg icons if needed
-        map.current.loadImage('/icons/hospital@2x.png', (error, image) => {
+        map.current.loadImage('/icons/H.png', (error, image) => {
           if (error) throw error;
           if (!image) throw error;
           if (!map.current?.hasImage('hospital-icon')) map.current?.addImage('hospital-icon', image);
