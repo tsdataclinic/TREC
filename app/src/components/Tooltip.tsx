@@ -58,7 +58,7 @@ function Tooltip({ feature, onDismiss }: Props): JSX.Element {
       <>
       <h3 className="font-bold text-base pb-2">{properties['stop_name']}</h3>
       <dl className="space-y-2">
-        <DataRow label="Routes">{properties['routes_serviced']}</DataRow>
+        <DataRow label="Routes">{JSON.parse(properties['routes_serviced']).join(', ')}</DataRow>
         <DataRow label={PROPERTY_LABELS['risk_category']}>
           <RiskSquares
             color="blue"
