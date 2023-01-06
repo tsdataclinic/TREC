@@ -111,7 +111,7 @@ function ContextPane({
         </div>
         <hr />
         <div className="text-lg flex justify-between">
-          <b>Highlight Transit line</b>
+          <b>Filter by Transit line</b>
           <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
         <div className="grid grid-cols-4 p-3 pb-0 gap-1">
@@ -128,7 +128,7 @@ function ContextPane({
           {
             routes.map(availableRoute => Object.values(availableRoute).map(routeRecord => {
               return <details key={routeRecord.city}>
-                <summary>{routeRecord.city}</summary>
+                <summary>{routeRecord.city} lines</summary>
                 {routeRecord.route_types.map(type => {
                   return <details className="ml-2" key={`${routeRecord.city}_${type}`}>
                     <summary>{type.route_type}</summary>
