@@ -13,15 +13,15 @@ export function getFilterGridColors(
   prop1: number,
 ): Array<COLORS | string> {
   return [
-    prop0 > 2 || prop1 > 0 ? 'gray' : COLORS.darkgreen,
-    prop0 > 2 || prop1 > 1 ? 'gray' : COLORS.darkblue,
-    prop0 > 2 || prop1 > 2 ? 'gray' : COLORS.darkred,
-    prop0 > 1 || prop1 > 0 ? 'gray' : COLORS.mediumgreen,
-    prop0 > 1 || prop1 > 1 ? 'gray' : COLORS.mediumblue,
-    prop0 > 1 || prop1 > 2 ? 'gray' : COLORS.mediumred,
-    prop0 > 0 || prop1 > 0 ? 'gray' : COLORS.lightgreen,
-    prop0 > 0 || prop1 > 1 ? 'gray' : COLORS.lightblue,
-    prop0 > 0 || prop1 > 2 ? 'gray' : COLORS.lightred,
+    prop0 > 2 || prop1 > 0 ? 'white' : COLORS.darkgreen,
+    prop0 > 2 || prop1 > 1 ? 'white' : COLORS.darkblue,
+    prop0 > 2 || prop1 > 2 ? 'white' : COLORS.darkred,
+    prop0 > 1 || prop1 > 0 ? 'white' : COLORS.mediumgreen,
+    prop0 > 1 || prop1 > 1 ? 'white' : COLORS.mediumblue,
+    prop0 > 1 || prop1 > 2 ? 'white' : COLORS.mediumred,
+    prop0 > 0 || prop1 > 0 ? 'white' : COLORS.lightgreen,
+    prop0 > 0 || prop1 > 1 ? 'white' : COLORS.lightblue,
+    prop0 > 0 || prop1 > 2 ? 'white' : COLORS.lightred,
   ];
 }
 
@@ -36,7 +36,7 @@ function Filter({
         filters[selectedProperties[0]],
         filters[selectedProperties[1]],
       ).map((color, i) => (
-        <span key={i} style={{ backgroundColor: color }} />
+        <span key={i} className="border-gray-95 border-2" style={{ backgroundColor: color }} />
       ))}
     </div>
   );
