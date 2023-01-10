@@ -111,6 +111,56 @@ export function useSourceLayerConfigs(
                 markers: []
             }
         ],
+        '2020 NYC Floods (Projected)': [
+            {
+                sourceId: 'nyc2050',
+                layerId: 'nyc2050',
+                layerType: 'fill',
+                layoutProperties: [
+                ],
+                paintProperties: [
+                    { name: 'fill-color', value: 'rgba(104, 207, 255, .95)' }
+                ],
+                markers: []
+            }
+        ],
+        '2050 NYC Floods (Projected)': [
+            {
+                sourceId: 'nyc2050',
+                layerId: 'nyc2050',
+                layerType: 'fill',
+                layoutProperties: [
+                ],
+                paintProperties: [
+                    { name: 'fill-opacity', value: .65 },
+                    { name: 'fill-color', value: ['case',
+                            ['==', ['get', 'Flooding_Category'], 'Deep flooding (>1ft)'], `${COLORS.darkgreen}`,
+                            ['==', ['get', 'Flooding_Category'], 'Future high tides'], `${COLORS.mediumgreen}`,
+                            `${COLORS.lightgreen}`,
+                        ]   
+                    }
+                ],
+                markers: []
+            }
+        ],
+        '2050 Hampton Roads Floods (Projected)': [
+            {
+                sourceId: 'hr2050',
+                layerId: 'hr2050',
+                layerType: 'fill',
+                layoutProperties: [
+                ],
+                paintProperties: [
+                    { name: 'fill-opacity', value: .65 },
+                    { name: 'fill-color', value: ['case',
+                            ['==', ['get', 'CLASS'], 'Low Lying'], `${COLORS.mediumgreen}`,
+                            `${COLORS.darkgreen}`,
+                        ]   
+                    }
+                ],
+                markers: []
+            }
+        ],
       }
       return output;
     }, [filters, selectedProperties])
