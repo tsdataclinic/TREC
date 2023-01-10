@@ -94,7 +94,7 @@ function MapComponent({
   }, [center]);
 
   useEffect(() => {
-    if (isMapLoaded) {
+    if (isMapLoaded) {     
       Object.values(layers).forEach((layer: Layer) => {
         if (!map.current) return;
         // remove layers
@@ -112,21 +112,37 @@ function MapComponent({
         if (layer.isVisible) {
           // add source if it doesn't exist
           if (!map.current?.getSource(layer.layerName)) {
-            map.current.addSource(layer.layerName, {
-              type: 'geojson',
-              data: layer.layerURL,
-            });
+            if (layer.layerURL.includes('geojson')) {
+              map.current.addSource(layer.layerName, {
+                type: 'geojson',
+                data: layer.layerURL,
+              });
+            } else {
+              map.current.addSource(layer.layerName, {
+                type: 'vector',
+                tiles: [layer.layerURL],
+              });
+            }
           }
           // add layers
           sourceLayerConfigs[layer.layerName].forEach(
             (slConfig: SLConfigType) => {
               if (!map.current) return;
               if (!map.current.getLayer(slConfig.layerId)) {
-                map.current.addLayer({
-                  id: slConfig.layerId,
-                  type: slConfig.layerType,
-                  source: layer.layerName,
-                });
+                if (layer.layerURL.includes('geojson')) { 
+                  map.current.addLayer({
+                    id: slConfig.layerId,
+                    type: slConfig.layerType,
+                    source: layer.layerName,
+                  });
+                } else {
+                  map.current.addLayer({
+                    id: slConfig.layerId,
+                    type: slConfig.layerType,
+                    source: layer.layerName,
+                    'source-layer': layer.sourceLayer
+                  });
+                }
 
                 slConfig.layoutProperties.forEach((layoutProperty: any) => {
                   if (map.current) {

@@ -4,13 +4,24 @@ import { Layer, RemoteLayer } from "../components/MainPage";
 
 export const fetchLayerFn = async (layer: Layer) => {
   if (layer.layerName && layer.layerURL) {
-    const res = await fetch(layer.layerURL);
-    const json = await res.json();
-    const result = {
-      ...json,
-      id: layer.id,
-    };
-    return result;
+    if (layer.layerURL.includes('geojson')) {
+      const res = await fetch(layer.layerURL);
+      const json = await res.json();
+      const result = {
+        ...json,
+        id: layer.id,
+      };
+      return result;
+    }
+    else { 
+      const res = await fetch(layer.layerURL);
+      const body = await res.text();
+      const result = {
+        body,
+        id: layer.id,
+      };
+      return result;
+    }
   }
 };
 
