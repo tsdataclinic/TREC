@@ -35,7 +35,7 @@ export function useSourceLayerConfigs(
     //     return output;
     //   }
       output = {
-        'stop_features': [
+        'Transit Stops': [
             {
                 sourceId: 'stop_features',
                 layerId: 'stop_features-icon',
@@ -97,7 +97,7 @@ export function useSourceLayerConfigs(
                 filters
             }
         ],
-        'hospitals': [
+        'Hospitals': [
             {
                 sourceId: 'hospitals',
                 layerId: 'hospital-icon',

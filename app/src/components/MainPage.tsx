@@ -40,13 +40,13 @@ export const PROPERTY_LABELS : Record<string, string> = {
 const AVAILABLE_LAYERS: Record<string, Layer> = {
   "1": {
     id: 1,
-    layerName: "hospitals",
+    layerName: "Hospitals",
     layerURL: "/results/hospitals.geojson",
     isVisible: true,
   },
   "2": {
     id: 2,
-    layerName: "stop_features",
+    layerName: "Transit Stops",
     layerURL: "/results/stop_features_v3.geojson",
     isVisible: true,
   },
