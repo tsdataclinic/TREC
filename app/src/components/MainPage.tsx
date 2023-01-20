@@ -12,6 +12,7 @@ import { AVAILABLE_ROUTES } from "../utils/availableRoutes";
 export type Layer = {
   id: number;
   layerName: string;
+  sourceLayer?: string;
   layerURL: string;
   isVisible: boolean;
 };
