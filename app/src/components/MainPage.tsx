@@ -8,6 +8,7 @@ import {
 } from "../hooks/useRemoteLayer";
 import { useSourceLayerConfigs } from "../utils/sourceLayerConfigs";
 import { AVAILABLE_ROUTES } from "../utils/availableRoutes";
+import { useRouteSummary } from "../hooks/useRouteSummary";
 
 export type Layer = {
   id: number;
@@ -82,7 +83,11 @@ export default function MainPage(): JSX.Element {
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>([]);
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers);
+
+  let routeSummary = useRouteSummary(remoteLayers)
+  
   // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
+  
   let sourceLayerConfigs = useSourceLayerConfigs(
     selectedProperties,
     // TODO - generate mapbox expressions inside hook body or in another function
