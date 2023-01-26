@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useState, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { Layer, RemoteLayer } from './MainPage';
+import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
 
@@ -14,6 +14,7 @@ type MapProps = {
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   center: [number, number];
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
 
 function MapComponent({
@@ -21,6 +22,7 @@ function MapComponent({
   layers,
   sourceLayerConfigs,
   center,
+  setDetailedRoutes,
 }: MapProps): JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
   const tooltipRef = useRef(
@@ -64,7 +66,6 @@ function MapComponent({
           .filter(f => layerNames.includes(f.source));
         if (features.length > 0) {
           const feature = features[0];
-
           const tooltipNode = document.createElement('div');
           const root = createRoot(tooltipNode);
 
@@ -74,6 +75,7 @@ function MapComponent({
               onDismiss={() => {
                 tooltipRef.current.remove();
               }}
+              setDetailedRoutes={setDetailedRoutes}
             />,
           );
 

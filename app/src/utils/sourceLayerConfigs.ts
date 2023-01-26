@@ -11,6 +11,7 @@ export enum COLORS {
     'darkgreen' = 'rgba(145,185,196,1)',
     'mediumgreen' = 'rgba(202,227,235,1)',
     'lightgreen' = 'rgba(225,232,235,1)',
+    'deepblue' = 'rgba(70,150,200,1)'
 }
 
 export type SLConfigType = {
