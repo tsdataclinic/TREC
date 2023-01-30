@@ -129,8 +129,8 @@ function ContextPane({
             routes.map(availableRoute => Object.values(availableRoute).map(routeRecord => {
               return <details key={routeRecord.city}>
                 <summary>{routeRecord.city} lines</summary>
-                {routeRecord.route_types.map(type => {
-                  return <details className="ml-2" key={`${routeRecord.city}_${type}`}>
+                {routeRecord.route_types.map((type, index) => {
+                  return <details className="ml-2" key={`${routeRecord.city}_${index}`}>
                     <summary>{type.route_type}</summary>
                     <ul className="ml-4">
                       {
