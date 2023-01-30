@@ -28,11 +28,12 @@ function DataRowLink(props: {
 }): JSX.Element {
   const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
   let routes = eval(routes_serviced)
-
+  let r_len = routes.length
+  
   return (
     <div className="w-full flex text-sm">
-      <dt className="flex-1">{label}</dt>
-      {routes.map((r:string, i:number) => (<dd className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" key={i} onClick={()=>setDetailedRoutes({city:city,routeType:route_type,routeServiced:r})}>{r}</dd>)
+      <dt className="flex-1 pr-2">{label}</dt>
+      {routes.map((r:string, i:number) => (<dd className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs" key={i} onClick={()=>setDetailedRoutes({city:city,routeType:route_type,routeServiced:r})}>{i< r_len-1 ? r+',' : r}</dd>)
       )}
       
     </div>
