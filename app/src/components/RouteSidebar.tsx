@@ -29,8 +29,9 @@ function RouteSummaryPane({
     return (
         <div
             id="SummaryPane"
-            className="bg-white w-1/5 min-w-fit max-w-sm h-full shadow flex flex-col"
+            className="bg-white min-w-fit h-full shadow flex flex-col"
         >
+            {/* min-w-max max-w-sm */}
             
             <div className="w-full flex pl-4">
                 <FontAwesomeIcon 
@@ -44,7 +45,11 @@ function RouteSummaryPane({
                 {detailedRoutes.routeType} Route
             </div>
 
-            <div className="flex flex-col pt-10 pl-4 space-y-2"><b>Total Stops</b></div>
+            <div className="pt-6">
+                <hr />
+            </div>
+
+            <div className="flex flex-col pt-5 pl-4 space-y-2"><b>Total Stops</b></div>
 
             <div className="flex flex-col pt-2 pl-4 space-y-2">
                 <b className="text-xl">{JSON.stringify(routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['count'])}</b>
