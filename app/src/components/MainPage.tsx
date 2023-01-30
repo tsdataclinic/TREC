@@ -51,6 +51,20 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     layerURL: "/results/stop_features_v3.geojson",
     isVisible: true,
   },
+  "3": {
+    id: 3,
+    layerName: "2050 Hampton Roads Floods (Projected)",
+    layerURL: "mapbox://indraneel-tsdataclinic.9hi3xl8q",
+    isVisible: false,
+    sourceLayer: 'hr_2050_flood_zones'
+  },
+  "4": {
+    id: 4,
+    layerName: "2050 NYC Floods (Projected)",
+    layerURL: "mapbox://indraneel-tsdataclinic.1ku89xc7",
+    isVisible: false,
+    sourceLayer: 'nyc_2050_flooding'
+  },
 };
 
 const AVAILABLE_REGIONS : Record<string, [number, number]> = {

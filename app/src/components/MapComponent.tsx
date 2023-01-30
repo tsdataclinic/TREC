@@ -117,7 +117,13 @@ function MapComponent({
                 type: 'geojson',
                 data: layer.layerURL,
               });
-            } else {
+            }  else if (layer.layerURL.includes('mapbox://')) {
+              map.current.addSource(layer.layerName, {
+                type: 'vector',
+                url: layer.layerURL,
+              });
+            }
+            else {
               map.current.addSource(layer.layerName, {
                 type: 'vector',
                 tiles: [layer.layerURL],
