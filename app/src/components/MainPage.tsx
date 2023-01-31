@@ -47,19 +47,25 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   },
   "2": {
     id: 2,
-    layerName: "Transit Stops",
-    layerURL: "/results/stop_features_v3.geojson",
+    layerName: "NYC Transit Stops",
+    layerURL: "/results/NYC-stop_features_v3.geojson",
     isVisible: true,
   },
   "3": {
     id: 3,
+    layerName: "Hampton Roads Transit Stops",
+    layerURL: "/results/HR-stop_features_v3.geojson",
+    isVisible: true,
+  },
+  "4": {
+    id: 4,
     layerName: "2050 Hampton Roads Floods (Projected)",
     layerURL: "mapbox://indraneel-tsdataclinic.9hi3xl8q",
     isVisible: false,
     sourceLayer: 'hr_2050_flood_zones'
   },
-  "4": {
-    id: 4,
+  "5": {
+    id: 5,
     layerName: "2050 NYC Floods (Projected)",
     layerURL: "mapbox://indraneel-tsdataclinic.1ku89xc7",
     isVisible: false,
