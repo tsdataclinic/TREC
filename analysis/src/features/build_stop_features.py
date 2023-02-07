@@ -339,9 +339,10 @@ def main():
     
     opts = parser.parse_args()
     stop_features = get_stops_features()
-    
+
     print(f"Writing feature file to {opts.out}")
-    stop_features.to_file(opts.out)
-    
+    with open(opts.out, 'w') as file:
+        file.write(stop_features.to_json())
+
 if __name__ == "__main__":
     main()

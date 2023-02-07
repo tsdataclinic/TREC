@@ -64,6 +64,10 @@ def make_stops(folder_path):
     routes_list.routes_serviced = routes_list.routes_serviced.apply(str).str.replace("\[|\]|'", "")
     
     stops_with_trips = stops_with_trips.merge(routes_list,how='left',on='stop_id')
+<<<<<<< HEAD
+    stops_with_trips["routes_serviced_str"] = stops_with_trips.routes_serviced.apply(str)
+=======
+>>>>>>> 4fb0f023646777e6185960e488e70087c61881e9
     
     # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
     stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
@@ -161,7 +165,8 @@ def main():
     output_path = opts.output_path
     
     stops = process_feeds(BASE_PATHS)
-    stops.to_file(output_path + "GTFS_stops_processed.geojson")
+    with open(output_path + "GTFS_stops_processed.geojson" , 'w') as file:
+        file.write(stops.to_json())
     print("Stops data written to: " + output_path + "GTFS_stops_processed.geojson") 
     
 if __name__ == "__main__":
