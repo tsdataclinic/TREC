@@ -4,17 +4,19 @@ import networkx as nx
 import osmnx as ox
 from shapely.geometry import Point, LineString, Polygon, MultiLineString
 import sys
+sys.path.append('../')
 import argparse
 from src.data.process_stops import process_feeds
 from src.data.process_fsf import process_fsf
 from src.features.count_jobs import count_jobs
+from src.features.jobs_vulnerability import get_worker_svi
 
 BASE_WALKSHED_PATH = '/home/data/osm/'
 CITY_DIRS = ['nyc','hampton_roads']
 
 NRI_DATA_PATH ='/home/data/results/climate_risk/NRI_processed.csv'
-NYC_TRANSIT_WALKSHED = '/home/data/osm/nyc/walksheds/transit_walkshed.geojson'
-HR_TRANSIT_WALKSHED = '/home/data/osm/hampton_roads/walksheds/transit_walkshed.geojson'
+NYC_TRANSIT_WALKSHED = '/home/data/osm/nyc/walksheds/transit_walkshed_fixed.geojson'
+HR_TRANSIT_WALKSHED = '/home/data/osm/hampton_roads/walksheds/transit_walkshed_fixed.geojson'
 
 NYC_WALK_GRAPH = '/home/data/osm/nyc/NYC_walk_graph.gpickle'
 HR_WALK_GRAPH = '/home/data/osm/hampton_roads/HR_walk_graph.gpickle'
@@ -24,6 +26,11 @@ HR_LODES = '/home/data/census/hampton_roads/LODES/va_od_main_JT01_2019.csv'
 
 NYC_BLOCKS = '/home/data/census/nyc/geo/blocks.geojson'
 HR_BLOCKS = '/home/data/census/hampton_roads/geo/blocks.geojson'
+
+NYC_TRACTS = '/home/data/census/nyc/geo/tracts.geojson'
+HR_TRACTS = '/home/data/census/hampton_roads/geo/tracts.geojson'
+
+SVI_PATH = '/home/data/social_vulnerability_index/SVI2020_US.csv'
 
 def fix_walkshed(graph, polygons):
     """
@@ -88,7 +95,7 @@ def load_NRI_data():
     DataFrame
         NRI file with cleaned columns for risk calculations
     """
-    NRI_data = pd.read_csv(NRI_data_path)
+    NRI_data = pd.read_csv(NRI_DATA_PATH)
     NRI_data["GEOID"] = NRI_data["GEOID"].astype(str).str.zfill(11)
     
     NRI_data['CFLD_AFREQ'] = NRI_data['CFLD_AFREQ'].fillna(0)
@@ -195,16 +202,17 @@ def get_transit_walksheds():
     nyc_poly = gpd.read_file(NYC_TRANSIT_WALKSHED)
     hr_poly = gpd.read_file(HR_TRANSIT_WALKSHED)
         
-    nyc_poly = nyc_poly.reset_index().rename(columns={'index':'id'})
-    hr_poly = hr_poly.reset_index().rename(columns={'index':'id'})
+#     nyc_poly = nyc_poly.reset_index().rename(columns={'index':'id'})
+#     hr_poly = hr_poly.reset_index().rename(columns={'index':'id'})
     
-    nyc_graph = nx.read_gpickle(NYC_WALK_GRAPH)
-    hr_graph = nx.read_gpickle(HR_WALK_GRAPH)
+#     nyc_graph = nx.read_gpickle(NYC_WALK_GRAPH)
+#     hr_graph = nx.read_gpickle(HR_WALK_GRAPH)
     
-    nyc_poly_fixed = fix_walkshed(nyc_graph, nyc_poly)
-    hr_poly_fixed = fix_walkshed(hr_graph, hr_poly)
+#     nyc_poly_fixed = fix_walkshed(nyc_graph, nyc_poly)
+#     hr_poly_fixed = fix_walkshed(hr_graph, hr_poly)
     
-    return nyc_poly_fixed,hr_poly_fixed
+    # return nyc_poly_fixed,hr_poly_fixed
+    return nyc_poly,hr_poly
 
 def get_job_counts():
     """
@@ -222,8 +230,10 @@ def get_job_counts():
     nyc_blocks = gpd.read_file(NYC_BLOCKS)
     hr_blocks = gpd.read_file(HR_BLOCKS)
     
+    print("Getting NYC jobs")
     nyc_jobs = count_jobs(blocks=nyc_blocks, polygons=nyc_poly_fixed, 
                           LODES=nyc_lodes, polygon_id_col='id', crs='epsg:4326')
+    print("Getting Hampton Roads jobs")
     hr_jobs = count_jobs(blocks=hr_blocks, polygons=hr_poly_fixed, 
                          LODES=hr_lodes, polygon_id_col='id', crs='epsg:4326')
 
@@ -256,6 +266,39 @@ def add_jobs_feature(stops):
     return stops
 
 
+def get_svi():
+    
+    nyc_poly_fixed,hr_poly_fixed = get_transit_walksheds()
+    nyc_lodes = pd.read_csv(NYC_LODES)
+    hr_lodes = pd.read_csv(HR_LODES)
+    nyc_tracts = gpd.read_file(NYC_TRACTS)
+    hr_tracts = gpd.read_file(HR_TRACTS)
+    svi = pd.read_csv(SVI_PATH)
+
+    print("Getting NYC SVI")
+    nyc_svi = get_worker_svi(lodes=nyc_lodes, svi=svi, census_geo=nyc_tracts, polygons=nyc_poly_fixed, polygon_id_col='id', crs='epsg:4326')
+    print("Getting Hampton Roads SVI")
+    hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='id', crs='epsg:4326')
+    
+    nyc_svi = nyc_poly_fixed.merge(nyc_svi,how='inner',on='id')
+    hr_svi = hr_poly_fixed.merge(hr_svi,how='inner',on='id')
+    
+    nyc_svi['worker_vulnerability_cat'] = pd.qcut(nyc_svi['SVI_total'], 3, labels=False, duplicates='drop')
+    hr_svi['worker_vulnerability_cat'] = pd.qcut(hr_svi['SVI_total'], 3, labels=False, duplicates='drop')
+    
+    vulnerable_workers = pd.concat([nyc_svi,hr_svi])
+    
+    return vulnerable_workers[['stop_id','SVI_total', 'SVI_SES', 'SVI_household', 'SVI_race','SVI_housing_transport','worker_vulnerability_cat']]
+
+
+def add_vulnerable_workers_feature(stops):
+    
+    vulnerable_workers = get_svi()
+    stops = stops.merge(vulnerable_workers, how='inner', on='stop_id')
+    
+    return stops
+
+
 def get_stops_features():
     """
     Function that builds the combined feature file
@@ -284,6 +327,8 @@ def get_stops_features():
     stops = add_hospital_access(stops)
     print("Adding Number of jobs")
     stops = add_jobs_feature(stops)
+    print("Adding Worker vulnerability")
+    stops = add_vulnerable_workers_feature(stops)
     print("Added all features")
     
     return stops
@@ -292,6 +337,7 @@ def main():
     parser = argparse.ArgumentParser("Create stop features")
     parser.add_argument("--out",  required=True)
     
+    opts = parser.parse_args()
     stop_features = get_stops_features()
     
     print(f"Writing feature file to {opts.out}")
