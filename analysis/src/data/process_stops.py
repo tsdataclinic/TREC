@@ -57,16 +57,24 @@ def make_stops(folder_path):
     stops_with_trips["geometry"] = geopd.points_from_xy(stops_with_trips.stop_lon, stops_with_trips.stop_lat, crs="EPSG:4326")
     stops_with_trips = geopd.GeoDataFrame(stops_with_trips, geometry = "geometry")
     
+    stops_with_trips["feed_name"] = feed_name
+
     # Routes as list
     routes_list = stops_with_trips.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
+    routes_list.routes_serviced = routes_list.routes_serviced.apply(str).str.replace("\[|\]|'", "")
+    
     stops_with_trips = stops_with_trips.merge(routes_list,how='left',on='stop_id')
+<<<<<<< HEAD
     stops_with_trips["routes_serviced_str"] = stops_with_trips.routes_serviced.apply(str)
+=======
+>>>>>>> 4fb0f023646777e6185960e488e70087c61881e9
     
     # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
     stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
-    stops_with_trips["feed_name"] = feed_name
+
     
     return stops_with_trips
+
 
 def tag_with_tracts(stops, tracts_path):
     """
@@ -110,6 +118,7 @@ def get_tract_path(feed_path):
     else:
         raise Exception("Error: Please add tract geojson paths to get_tract_path")
         
+
 def process_feeds(base_paths=BASE_PATHS, city_list=CITY_LIST):
     """
     Takes list of paths containing (potentially) multiple GTFS feed folders and, for each such folder, applies make_stops() and concatenates the result into full table
@@ -145,6 +154,7 @@ def process_feeds(base_paths=BASE_PATHS, city_list=CITY_LIST):
     
     stops_out = stops_out.reset_index(drop=True)
     stops_out = stops_out.merge(feed_city_mapping, how='left', on='feed_name')
+
     return stops_out
 
 def main():
