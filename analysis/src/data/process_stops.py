@@ -59,17 +59,7 @@ def make_stops(folder_path):
     
     stops_with_trips["feed_name"] = feed_name
 
-    # Routes as list
-    routes_list = stops_with_trips.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
-    routes_list.routes_serviced = routes_list.routes_serviced.apply(str).str.replace("\[|\]|'", "", regex = True)
-    
-    stops_with_trips = stops_with_trips.merge(routes_list,how='left',on='stop_id')
-    stops_with_trips["routes_serviced_str"] = stops_with_trips.routes_serviced.apply(str)
-    
-    # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
-    stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
-
-    
+  
     return stops_with_trips
 
 
@@ -149,6 +139,16 @@ def process_feeds(base_paths=BASE_PATHS, city_list=CITY_LIST):
         
         stops_out = pd.concat([stops_out, stops])
     
+    #Routes as list
+    routes_list = stops_out.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
+    routes_list.routes_serviced = routes_list.routes_serviced.apply(str).str.replace("\[|\]|'", "", regex = True)
+    
+    stops_out = stops_out.merge(routes_list,how='left',on='stop_id')
+    stops_out["routes_serviced_str"] = stops_out.routes_serviced.apply(str)
+    
+    # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
+    stops_out = stops_out.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
+
     stops_out = stops_out.reset_index(drop=True)
     stops_out = stops_out.merge(feed_city_mapping, how='left', on='feed_name')
 
