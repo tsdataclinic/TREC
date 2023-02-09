@@ -14,7 +14,6 @@ from src.features.jobs_vulnerability import get_worker_svi
 BASE_WALKSHED_PATH = '/home/data/osm/'
 CITY_DIRS = ['nyc','hampton_roads']
 
-NRI_DATA_PATH ='/home/data/results/climate_risk/NRI_processed.csv'
 NYC_TRANSIT_WALKSHED = '/home/data/osm/nyc/walksheds/transit_walkshed_fixed.geojson'
 HR_TRANSIT_WALKSHED = '/home/data/osm/hampton_roads/walksheds/transit_walkshed_fixed.geojson'
 
@@ -24,13 +23,24 @@ HR_WALK_GRAPH = '/home/data/osm/hampton_roads/HR_walk_graph.gpickle'
 NYC_LODES = '/home/data/census/nyc/LODES/ny_od_main_JT01_2019.csv'
 HR_LODES = '/home/data/census/hampton_roads/LODES/va_od_main_JT01_2019.csv'
 
-NYC_BLOCKS = '/home/data/census/nyc/geo/blocks.geojson'
-HR_BLOCKS = '/home/data/census/hampton_roads/geo/blocks.geojson'
+NYC_BLOCKS = '/home/data/census/nyc/geo/block_groups.geojson'
+HR_BLOCKS = '/home/data/census/hampton_roads/geo/block_groups.geojson'
 
 NYC_TRACTS = '/home/data/census/nyc/geo/tracts.geojson'
 HR_TRACTS = '/home/data/census/hampton_roads/geo/tracts.geojson'
 
 SVI_PATH = '/home/data/social_vulnerability_index/SVI2020_US.csv'
+
+COLUMNS_TO_KEEP = ["stop_id", 
+        "stop_name", 
+        "route_type",
+        "routes_serviced_str",
+        "risk_category", 
+        "jobs_cat", 
+        "worker_vulnerability_cat", 
+        "access_to_hospital",
+        "geometry"]
+
 
 def fix_walkshed(graph, polygons):
     """
@@ -82,45 +92,6 @@ def add_fs_flood_risk(stops):
     
     stops = stops.merge(fsf_feature[['GEOID','risk_score','pct_moderate_plus','risk_category']],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
-    
-    return stops
-
-
-def load_NRI_data():
-    """
-    Loads and minimallyprocesses NRI data for featurization
-        
-    Returns
-    ----------
-    DataFrame
-        NRI file with cleaned columns for risk calculations
-    """
-    NRI_data = pd.read_csv(NRI_DATA_PATH)
-    NRI_data["GEOID"] = NRI_data["GEOID"].astype(str).str.zfill(11)
-    
-    NRI_data['CFLD_AFREQ'] = NRI_data['CFLD_AFREQ'].fillna(0)
-    NRI_data['CFLD_EALB'] = NRI_data['CFLD_EALB'].fillna(0)
-    
-    return NRI_data[['GEOID','CFLD_AFREQ','CFLD_EALB']]
-
-
-def add_NRI_flood_risk(stops):
-    """
-    Adds flood risk based on National Risk Index data
-    
-    Parameters
-    ----------
-    stops: GeoDataFrame
-        
-    Returns
-    ----------
-    GeoDataFrame
-        Adds coastal flooding risk columns to stops file
-    """
-    NRI_data = load_NRI_data()
-    stops = stops.merge(NRI_data, how='left', left_on = "GEOID_2010", right_on = "GEOID")
-    stops['CFLD_damage_quantile'] = pd.qcut(stops['CFLD_EALB'], 3, labels=False, duplicates='drop')
-    stops['CFLD_freq_quantile'] = pd.qcut(stops['CFLD_AFREQ'], 3, labels=False, duplicates='drop')
     
     return stops
 
@@ -225,6 +196,8 @@ def get_job_counts():
     """
     
     nyc_poly_fixed,hr_poly_fixed = get_transit_walksheds()
+    nyc_poly_fixed = nyc_poly_fixed
+    hr_poly_fixed = nyc_poly_fixed
     nyc_lodes = pd.read_csv(NYC_LODES)
     hr_lodes = pd.read_csv(HR_LODES)
     nyc_blocks = gpd.read_file(NYC_BLOCKS)
@@ -232,10 +205,10 @@ def get_job_counts():
     
     print("Getting NYC jobs")
     nyc_jobs = count_jobs(blocks=nyc_blocks, polygons=nyc_poly_fixed, 
-                          LODES=nyc_lodes, polygon_id_col='id', crs='epsg:4326')
+                          LODES=nyc_lodes, polygon_id_col='id', crs='epsg:2263')
     print("Getting Hampton Roads jobs")
     hr_jobs = count_jobs(blocks=hr_blocks, polygons=hr_poly_fixed, 
-                         LODES=hr_lodes, polygon_id_col='id', crs='epsg:4326')
+                         LODES=hr_lodes, polygon_id_col='id', crs='epsg:2283')
 
     nyc_jobs = nyc_poly_fixed.merge(nyc_jobs,how='inner',on='id')
     hr_jobs = hr_poly_fixed.merge(hr_jobs,how='inner',on='id')
@@ -276,9 +249,9 @@ def get_svi():
     svi = pd.read_csv(SVI_PATH)
 
     print("Getting NYC SVI")
-    nyc_svi = get_worker_svi(lodes=nyc_lodes, svi=svi, census_geo=nyc_tracts, polygons=nyc_poly_fixed, polygon_id_col='id', crs='epsg:4326')
+    nyc_svi = get_worker_svi(lodes=nyc_lodes, svi=svi, census_geo=nyc_tracts, polygons=nyc_poly_fixed, polygon_id_col='id', crs='epsg:2263')
     print("Getting Hampton Roads SVI")
-    hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='id', crs='epsg:4326')
+    hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='id', crs='epsg:2283')
     
     nyc_svi = nyc_poly_fixed.merge(nyc_svi,how='inner',on='id')
     hr_svi = hr_poly_fixed.merge(hr_svi,how='inner',on='id')
@@ -319,16 +292,19 @@ def get_stops_features():
     """
 
     stops = process_feeds()
+    print(stops.shape)
     print("Adding First St. flood risk")
     stops = add_fs_flood_risk(stops)
-    print("Adding NRI Coastal Flooding risk")
-    stops = add_NRI_flood_risk(stops)
+    print(stops.shape)
     print("Adding Hospital Access")
     stops = add_hospital_access(stops)
+    print(stops.shape)
     print("Adding Number of jobs")
     stops = add_jobs_feature(stops)
+    print(stops.shape)
     print("Adding Worker vulnerability")
     stops = add_vulnerable_workers_feature(stops)
+    print(stops.shape)
     print("Added all features")
     
     return stops
@@ -339,6 +315,7 @@ def main():
     
     opts = parser.parse_args()
     stop_features = get_stops_features()
+    stop_features = stop_features[COLUMNS_TO_KEEP]
 
     print(f"Writing feature file to {opts.out}")
     with open(opts.out, 'w') as file:

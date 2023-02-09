@@ -61,13 +61,10 @@ def make_stops(folder_path):
 
     # Routes as list
     routes_list = stops_with_trips.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
-    routes_list.routes_serviced = routes_list.routes_serviced.apply(str).str.replace("\[|\]|'", "")
+    routes_list.routes_serviced = routes_list.routes_serviced.apply(str).str.replace("\[|\]|'", "", regex = True)
     
     stops_with_trips = stops_with_trips.merge(routes_list,how='left',on='stop_id')
-<<<<<<< HEAD
     stops_with_trips["routes_serviced_str"] = stops_with_trips.routes_serviced.apply(str)
-=======
->>>>>>> 4fb0f023646777e6185960e488e70087c61881e9
     
     # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
     stops_with_trips = stops_with_trips.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)

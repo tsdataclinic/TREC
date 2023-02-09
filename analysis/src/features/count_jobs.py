@@ -105,7 +105,6 @@ def count_jobs(blocks, polygons, LODES, polygon_id_col, crs):
     DataFrame
         Summed jobs data aggregated to polygon IDs, with the non-commuters subtracted out
     """
-    time_curr = time.time()
     polygons = polygons.to_crs(crs)
     blocks = blocks.to_crs(crs)
     blocks = areal.calculate_census_areas(blocks)
