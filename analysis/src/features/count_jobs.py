@@ -78,7 +78,7 @@ def count_jobs(block_groups, polygons, LODES, polygon_id_col, crs):
     """
     polygons = polygons.to_crs(crs)
     block_groups = block_groups.to_crs(crs)
-    block_groups = areal.calculate_census_areas(blblock_groupsocks)
+    block_groups = areal.calculate_census_areas(block_groups)
 
     LODES["w_geocode"] = LODES["w_geocode"].astype(str).str.slice(0,12)
     LODES["h_geocode"] = LODES["h_geocode"].astype(str).str.slice(0,12)
