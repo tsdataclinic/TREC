@@ -27,10 +27,10 @@ def count_all_jobs(census_geo, polygons, LODES, polygon_id_col, crs):
     DataFrame
         Summed jobs data aggregated to polygon IDs
     """
-    wts = areal.calculate_areal_weights(polygons, census_geo,'stop_id')
+    wts = areal.calculate_areal_weights(polygons, census_geo,polygon_id_col)
     all_jobs = wts.merge(LODES[['w_geocode','S000']],how='left',right_on='w_geocode',left_on='GEOID')
     all_jobs['total_jobs'] = all_jobs.intersection_weight*all_jobs.S000
-    all_jobs = all_jobs.groupby('stop_id').sum()['total_jobs'].reset_index()
+    all_jobs = all_jobs.groupby(polygon_id_col).sum()['total_jobs'].reset_index()
 
     return all_jobs
 
@@ -53,15 +53,15 @@ def count_jobs_to_subtract(census_geo, polygons, LODES, polygon_id_col, crs):
         Summed jobs data aggregated to polygon IDs
     """
        
-    wts = areal.calculate_areal_weights(polygons, census_geo,'stop_id')
-    full_wts = wts.merge(wts,how='outer',on='stop_id')
+    wts = areal.calculate_areal_weights(polygons, census_geo,polygon_id_col)
+    full_wts = wts.merge(wts,how='outer',on=polygon_id_col)
     full_wts['full_weight'] = full_wts.intersection_weight_x * full_wts.intersection_weight_y
 
-    to_sub = full_wts[['stop_id','GEOID_x','GEOID_y','full_weight']].merge(LODES[['w_geocode','h_geocode','S000']],
+    to_sub = full_wts[[polygon_id_col,'GEOID_x','GEOID_y','full_weight']].merge(LODES[['w_geocode','h_geocode','S000']],
                                                                            right_on=['w_geocode','h_geocode'],left_on=['GEOID_x','GEOID_y'])
     
     to_sub['jobs_to_subtract'] = to_sub.full_weight *to_sub.S000
-    to_sub = to_sub.groupby('stop_id').sum()['jobs_to_subtract'].reset_index()
+    to_sub = to_sub.groupby(polygon_id_col).sum()['jobs_to_subtract'].reset_index()
     
     return to_sub
 

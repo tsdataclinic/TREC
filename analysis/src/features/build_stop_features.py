@@ -205,13 +205,13 @@ def get_job_counts():
     
     print("Getting NYC jobs")
     nyc_jobs = count_jobs(census_geo=nyc_blocks, polygons=nyc_poly_fixed, 
-                          LODES=nyc_lodes, polygon_id_col='id', crs='epsg:2263')
+                          LODES=nyc_lodes, polygon_id_col='stop_id', crs='epsg:2263')
     print("Getting Hampton Roads jobs")
     hr_jobs = count_jobs(census_geo=hr_blocks, polygons=hr_poly_fixed, 
-                         LODES=hr_lodes, polygon_id_col='id', crs='epsg:2283')
+                         LODES=hr_lodes, polygon_id_col='stop_id', crs='epsg:2283')
 
-    nyc_jobs = nyc_poly_fixed.merge(nyc_jobs,how='inner',on='id')
-    hr_jobs = hr_poly_fixed.merge(hr_jobs,how='inner',on='id')
+    # nyc_jobs = nyc_poly_fixed.merge(nyc_jobs,how='inner',on='id')
+    # hr_jobs = hr_poly_fixed.merge(hr_jobs,how='inner',on='id')
     
     nyc_jobs['jobs_cat'] = pd.qcut(nyc_jobs['jobs'], 3, labels=False, duplicates='drop')
     hr_jobs['jobs_cat'] = pd.qcut(hr_jobs['jobs'], 3, labels=False, duplicates='drop')
@@ -249,9 +249,9 @@ def get_svi():
     svi = pd.read_csv(SVI_PATH)
 
     print("Getting NYC SVI")
-    nyc_svi = get_worker_svi(lodes=nyc_lodes, svi=svi, census_geo=nyc_tracts, polygons=nyc_poly_fixed, polygon_id_col='id', crs='epsg:2263')
+    nyc_svi = get_worker_svi(lodes=nyc_lodes, svi=svi, census_geo=nyc_tracts, polygons=nyc_poly_fixed, polygon_id_col='stop_id', crs='epsg:2263')
     print("Getting Hampton Roads SVI")
-    hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='id', crs='epsg:2283')
+    hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='stop_id', crs='epsg:2283')
     
     nyc_svi = nyc_poly_fixed.merge(nyc_svi,how='inner',on='id')
     hr_svi = hr_poly_fixed.merge(hr_svi,how='inner',on='id')
