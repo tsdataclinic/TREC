@@ -4,6 +4,7 @@ from src.features import areal_interpolation as areal
 import geopandas as geopd
 import pandas as pd
 import argparse
+import time
 
 def count_all_jobs(blocks, polygons, LODES, polygon_id_col, crs):
     """
@@ -104,19 +105,17 @@ def count_jobs(blocks, polygons, LODES, polygon_id_col, crs):
     DataFrame
         Summed jobs data aggregated to polygon IDs, with the non-commuters subtracted out
     """
-       
-    
+    time_curr = time.time()
     polygons = polygons.to_crs(crs)
     blocks = blocks.to_crs(crs)
     blocks = areal.calculate_census_areas(blocks)
 
-    LODES["w_geocode"] = LODES["w_geocode"].astype(str)
-    LODES["h_geocode"] = LODES["h_geocode"].astype(str)
-    LODES = LODES[["w_geocode", "h_geocode", "S000"]]
-    
+    LODES["w_geocode"] = LODES["w_geocode"].astype(str).str.slice(0,12)
+    LODES["h_geocode"] = LODES["h_geocode"].astype(str).str.slice(0,12)
+    LODES = LODES.groupby(["w_geocode", "h_geocode"]).agg(S000 = ("S000", "sum")).reset_index()
+
     jobs_full = count_all_jobs(blocks, polygons, LODES, polygon_id_col, crs)
     jobs_to_subtract = count_jobs_to_subtract(blocks, polygons, LODES, polygon_id_col, crs)
-    
     jobs_merged = jobs_full.merge(jobs_to_subtract)
     jobs_merged["jobs"] = jobs_merged["total_jobs"] - jobs_merged["jobs_to_subtract"]
     
