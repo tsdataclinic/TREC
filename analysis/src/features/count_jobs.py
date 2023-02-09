@@ -27,7 +27,7 @@ def count_all_jobs(census_geo, polygons, LODES, polygon_id_col, crs):
     DataFrame
         Summed jobs data aggregated to polygon IDs
     """
-    wts = calculate_areal_weights(polygons, census_geo,'stop_id')
+    wts = areal.calculate_areal_weights(polygons, census_geo,'stop_id')
     all_jobs = wts.merge(LODES[['w_geocode','S000']],how='left',right_on='w_geocode',left_on='GEOID')
     all_jobs['total_jobs'] = all_jobs.intersection_weight*all_jobs.S000
     all_jobs = all_jobs.groupby('stop_id').sum()['total_jobs'].reset_index()
@@ -53,7 +53,7 @@ def count_jobs_to_subtract(census_geo, polygons, LODES, polygon_id_col, crs):
         Summed jobs data aggregated to polygon IDs
     """
        
-    wts = calculate_areal_weights(polygons, census_geo,'stop_id')
+    wts = areal.calculate_areal_weights(polygons, census_geo,'stop_id')
     full_wts = wts.merge(wts,how='outer',on='stop_id')
     full_wts['full_weight'] = full_wts.intersection_weight_x * full_wts.intersection_weight_y
 
@@ -63,9 +63,9 @@ def count_jobs_to_subtract(census_geo, polygons, LODES, polygon_id_col, crs):
     to_sub['jobs_to_subtract'] = to_sub.full_weight *to_sub.S000
     to_sub = to_sub.groupby('stop_id').sum()['jobs_to_subtract'].reset_index()
     
-    return out
+    return to_sub
 
-def count_jobs(block_groups, polygons, LODES, polygon_id_col, crs):
+def count_jobs(census_geo, polygons, LODES, polygon_id_col, crs):
     """
     Computes areally interpolated estimates number of people working inside each supplied polygons who also live in that polygon
     
@@ -77,16 +77,16 @@ def count_jobs(block_groups, polygons, LODES, polygon_id_col, crs):
         Summed jobs data aggregated to polygon IDs, with the non-commuters subtracted out
     """
     polygons = polygons.to_crs(crs)
-    block_groups = block_groups.to_crs(crs)
-    block_groups = areal.calculate_census_areas(block_groups)
+    census_geo = census_geo.to_crs(crs)
+    census_geo = areal.calculate_census_areas(census_geo)
 
     LODES["w_geocode"] = LODES["w_geocode"].astype(str).str.slice(0,12)
     LODES["h_geocode"] = LODES["h_geocode"].astype(str).str.slice(0,12)
     LODES = LODES.groupby(["w_geocode", "h_geocode"]).agg(S000 = ("S000", "sum")).reset_index()
-    LODES = LODES[(LODES.w_geocode.isin(block_groups.GEOID)) & (LODES.h_geocode.isin(block_groups.GEOID))]
+    LODES = LODES[(LODES.w_geocode.isin(census_geo.GEOID)) & (LODES.h_geocode.isin(census_geo.GEOID))]
     
-    jobs_full = count_all_jobs(block_groups, polygons, LODES, polygon_id_col, crs)
-    jobs_to_subtract = count_jobs_to_subtract(block_groups, polygons, LODES, polygon_id_col, crs)
+    jobs_full = count_all_jobs(census_geo, polygons, LODES, polygon_id_col, crs)
+    jobs_to_subtract = count_jobs_to_subtract(census_geo, polygons, LODES, polygon_id_col, crs)
     jobs_merged = jobs_full.merge(jobs_to_subtract)
     jobs_merged.jobs_to_subtract = job_counts.jobs_to_subtract.fillna(0)
     jobs_merged["jobs"] = jobs_merged["total_jobs"] - jobs_merged["jobs_to_subtract"]

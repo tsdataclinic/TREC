@@ -204,10 +204,10 @@ def get_job_counts():
     hr_blocks = gpd.read_file(HR_BLOCKS)
     
     print("Getting NYC jobs")
-    nyc_jobs = count_jobs(blocks=nyc_blocks, polygons=nyc_poly_fixed, 
+    nyc_jobs = count_jobs(census_geo=nyc_blocks, polygons=nyc_poly_fixed, 
                           LODES=nyc_lodes, polygon_id_col='id', crs='epsg:2263')
     print("Getting Hampton Roads jobs")
-    hr_jobs = count_jobs(blocks=hr_blocks, polygons=hr_poly_fixed, 
+    hr_jobs = count_jobs(census_geo=hr_blocks, polygons=hr_poly_fixed, 
                          LODES=hr_lodes, polygon_id_col='id', crs='epsg:2283')
 
     nyc_jobs = nyc_poly_fixed.merge(nyc_jobs,how='inner',on='id')
