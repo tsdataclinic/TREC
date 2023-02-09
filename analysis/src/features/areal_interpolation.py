@@ -37,7 +37,7 @@ def calculate_areal_weights(polygons, census_geo, polygon_id_col):
         Weights associated with GEOIDs, polygon IDs
     """
     
-    intersected_polygons = polygons.overlay(census_geo)
+    intersected_polygons = polygons.overlay(census_geo, keep_geom_type = True)
     intersected_polygons["intersection_area"] = intersected_polygons.area
     intersected_polygons["intersection_weight"] =   intersected_polygons["intersection_area"] / intersected_polygons["census_area"]
     intersection_weights = intersected_polygons[[polygon_id_col, "GEOID", "intersection_weight"]]
