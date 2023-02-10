@@ -198,8 +198,6 @@ def get_job_counts():
     """
     
     nyc_poly_fixed,hr_poly_fixed = get_transit_walksheds()
-    nyc_poly_fixed = nyc_poly_fixed
-    hr_poly_fixed = nyc_poly_fixed
     nyc_lodes = pd.read_csv(NYC_LODES)
     hr_lodes = pd.read_csv(HR_LODES)
     nyc_blocks = gpd.read_file(NYC_BLOCKS)
@@ -208,10 +206,11 @@ def get_job_counts():
     print("Getting NYC jobs")
     nyc_jobs = count_jobs(census_geo=nyc_blocks, polygons=nyc_poly_fixed, 
                           LODES=nyc_lodes, polygon_id_col='stop_id', crs='epsg:2263')
+    print(nyc_jobs.shape)
     print("Getting Hampton Roads jobs")
     hr_jobs = count_jobs(census_geo=hr_blocks, polygons=hr_poly_fixed, 
                          LODES=hr_lodes, polygon_id_col='stop_id', crs='epsg:2283')
-
+    print(hr_jobs.shape)
     # nyc_jobs = nyc_poly_fixed.merge(nyc_jobs,how='inner',on='id')
     # hr_jobs = hr_poly_fixed.merge(hr_jobs,how='inner',on='id')
     
@@ -219,7 +218,7 @@ def get_job_counts():
     hr_jobs['jobs_cat'] = pd.qcut(hr_jobs['jobs'], 3, labels=False, duplicates='drop')
     
     jobs = pd.concat([nyc_jobs,hr_jobs])
-    
+    print(jobs.shape)
     return jobs[['stop_id','jobs','jobs_cat']]
 
 def add_jobs_feature(stops):
@@ -236,6 +235,7 @@ def add_jobs_feature(stops):
         Stops file with job count features
     """
     jobs = get_job_counts()
+
     stops = stops.merge(jobs, how='inner', on='stop_id')
     
     return stops
@@ -304,10 +304,10 @@ def get_stops_features():
     print("Adding Number of jobs")
     stops = add_jobs_feature(stops)
     print(stops.shape)
-    # print("Adding Worker vulnerability")
-    # stops = add_vulnerable_workers_feature(stops)
-    # print(stops.shape)
-    # print("Added all features")
+    print("Adding Worker vulnerability")
+    stops = add_vulnerable_workers_feature(stops)
+    print(stops.shape)
+    print("Added all features")
     
     return stops
 

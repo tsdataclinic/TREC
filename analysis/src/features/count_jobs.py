@@ -87,7 +87,7 @@ def count_jobs(census_geo, polygons, LODES, polygon_id_col, crs):
     
     jobs_full = count_all_jobs(census_geo, polygons, LODES, polygon_id_col, crs)
     jobs_to_subtract = count_jobs_to_subtract(census_geo, polygons, LODES, polygon_id_col, crs)
-    jobs_merged = jobs_full.merge(jobs_to_subtract)
+    jobs_merged = jobs_full.merge(jobs_to_subtract, how='left')
     jobs_merged.jobs_to_subtract = jobs_merged.jobs_to_subtract.fillna(0)
     jobs_merged["jobs"] = jobs_merged["total_jobs"] - jobs_merged["jobs_to_subtract"]
     
