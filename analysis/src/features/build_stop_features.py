@@ -171,7 +171,9 @@ def get_transit_walksheds():
     """
 
     nyc_poly = gpd.read_file(NYC_TRANSIT_WALKSHED)
+    nyc_poly = nyc_poly.drop_duplicates(subset=['stop_id'])
     hr_poly = gpd.read_file(HR_TRANSIT_WALKSHED)
+    hr_poly = hr_poly.drop_duplicates(subset=['stop_id'])
         
 #     nyc_poly = nyc_poly.reset_index().rename(columns={'index':'id'})
 #     hr_poly = hr_poly.reset_index().rename(columns={'index':'id'})
@@ -253,8 +255,8 @@ def get_svi():
     print("Getting Hampton Roads SVI")
     hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='stop_id', crs='epsg:2283')
     
-    nyc_svi = nyc_poly_fixed.merge(nyc_svi,how='inner',on='id')
-    hr_svi = hr_poly_fixed.merge(hr_svi,how='inner',on='id')
+    # nyc_svi = nyc_poly_fixed.merge(nyc_svi,how='inner',on='id')
+    # hr_svi = hr_poly_fixed.merge(hr_svi,how='inner',on='id')
     
     nyc_svi['worker_vulnerability_cat'] = pd.qcut(nyc_svi['SVI_total'], 3, labels=False, duplicates='drop')
     hr_svi['worker_vulnerability_cat'] = pd.qcut(hr_svi['SVI_total'], 3, labels=False, duplicates='drop')
@@ -302,10 +304,10 @@ def get_stops_features():
     print("Adding Number of jobs")
     stops = add_jobs_feature(stops)
     print(stops.shape)
-    print("Adding Worker vulnerability")
-    stops = add_vulnerable_workers_feature(stops)
-    print(stops.shape)
-    print("Added all features")
+    # print("Adding Worker vulnerability")
+    # stops = add_vulnerable_workers_feature(stops)
+    # print(stops.shape)
+    # print("Added all features")
     
     return stops
 
