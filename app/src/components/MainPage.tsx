@@ -42,21 +42,27 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   "1": {
     id: 1,
     layerName: "Hospitals",
-    layerURL: "/results/hospitals.geojson",
+    layerURL: "/results/hospitals_v2.geojson",
     isVisible: true,
   },
   "2": {
     id: 2,
-    layerName: "NYC Transit Stops",
-    layerURL: "/results/NYC-stop_features_v3.geojson",
+    layerName: "Transit Stops",
+    layerURL: "/results/stop_features_v5.geojson",
     isVisible: true,
   },
-  "3": {
-    id: 3,
-    layerName: "Hampton Roads Transit Stops",
-    layerURL: "/results/HR-stop_features_v3.geojson",
-    isVisible: true,
-  },
+  // "2": {
+  //   id: 2,
+  //   layerName: "NYC Transit Stops",
+  //   layerURL: "/results/NYC-stop_features_v3.geojson",
+  //   isVisible: true,
+  // },
+  // "3": {
+  //   id: 3,
+  //   layerName: "Hampton Roads Transit Stops",
+  //   layerURL: "/results/HR-stop_features_v3.geojson",
+  //   isVisible: true,
+  // },
   "4": {
     id: 4,
     layerName: "2050 Hampton Roads Floods (Projected)",

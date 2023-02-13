@@ -35,10 +35,10 @@ export function useSourceLayerConfigs(
     //     return output;
     //   }
       output = {
-        'NYC Transit Stops': [
+        'Transit Stops': [
             {
-                sourceId: 'NYC-stop_features',
-                layerId: 'NYC-stop_features-icon',
+                sourceId: 'stop_features',
+                layerId: 'stop_features-icon',
                 layerType: 'symbol',
                 layoutProperties: [
                     { name: 'icon-image', value: ['match', ['get', 'route_type'], 
@@ -53,8 +53,8 @@ export function useSourceLayerConfigs(
                 ]
             },
             {
-                sourceId: 'NYC-stop_features',
-                layerId: 'NYC-stop_features-risk_category',
+                sourceId: 'stop_features',
+                layerId: 'stop_features-risk_category',
                 layerType: 'circle',
                 layoutProperties: [
                 ],
@@ -97,68 +97,130 @@ export function useSourceLayerConfigs(
                 filters
             }
         ],
-        'Hampton Roads Transit Stops': [
-            {
-                sourceId: 'HR-stop_features',
-                layerId: 'HR-stop_features-icon',
-                layerType: 'symbol',
-                layoutProperties: [
-                    { name: 'icon-image', value: ['match', ['get', 'route_type'], 
-                            'Bus', 'bus-11',
-                            'Subway', 'rail-11',
-                            'bus-11'
-                        ], options: { sdf: true }}
-                ],
-                paintProperties: [
-                    // { name: 'icon-color', value: 'red'},
-                    // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
-                ]
-            },
-            {
-                sourceId: 'HR-stop_features',
-                layerId: 'HR-stop_features-risk_category',
-                layerType: 'circle',
-                layoutProperties: [
-                ],
-                paintProperties: [
-                    { name: 'circle-stroke-color', value: 'grey'},
-                    { name: 'circle-stroke-width', value: 1},
-                    { name: 'circle-radius', value: [
-                        'interpolate', 
-                        ['linear'], 
-                        ['zoom'],
-                        0, .1,
-                        7, .5,
-                        14, 5,
-                        15, 10,
-                        16, 12,
-                        17, 20,
-                        19, 25
-                    ]},
-                    { name: 'circle-color', value: [
-                        'interpolate',
-                        ['linear'],
-                        ['get', selectedProperties[0]],
-                        0, 
-                            ['case',
-                            ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
-                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
-                            `${COLORS.lightred}`],
-                        1, 
-                        ['case',
-                            ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
-                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
-                            `${COLORS.mediumred}`],
-                        2, 
-                        ['case',
-                            ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
-                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
-                            `${COLORS.darkred}`],
-                    ]},
-                ],
-                filters
-            }
-        ],
+        // 'NYC Transit Stops': [
+        //     {
+        //         sourceId: 'NYC-stop_features',
+        //         layerId: 'NYC-stop_features-icon',
+        //         layerType: 'symbol',
+        //         layoutProperties: [
+        //             { name: 'icon-image', value: ['match', ['get', 'route_type'], 
+        //                     'Bus', 'bus-11',
+        //                     'Subway', 'rail-11',
+        //                     'bus-11'
+        //                 ], options: { sdf: true }}
+        //         ],
+        //         paintProperties: [
+        //             // { name: 'icon-color', value: 'red'},
+        //             // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
+        //         ]
+        //     },
+        //     {
+        //         sourceId: 'NYC-stop_features',
+        //         layerId: 'NYC-stop_features-risk_category',
+        //         layerType: 'circle',
+        //         layoutProperties: [
+        //         ],
+        //         paintProperties: [
+        //             { name: 'circle-stroke-color', value: 'grey'},
+        //             { name: 'circle-stroke-width', value: 1},
+        //             { name: 'circle-radius', value: [
+        //                 'interpolate', 
+        //                 ['linear'], 
+        //                 ['zoom'],
+        //                 0, .1,
+        //                 7, .5,
+        //                 14, 5,
+        //                 15, 10,
+        //                 16, 12,
+        //                 17, 20,
+        //                 19, 25
+        //             ]},
+        //             { name: 'circle-color', value: [
+        //                 'interpolate',
+        //                 ['linear'],
+        //                 ['get', selectedProperties[0]],
+        //                 0, 
+        //                     ['case',
+        //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
+        //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
+        //                     `${COLORS.lightred}`],
+        //                 1, 
+        //                 ['case',
+        //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
+        //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
+        //                     `${COLORS.mediumred}`],
+        //                 2, 
+        //                 ['case',
+        //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
+        //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
+        //                     `${COLORS.darkred}`],
+        //             ]},
+        //         ],
+        //         filters
+        //     }
+        // ],
+        // 'Hampton Roads Transit Stops': [
+        //     {
+        //         sourceId: 'HR-stop_features',
+        //         layerId: 'HR-stop_features-icon',
+        //         layerType: 'symbol',
+        //         layoutProperties: [
+        //             { name: 'icon-image', value: ['match', ['get', 'route_type'], 
+        //                     'Bus', 'bus-11',
+        //                     'Subway', 'rail-11',
+        //                     'bus-11'
+        //                 ], options: { sdf: true }}
+        //         ],
+        //         paintProperties: [
+        //             // { name: 'icon-color', value: 'red'},
+        //             // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
+        //         ]
+        //     },
+        //     {
+        //         sourceId: 'HR-stop_features',
+        //         layerId: 'HR-stop_features-risk_category',
+        //         layerType: 'circle',
+        //         layoutProperties: [
+        //         ],
+        //         paintProperties: [
+        //             { name: 'circle-stroke-color', value: 'grey'},
+        //             { name: 'circle-stroke-width', value: 1},
+        //             { name: 'circle-radius', value: [
+        //                 'interpolate', 
+        //                 ['linear'], 
+        //                 ['zoom'],
+        //                 0, .1,
+        //                 7, .5,
+        //                 14, 5,
+        //                 15, 10,
+        //                 16, 12,
+        //                 17, 20,
+        //                 19, 25
+        //             ]},
+        //             { name: 'circle-color', value: [
+        //                 'interpolate',
+        //                 ['linear'],
+        //                 ['get', selectedProperties[0]],
+        //                 0, 
+        //                     ['case',
+        //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
+        //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
+        //                     `${COLORS.lightred}`],
+        //                 1, 
+        //                 ['case',
+        //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
+        //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
+        //                     `${COLORS.mediumred}`],
+        //                 2, 
+        //                 ['case',
+        //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
+        //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
+        //                     `${COLORS.darkred}`],
+        //             ]},
+        //         ],
+        //         filters
+        //     }
+        // ],
         'Hospitals': [
             {
                 sourceId: 'hospitals',
