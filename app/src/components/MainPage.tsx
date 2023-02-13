@@ -44,13 +44,13 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   "1": {
     id: 1,
     layerName: "Hospitals",
-    layerURL: "/results/hospitals.geojson",
+    layerURL: "/results/hospitals_v2.geojson",
     isVisible: true,
   },
   "2": {
     id: 2,
     layerName: "Transit Stops",
-    layerURL: "/results/stop_features_v3.geojson",
+    layerURL: "/results/stop_features_v5.geojson",
     isVisible: true,
   },
 };

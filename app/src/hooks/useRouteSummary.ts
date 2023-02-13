@@ -23,13 +23,13 @@ export const useRouteSummary = (
         if (remoteLayers[1].isSuccess && detailedRoutes) {
           
           let route_data = {
-            'routes': remoteLayers[1].data.features.map((a:any) => a.properties.routes_serviced), 
+            'routes': remoteLayers[1].data.features.map((a:any) => a.properties.routes_serviced.split(",")), 
             'flood_risk': remoteLayers[1].data.features.map((a:any) => a.properties.risk_category),
             'access_to_hospital': remoteLayers[1].data.features.map((a:any) => a.properties.access_to_hospital),
             'jobs_cat': remoteLayers[1].data.features.map((a:any) => a.properties.jobs_cat),
             'worker_vulnerability_cat': remoteLayers[1].data.features.map((a:any) => a.properties.worker_vulnerability_cat),
           }
-    
+          // console.log(route_data)
           // Flattening this data so that we have scores for each stop on a route
           let route_features = route_data.routes.flatMap((r:any, index:any) => {
             return r.map((route:any) => {
