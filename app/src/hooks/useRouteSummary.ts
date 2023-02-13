@@ -23,7 +23,7 @@ export const useRouteSummary = (
         if (remoteLayers[1].isSuccess && detailedRoutes) {
           
           let route_data = {
-            'routes': remoteLayers[1].data.features.map((a:any) => a.properties.routes_serviced.split(",")), 
+            'routes': remoteLayers[1].data.features.map((a:any) => a.properties.routes_serviced), 
             'flood_risk': remoteLayers[1].data.features.map((a:any) => a.properties.risk_category),
             'access_to_hospital': remoteLayers[1].data.features.map((a:any) => a.properties.access_to_hospital),
             'jobs_cat': remoteLayers[1].data.features.map((a:any) => a.properties.jobs_cat),
