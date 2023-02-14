@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import ContextPane from "./ContextPane";
+import RouteSummaryPane from "./RouteSidebar";
 import Filter from "./Filter";
 import MapComponent from "./MapComponent";
 import {
@@ -8,6 +9,7 @@ import {
 } from "../hooks/useRemoteLayer";
 import { useSourceLayerConfigs } from "../utils/sourceLayerConfigs";
 import { AVAILABLE_ROUTES } from "../utils/availableRoutes";
+import { RouteSummary, useRouteSummary } from "../hooks/useRouteSummary";
 
 export type Layer = {
   id: number;
@@ -106,9 +108,15 @@ export default function MainPage(): JSX.Element {
   });
 
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>([]);
+  const [detailedRoutes, setDetailedRoutes] = useState<SelectedRoute>({city:'',routeType:'',routeServiced:''});
+
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers);
+  // console.log(remoteLayers)
+  let routeSummary = useRouteSummary(remoteLayers, detailedRoutes)
+  // console.log(routeSummary)
   // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
+  
   let sourceLayerConfigs = useSourceLayerConfigs(
     selectedProperties,
     // TODO - generate mapbox expressions inside hook body or in another function
@@ -155,11 +163,18 @@ export default function MainPage(): JSX.Element {
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
       />
+      {detailedRoutes.city != '' && 
+      <RouteSummaryPane
+        routeSummary={routeSummary}
+        detailedRoutes={detailedRoutes}
+        setDetailedRoutes={setDetailedRoutes}
+      />}
       <MapComponent
         center={selectedRegion}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
+        setDetailedRoutes={setDetailedRoutes}
       />
       <Filter
         filters={filters}

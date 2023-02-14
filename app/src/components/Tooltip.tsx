@@ -1,8 +1,10 @@
+import { debug } from 'console';
+import { GeoJsonProperties } from 'geojson';
 import { MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import * as React from 'react';
 import { getFilterGridColors } from './Filter';
-import { PROPERTY_LABELS } from './MainPage';
+import { PROPERTY_LABELS, SelectedRoute } from './MainPage';
 
 function DataRow(props: {
   children: React.ReactNode;
@@ -13,6 +15,27 @@ function DataRow(props: {
     <div className="w-full flex text-sm">
       <dt className="flex-1">{label}</dt>
       <dd>{children}</dd>
+    </div>
+  );
+}
+
+function DataRowLink(props: {
+  city: string;
+  route_type:string;
+  routes_serviced:string;
+  label: string;
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
+}): JSX.Element {
+  const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
+  let routes = JSON.parse(routes_serviced)
+  let r_len = routes.length
+  
+  return (
+    <div className="w-full flex text-sm">
+      <dt className="flex-1 pr-2">{label}</dt>
+      {routes.map((r:string, i:number) => (<dd className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs" key={i} onClick={()=>setDetailedRoutes({city:city,routeType:route_type,routeServiced:r})}>{i< r_len-1 ? r+',' : r}</dd>)
+      )}
+      
     </div>
   );
 }
@@ -36,9 +59,10 @@ function RiskSquares(props: {
 type Props = {
   feature: MapboxGeoJSONFeature;
   onDismiss: () => void;
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
 
-function Tooltip({ feature, onDismiss }: Props): JSX.Element {
+function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element {
   const { id, properties } = feature;
 
   if (!properties) {
@@ -52,13 +76,15 @@ function Tooltip({ feature, onDismiss }: Props): JSX.Element {
       {properties['FEATURE_CLASS'] ? 
         <div>
           <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3>
-          <h4 className="text-base pb-2">{properties['MAP_NAME']}</h4>
+          
         </div>
       : 
       <>
       <h3 className="font-bold text-base pb-2">{properties['stop_name']}</h3>
       <dl className="space-y-2">
-        <DataRow label="Routes">{JSON.parse(properties['routes_serviced']).join(', ')}</DataRow>
+        <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
+                     city={properties.city} route_type={properties.route_type}
+                     routes_serviced={properties.routes_serviced}></DataRowLink>
         <DataRow label={PROPERTY_LABELS['risk_category']}>
           <RiskSquares
             color="blue"
