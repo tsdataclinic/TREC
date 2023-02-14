@@ -10,7 +10,6 @@ function ColorBar(props: {
     color: string;
 }): JSX.Element {
     const { width, color } = props;
-    console.log(typeof(width+'%'))
     return (
         <div className="flex-3 w-3/5 h-5 bg-slate-200">
             <div className="h-5" style={{width: width+'%', backgroundColor: color}}></div>
@@ -27,13 +26,13 @@ export default function BarChart(props: {
     const pcts = data.map(k => ((k/sum * 100).toFixed(0)))
     let colors = [COLORS.darkred, COLORS.mediumred, COLORS.lightred];
     if (label == 'Flood Risk'){
-        colors = [COLORS.deepblue,COLORS.darkgreen, COLORS.mediumgreen]
+        colors = [COLORS.darkgreen,COLORS.mediumgreen, COLORS.lightgreen]
     } else if (label == 'Access to Hospitals') {
-        colors = [COLORS.darkblue, COLORS.mediumblue, COLORS.lightblue]
+        colors = [COLORS.darkpurple, COLORS.mediumpurple, COLORS.lightpurple]
     }
     return (
             <div>
-                <div className="w-full flex text-base pt-8 pl-4">
+                <div className="w-full flex text-base pt-6 pl-4">
                     <dt className="flex-1">{label}</dt>
                     <dd className="pl-20 pr-4"># of stations</dd>
                 </div>

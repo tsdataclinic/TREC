@@ -4,14 +4,13 @@ import { useMemo } from "react";
 export enum COLORS {
     'darkred' = 'rgba(102,55,67,1)',
     'mediumred' ='rgba(157,110,123,1)',
-    'lightred' = 'rgba(191,143,149,1)',
-    'darkblue' = 'rgba(117,128,157,1)',
-    'mediumblue' = 'rgba(166,151,183,1)',
-    'lightblue' = 'rgba(217,202,214,1)',
-    'darkgreen' = 'rgba(145,185,196,1)',
-    'mediumgreen' = 'rgba(202,227,235,1)',
-    'lightgreen' = 'rgba(225,232,235,1)',
-    'deepblue' = 'rgba(70,150,200,1)'
+    'lightred' = 'rgba(201,153,159,1)',
+    'darkpurple' = 'rgba(117,128,157,1)',
+    'mediumpurple' = 'rgba(166,151,183,1)',
+    'lightpurple' = 'rgba(217,202,214,1)',
+    'darkgreen' = 'rgba(100,165,189,1)',
+    'mediumgreen' = 'rgba(150,195,196,1)',
+    'lightgreen' = 'rgba(210,237,242,1)'
 }
 
 export type SLConfigType = {
@@ -81,17 +80,17 @@ export function useSourceLayerConfigs(
                         0, 
                             ['case',
                             ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
-                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
+                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightpurple}`,
                             `${COLORS.lightred}`],
                         1, 
                         ['case',
                             ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
-                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
+                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumpurple}`,
                             `${COLORS.mediumred}`],
                         2, 
                         ['case',
                             ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
-                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
+                            ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkpurple}`,
                             `${COLORS.darkred}`],
                     ]},
                 ],

@@ -34,7 +34,7 @@ function ContextPane({
       id="ContextPane"
       className="bg-white w-1/5 min-w-fit max-w-sm h-full shadow flex flex-col"
     >
-      <div className="p-4 border-b border-b-slate-400">
+      <div className="p-5 border-b border-b-slate-400">
         <select
           onChange={e => {
             setSelectedRegion(regions[e.target.value]);

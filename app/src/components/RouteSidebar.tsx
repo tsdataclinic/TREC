@@ -33,23 +33,19 @@ function RouteSummaryPane({
         >
             {/* min-w-max max-w-sm */}
             
-            <div className="w-full flex pl-4">
+            <div className="p-2 border-b border-b-slate-400">
                 <FontAwesomeIcon 
                     icon={IconType.faArrowLeft} 
                     onClick={()=>{setDetailedRoutes({city:'',routeType:'',routeServiced:''})}}
                     className="text-base font-xl hover:bg-slate-200 cursor-pointer transition-colors pt-3"/>
                 <b className="pl-4 pt-2">{detailedRoutes.routeServiced}</b>
+                <div className="flex flex-col pl-7 space-y-2">
+                    {detailedRoutes.routeType} Route
+                </div>
             </div>
             
-            <div className="flex flex-col pl-11 space-y-2">
-                {detailedRoutes.routeType} Route
-            </div>
 
-            <div className="pt-6">
-                <hr />
-            </div>
-
-            <div className="flex flex-col pt-5 pl-4 space-y-2"><b>Total Stops</b></div>
+            <div className="flex flex-col pt-4 pl-4 space-y-2"><b>Total Stops</b></div>
 
             <div className="flex flex-col pt-2 pl-4 space-y-2">
                 <b className="text-xl">{JSON.stringify(routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['count'])}</b>

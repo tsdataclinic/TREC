@@ -27,7 +27,7 @@ function DataRowLink(props: {
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 }): JSX.Element {
   const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
-  let routes = eval(routes_serviced)
+  let routes = JSON.parse(routes_serviced)
   let r_len = routes.length
   
   return (
@@ -76,7 +76,7 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
       {properties['FEATURE_CLASS'] ? 
         <div>
           <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3>
-          {/* <h4 className="text-base pb-2">{properties['MAP_NAME']}</h4> */}
+          
         </div>
       : 
       <>
@@ -84,7 +84,7 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
       <dl className="space-y-2">
         <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
                      city={properties.city} route_type={properties.route_type}
-                     routes_serviced={properties.routes_serviced_str}></DataRowLink>
+                     routes_serviced={properties.routes_serviced}></DataRowLink>
         <DataRow label={PROPERTY_LABELS['risk_category']}>
           <RiskSquares
             color="blue"

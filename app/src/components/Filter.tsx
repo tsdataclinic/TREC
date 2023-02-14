@@ -14,13 +14,13 @@ export function getFilterGridColors(
 ): Array<COLORS | string> {
   return [
     prop0 > 2 || prop1 > 0 ? 'white' : COLORS.darkgreen,
-    prop0 > 2 || prop1 > 1 ? 'white' : COLORS.darkblue,
+    prop0 > 2 || prop1 > 1 ? 'white' : COLORS.darkpurple,
     prop0 > 2 || prop1 > 2 ? 'white' : COLORS.darkred,
     prop0 > 1 || prop1 > 0 ? 'white' : COLORS.mediumgreen,
-    prop0 > 1 || prop1 > 1 ? 'white' : COLORS.mediumblue,
+    prop0 > 1 || prop1 > 1 ? 'white' : COLORS.mediumpurple,
     prop0 > 1 || prop1 > 2 ? 'white' : COLORS.mediumred,
     prop0 > 0 || prop1 > 0 ? 'white' : COLORS.lightgreen,
-    prop0 > 0 || prop1 > 1 ? 'white' : COLORS.lightblue,
+    prop0 > 0 || prop1 > 1 ? 'white' : COLORS.lightpurple,
     prop0 > 0 || prop1 > 2 ? 'white' : COLORS.lightred,
   ];
 }
