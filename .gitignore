@@ -156,3 +156,4 @@ dmypy.json
 #######
 /app/public/results/*
 /app/public/results/*/*
+*.geojson
