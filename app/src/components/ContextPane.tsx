@@ -111,7 +111,7 @@ function ContextPane({
         </div>
         <hr />
         <div className="text-lg flex justify-between">
-          <b>Filter by Transit line</b>
+          <b>Filter by Transit Line</b>
           <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
         <div className="grid grid-cols-4 p-3 pb-0 gap-1">
