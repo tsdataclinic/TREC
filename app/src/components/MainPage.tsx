@@ -50,7 +50,7 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   "2": {
     id: 2,
     layerName: "Transit Stops",
-    layerURL: "/results/stop_features_v5.geojson",
+    layerURL: "/results/stop_features_v6.geojson",
     isVisible: true,
   },
 };

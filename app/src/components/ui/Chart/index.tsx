@@ -27,8 +27,6 @@ export default function BarChart(props: {
     let colors = [COLORS.darkred, COLORS.mediumred, COLORS.lightred];
     if (label == 'Flood Risk'){
         colors = [COLORS.darkgreen,COLORS.mediumgreen, COLORS.lightgreen]
-    } else if (label == 'Access to Hospitals') {
-        colors = [COLORS.darkpurple, COLORS.mediumpurple, COLORS.lightpurple]
     }
     return (
             <div>
