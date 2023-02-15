@@ -12,12 +12,15 @@ export const fetchLayerFn = async (layer: Layer) => {
         id: layer.id,
       };
       return result;
-    }
-    else { 
-      const res = await fetch(layer.layerURL);
-      const body = await res.text();
+    } else if (layer.layerURL.includes('mapbox://')) {
+      return {
+        id: layer.id
+      };
+    } else { 
+      // const res = await fetch(layer.layerURL);
+      // const body = await res.text();
       const result = {
-        body,
+        // body,
         id: layer.id,
       };
       return result;

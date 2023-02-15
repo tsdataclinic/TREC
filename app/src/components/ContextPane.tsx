@@ -49,7 +49,7 @@ function ContextPane({
 
       <div className="px-4 space-y-4 pt-4 flex flex-col h-full overflow-scroll">
         
-        {/* <div className="border-b border-b-slate-300 pb-4">
+        <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers).map(layer => {
             return (
               <div className="space-x-2">
@@ -69,7 +69,7 @@ function ContextPane({
               </div>
             );
           })}
-        </div> */}
+        </div>
 
         <div className="flex flex-col space-y-2">
           <label>
@@ -111,7 +111,7 @@ function ContextPane({
         </div>
         <hr />
         <div className="text-lg flex justify-between">
-          <b>Filter by Transit line</b>
+          <b>Filter by Transit Line</b>
           <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
         <div className="grid grid-cols-4 p-3 pb-0 gap-1">
@@ -129,8 +129,8 @@ function ContextPane({
             routes.map(availableRoute => Object.values(availableRoute).map(routeRecord => {
               return <details key={routeRecord.city}>
                 <summary>{routeRecord.city} lines</summary>
-                {routeRecord.route_types.map(type => {
-                  return <details className="ml-2" key={`${routeRecord.city}_${type}`}>
+                {routeRecord.route_types.map((type, index) => {
+                  return <details className="ml-2" key={`${routeRecord.city}_${index}`}>
                     <summary>{type.route_type}</summary>
                     <ul className="ml-4">
                       {
