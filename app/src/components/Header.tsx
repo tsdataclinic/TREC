@@ -152,11 +152,19 @@ function LegalContents() {
       <p>
         TREC is hosted by Two Sigma Investments, LP, and is subject to Two
         Sigma's{' '}
-        <a href="https://www.twosigma.com/legal-disclosure/">
+        <a
+          href="https://www.twosigma.com/legal-disclosure/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Legal Disclosure
         </a>{' '}
         and{' '}
-        <a href="https://www.twosigma.com/legal-disclosure/privacy-policy/">
+        <a
+          href="https://www.twosigma.com/legal-disclosure/privacy-policy/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Privacy Policy
         </a>
         , with the following amendments:
@@ -174,11 +182,21 @@ function LegalContents() {
       </p>
       <p>
         This tool is shared pursuant to the{' '}
-        <a href="https://www.apache.org/licenses/LICENSE-2.0.html">
+        <a
+          href="https://www.apache.org/licenses/LICENSE-2.0.html"
+          target="_blank"
+          rel="noreferrer"
+        >
           Apache 2.0 License
-        </a>{' '}
-        for the data contained herein can be found in the{' '}
-        <a href="https://github.com/tsdataclinic/trec">TREC Github repo</a>
+        </a>
+        . Licenses for the data contained herein can be found in the{' '}
+        <a
+          href="https://github.com/tsdataclinic/trec"
+          target="_blank"
+          rel="noreferrer"
+        >
+          TREC Github repo
+        </a>
       </p>
     </>
   );
