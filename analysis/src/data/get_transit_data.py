@@ -4,7 +4,6 @@ from io import BytesIO
 import argparse
 import json
 
-BASE_PATH = 'data'
 
 def get_transit_feeds(config, city_key):
     """
@@ -16,7 +15,7 @@ def get_transit_feeds(config, city_key):
         JSON configuration file
 
     """
-    base_path = f"{BASE_PATH}/cities/{city_key}/transit_feeds/"
+    base_path = f"{config['base_path']}/cities/{city_key}/transit_feeds/"
     feeds = config[city_key]['transit_feeds']
     feed_names = list(feeds.keys())
     feed_urls = list(feeds.values())
