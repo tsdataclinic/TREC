@@ -366,7 +366,7 @@ function Header() {
     <header className="px-4 flex py-2 justify-between items-center top-0 z-10 bg-app-slate text-white">
       <div className="flex space-x-4 items-center">
         <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
-        <h1>TREC - Census TOP</h1>
+        <h1 className="text-lg">TREC - Census TOP</h1>
       </div>
       <div className="flex">
         <ModalLink modalContents={<MethodologyModalContents />}>
