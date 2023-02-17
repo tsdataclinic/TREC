@@ -1,16 +1,6 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import Modal from './ui/Modal';
 import Button from './ui/Button';
-
-function HeaderLink(props: { to: string; children: React.ReactNode }) {
-  const { to, children } = props;
-  return (
-    <NavLink to={to} className="hover:bg-slate-600 py-4 px-4">
-      {children}
-    </NavLink>
-  );
-}
 
 function ModalLink(props: {
   children: string;
@@ -23,7 +13,7 @@ function ModalLink(props: {
     <>
       <Button
         unstyled
-        className="hover:bg-slate-600 px-4"
+        className="hover:bg-slate-600 px-4 py-4"
         onClick={() => setIsModalOpen(true)}
       >
         {children}
@@ -381,7 +371,7 @@ function MethodologyModalContents() {
 
 function Header() {
   return (
-    <header className="px-4 flex py-2 justify-between items-center top-0 z-10 bg-app-slate text-white">
+    <header className="px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
       <div className="flex space-x-4 items-center">
         <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
         <h1 className="text-lg">TREC - Census TOP</h1>
