@@ -10,7 +10,6 @@ import os
 import json
 ox.config(log_console=True)
 
-BASE_PATH = 'data'
 
 def create_extent(geo_file_path):
     """
@@ -56,20 +55,24 @@ def get_walk_graph(geo_file_path, network_type='walk'):
     G = ox.graph_from_polygon(extent['geometry'].iloc[0], network_type=network_type, retain_all=True)
     return G
 
-
-def main():
-    parser = argparse.ArgumentParser("OSM Graph builder")
-    parser.add_argument("--city",  required=True)
-    
-    opts = parser.parse_args()
-    
-    extent_path = f"{BASE_PATH}/cities/{opts.city}/census/geo/tracts.geojson"
-    out_path = f"{BASE_PATH}/cities/{opts.city}/osm/"
+def make_walk_graph(config, city_key):
+    extent_path = f"{config['base_path']}/cities/{city_key}/census/geo/tracts.geojson"
+    out_path = f"{config['base_path']}/cities/{city_key}/osm/"
     
     G = get_walk_graph(extent_path)
     print("Graph created. Writing it") 
     nx.write_gpickle(G, out_path+"walk_graph.gpickle")
 
+def main():
+    parser = argparse.ArgumentParser("OSM Graph builder")
+    parser.add_argument("--config",  required=True)
+    parser.add_argument("--city",  required=True)
+    
+    opts = parser.parse_args()
+    with open(opts.config) as f:
+        config = json.load(f)
+
+    make_walk_graph(config, opts.city)
     print("OSM data written") 
     
     

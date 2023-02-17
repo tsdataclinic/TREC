@@ -1,4 +1,12 @@
-{
+{   "base_path": "/home/data/",
+
+    "national":
+    {
+        "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
+        "flood_risk_path":"/home/data/national/fsf_flood_tract_summary.csv",
+        "svi_path":"/home/data/national/SVI2020_US.csv"
+    },
+    
     "nyc": 
     {
         "city_name": "New York City",
