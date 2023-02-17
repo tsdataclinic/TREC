@@ -5,6 +5,8 @@ import argparse
 import os
 import json
 
+BASE_PATH = 'data'
+
 def get_LODES(config, city_key):
     """
     Computes areally interpolated sums total number of people working inside supplied polygons
@@ -19,11 +21,11 @@ def get_LODES(config, city_key):
     ----------
     Writes and unzips LODES file for speicified state
     """
-    path = f"{config['base_path']}/cities/{city_key}/census/LODES/"
+    path = f"{BASE_PATH}/cities/{city_key}/census/LODES/"
     state = config[city_key]['state']
     file_name = state + "_od_main_JT01_2019.csv.gz"
     url = "https://lehd.ces.census.gov/data/lodes/LODES7/" + state.lower() + "/od/" + state.lower() + "_od_main_JT01_2019.csv.gz"
-    
+
     if not os.path.isdir(path):
         os.makedirs(path)
     

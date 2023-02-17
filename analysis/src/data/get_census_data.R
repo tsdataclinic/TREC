@@ -5,6 +5,7 @@ library("optparse")
 library("tidyjson")
 library("jsonlite")
 
+BASE_PATH = 'data'
 
 option_list = list(
     make_option(c("--config"), type="character", default=NULL, 
@@ -22,7 +23,7 @@ city <- opt$city
 config <- config %>% spread_all()
 msa_code <- config[config$city_code==city,]$msa_code
 
-path = paste0(config$base_path,"/cities/",city,"/census/")
+path = paste0(BASE_PATH,"/cities/",city,"/census/")
 tract_path = "geo/tracts.geojson"
 tract_2010_path = "geo/tracts_2010.geojson"
 block_group_path = "geo/block_groups.geojson"
