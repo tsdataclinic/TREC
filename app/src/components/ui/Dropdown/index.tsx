@@ -24,8 +24,8 @@ export const StyledTriggerButton = styled(Select.Trigger)`
   &[data-disabled] {
     color: #94a3b8;
     cursor: not-allowed;
-    &: hover {
-      background-color: inherit;
+    &:hover {
+      !background-color: inherit;
     }
   }
 `;
