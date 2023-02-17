@@ -1,0 +1,18 @@
+{
+    "nyc": 
+    {
+        "city_name": "New York City",
+        "city_code": "nyc",
+        "msa_code": "C3562",
+        "state":"NY",
+        "transit_feeds": {
+            "mta_subway": "http://web.mta.info/developers/data/nyct/subway/google_transit.zip",
+            "mta_bus_company": "http://web.mta.info/developers/data/busco/google_transit.zip",
+            "bus_bronx": "http://web.mta.info/developers/data/nyct/bus/google_transit_bronx.zip",
+            "bus_brooklyn": "http://web.mta.info/developers/data/nyct/bus/google_transit_brooklyn.zip",
+            "bus_manhattan": "http://web.mta.info/developers/data/nyct/bus/google_transit_manhattan.zip",
+            "bus_queens": "http://web.mta.info/developers/data/nyct/bus/google_transit_queens.zip",
+            "bus_staten_island": "http://web.mta.info/developers/data/nyct/bus/google_transit_staten_island.zip"
+        }
+    }
+}
