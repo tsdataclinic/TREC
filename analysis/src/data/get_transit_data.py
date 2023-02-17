@@ -14,7 +14,7 @@ def get_transit_feeds(config, city_key):
         JSON configuration file
 
     """
-    base_path = f"/home/data/cities/{city_key}/transit_feeds/"
+    base_path = f"{config['base_path']}/cities/{city_key}/transit_feeds/"
     feeds = config[city_key]['transit_feeds']
     feed_names = list(feeds.keys())
     feed_urls = list(feeds.values())

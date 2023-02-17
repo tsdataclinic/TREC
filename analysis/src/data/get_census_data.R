@@ -22,12 +22,14 @@ city <- opt$city
 config <- config %>% spread_all()
 msa_code <- config[config$city_code==city,]$msa_code
 
-path = paste0("/home/data/cities/",city,"/census/")
+path = paste0(config$base_path,"/cities/",city,"/census/")
 tract_path = "geo/tracts.geojson"
 tract_2010_path = "geo/tracts_2010.geojson"
 block_group_path = "geo/block_groups.geojson"
 block_path = "geo/blocks.geojson"
 acs_path =  "acs/acs_wide.csv"
+
+dir.create(path)
 
 all_msa <- read_csv("https://www.bls.gov/cew/classifications/areas/qcew-county-msa-csa-crosswalk-csv.csv") # National MSA to county crosswalk
 selected_msa <- all_msa %>% filter(`MSA Code` == msa_code)
