@@ -43,8 +43,9 @@ def subset_hospital_points(points, extent, county_list=[]):
     return hospitals_gdf_extent
 
 def process_hospitals(config, city_key, out=False):
-    poi_path = os.listdir(f"{config['base_path']}/national/points_of_interest")[0]
-    poi_data = pd.read_csv(poi_path,sep='|')
+    poi_path = f"{config['base_path']}/national/"
+    poi_file = os.listdir(poi_path)[0]
+    poi_data = pd.read_csv(poi_path+poi_file,sep='|')
 
     geo_path = f"{config['base_path']}/cities/{city_key}/census/geo/tracts.geojson"
     extent = create_extent(geo_path)
@@ -55,8 +56,11 @@ def process_hospitals(config, city_key, out=False):
 
     hospitals = subset_hospital_points(poi_data, extent,county_list)
     if out == True:
-        out_path = f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson"
-        hospitals.to_file(out_path, driver='GeoJSON')
+        out_path = f"{config['base_path']}/cities/{city_key}/results/"
+        if not os.path.isdir(out_path):
+            os.makedirs(out_path)
+
+        hospitals.to_file(out_path+"hospitals.geojson", driver='GeoJSON')
         print("Hospitals data written to: " + out_path) 
     else:
         return hospitals
@@ -73,8 +77,11 @@ def main():
         config = json.load(f)
 
     hospitals = process_hospitals(config, opts.city)
-    out_path = f"{config['base_path']}/cities/{opts.city}/results/hospitals.geojson"
-    hospitals.to_file(out_path, driver='GeoJSON')
+    out_path = f"{config['base_path']}/cities/{city_key}/results/"
+    if not os.path.isdir(out_path):
+        os.makedirs(out_path)
+
+    hospitals.to_file(out_path+"hospitals.geojson", driver='GeoJSON')
     print("Hospitals data written to: " + out_path) 
     
 if __name__ == "__main__":

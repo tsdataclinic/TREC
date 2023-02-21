@@ -14,11 +14,11 @@ import json
 COLUMNS_TO_KEEP = ["stop_id", 
         "stop_name", 
         "route_type",
-        "routes_serviced_str",
-        "risk_category", 
-        "jobs_cat", 
-        "worker_vulnerability_cat", 
-        "access_to_hospital",
+        "routes_serviced",
+        "flood_risk_category", 
+        "job_access_category", 
+        "worker_vulnerability_category", 
+        "access_to_hospital_category",
         "geometry"]
 
 
@@ -39,7 +39,7 @@ def add_fs_flood_risk(stops, config):
     
     stops = stops.merge(fsf_feature[['GEOID','risk_score','pct_moderate_plus','risk_category']],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
-    
+    stops = stops.rename(columns={'risk_category':'flood_risk_category'})
     return stops
 
 
@@ -85,9 +85,9 @@ def add_hospital_access(stops, config, city_key):
     high_idx = gpd.sjoin(stops, high, predicate='within').index
     med_idx = gpd.sjoin(stops, med, predicate='within').index
     
-    stops['access_to_hospital'] = 0
-    stops.loc[stops.index.isin(med_idx),'access_to_hospital'] = 1
-    stops.loc[stops.index.isin(high_idx),'access_to_hospital'] = 2
+    stops['access_to_hospital_category'] = 0
+    stops.loc[stops.index.isin(med_idx),'access_to_hospital_category'] = 1
+    stops.loc[stops.index.isin(high_idx),'access_to_hospital_category'] = 2
     
     return stops
 
@@ -116,10 +116,10 @@ def get_job_counts(config, city_key):
                           LODES=lodes, polygon_id_col='stop_id', crs='epsg:2263')
 
     
-    jobs['jobs_cat'] = pd.qcut(jobs['jobs'], 3, labels=False, duplicates='drop')
-    
-    print(jobs.shape)
-    return jobs[['stop_id','jobs','jobs_cat']]
+    jobs['job_access_category'] = pd.qcut(jobs['jobs'], 3, labels=False, duplicates='drop')
+
+    # print(jobs.shape)
+    return jobs[['stop_id','jobs','job_access_category']]
 
 def add_jobs_feature(stops, config, city_key):
     """
@@ -143,10 +143,10 @@ def add_jobs_feature(stops, config, city_key):
 
 def get_svi(config, city_key):
     
-    TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed_fixed.geojson"
+    TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed.geojson"
     TRACTS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/tracts_2010.geojson"
     LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2019.csv"
-    SVI_PATH = f"{config['base_path']}/cities/national/SVI2020_US.csv"
+    SVI_PATH = f"{config['base_path']}/national/SVI2020_US.csv"
 
     walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
     lodes = pd.read_csv(LODES_PATH)
@@ -156,9 +156,9 @@ def get_svi(config, city_key):
     print("Getting SVI")
     vulnerable_workers = get_worker_svi(lodes=lodes, svi=svi, census_geo=tracts, polygons=walksheds, polygon_id_col='stop_id', crs='epsg:2263')
         
-    vulnerable_workers['worker_vulnerability_cat'] = pd.qcut(vulnerable_workers['SVI_total'], 3, labels=False, duplicates='drop')
+    vulnerable_workers['worker_vulnerability_category'] = pd.qcut(vulnerable_workers['SVI_total'], 3, labels=False, duplicates='drop')
         
-    return vulnerable_workers[['stop_id','SVI_total', 'SVI_SES', 'SVI_household', 'SVI_race','SVI_housing_transport','worker_vulnerability_cat']]
+    return vulnerable_workers[['stop_id','SVI_total', 'SVI_SES', 'SVI_household', 'SVI_race','SVI_housing_transport','worker_vulnerability_category']]
 
 
 def add_vulnerable_workers_feature(stops, config, city_key):
@@ -190,20 +190,20 @@ def get_stops_features(config, city_key):
     STOPS_PATH = f"{config['base_path']}/cities/{city_key}/stops.geojson"
 
     stops = gpd.read_file(STOPS_PATH)
-    print(stops.shape)
+    # print(stops.shape)
 
     print("Adding First St. flood risk")
-    stops = add_fs_flood_risk(stops)
-    print(stops.shape)
+    stops = add_fs_flood_risk(stops, config)
+    # print(stops.shape)
     print("Adding Hospital Access")
     stops = add_hospital_access(stops, config, city_key)
-    print(stops.shape)
+    # print(stops.shape)
     print("Adding Number of jobs")
     stops = add_jobs_feature(stops, config, city_key)
-    print(stops.shape)
+    # print(stops.shape)
     print("Adding Worker vulnerability")
     stops = add_vulnerable_workers_feature(stops, config, city_key)
-    print(stops.shape)
+    # print(stops.shape)
     print("Added all features")
     
     return stops

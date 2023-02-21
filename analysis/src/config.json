@@ -1,10 +1,10 @@
-{   "base_path": "/home/data",
+{   "base_path": "/home/data/test",
 
     "national":
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
-        "flood_risk_path":"/home/data/national/fsf_flood_tract_summary.csv",
-        "svi_path":"/home/data/national/SVI2020_US.csv"
+        "flood_risk_path":"/home/data/test/national/fsf_flood_tract_summary.csv",
+        "svi_path":"/home/data/test/national/SVI2020_US.csv"
     },
     
     "nyc": 

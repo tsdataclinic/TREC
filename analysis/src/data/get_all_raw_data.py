@@ -16,20 +16,21 @@ def main():
     parser.add_argument("--city", required=True)
     path = os.getcwd()
     opts = parser.parse_args()
+    print(opts.config)
     
     with open(opts.config) as f:
         config = json.load(f)
 
-    print("Getting points of interest data") 
-    get_poi_data(config)
-    print("Getting Transit feeds") 
-    get_transit_feeds(config, opts.city)
+    # print("Getting points of interest data") 
+    # get_poi_data(config)
+    # print("Getting Transit feeds") 
+    # get_transit_feeds(config, opts.city)
     print("Getting Census geographies") 
-    subprocess.run(["Rscript", f"{path}/src/data/get_census_data.R",opts.config,opts.city])
-    print("Getting LODES data") 
-    get_LODES(config, opts.city)
-    print("Getting OSM data") 
-    get_osm_data(config, opts.city)
+    subprocess.run(["Rscript", f"{path}/data/get_census_data.R","--config",opts.config,"--city",opts.city])
+    # print("Getting LODES data") 
+    # get_LODES(config, opts.city)
+    # print("Getting OSM data") 
+    # get_osm_data(config, opts.city)
     
     
 if __name__ == "__main__":

@@ -19,14 +19,14 @@ opt = parse_args(opt_parser);
 
 config <- fromJSON(txt=opt$config)
 city <- opt$city
-
+base_path <- config$base_path
 config <- map_dfr(config[city], as_tibble)
 msa_code <- config[config$city_code==city,]$msa_code
 
-path = paste0(BASE_PATH,"/cities/",city,"/census/")
-tract_path = "geo/tracts.geojson"
-tract_2010_path = "geo/tracts_2010.geojson"
-block_group_path = "geo/block_groups.geojson"
+path = paste0(base_path,"/cities/",city,"/census/geo/")
+tract_path = "tracts.geojson"
+tract_2010_path = "tracts_2010.geojson"
+block_group_path = "block_groups.geojson"
 # block_path = "geo/blocks.geojson"
 # acs_path =  "acs/acs_wide.csv"
 
@@ -51,7 +51,7 @@ tract_boundaries <- get_acs(geography = "tract",
 tract_boundaries <- st_transform(tract_boundaries, "WGS84")
 
 
-st_write(tract_boundaries, paste0(path, tract_path))
+st_write(tract_boundaries, paste0(path, tract_path),append=FALSE)
 
 ## Save 2010 Tract boundaries
 tract_boundaries <- get_acs(geography = "tract",
@@ -67,12 +67,12 @@ tract_boundaries <- get_acs(geography = "tract",
 tract_boundaries <- st_transform(tract_boundaries, "WGS84")
 
 
-st_write(tract_boundaries, paste0(path, tract_2010_path))
+st_write(tract_boundaries, paste0(path, tract_2010_path),append=FALSE)
 
 ## Save 2020 Block groups
 block_group_boundaries <- get_acs(geography = "block group", 
                                   state = selected_msa_states, 
-                                  year = 2010, 
+                                  year = 2019, 
                                   cb = TRUE, 
                                   geometry = T,
                                   variables = "B19013_001") %>% 
@@ -82,6 +82,6 @@ block_group_boundaries <- get_acs(geography = "block group",
 
 block_group_boundaries <- st_transform(block_group_boundaries, "WGS84")
 
-st_write(block_group_boundaries, paste0(path, block_group_path))
+st_write(block_group_boundaries, paste0(path, block_group_path),append=FALSE)
 
 

@@ -37,6 +37,10 @@ def get_osm_data(config, city_key):
     extent_path = f"{config['base_path']}/cities/{city_key}/census/geo/tracts.geojson"
     out_path = f"{config['base_path']}/cities/{city_key}/osm/"
     
+    if not os.path.isdir(out_path):
+        os.makedirs(out_path)
+
+    
     G = get_walk_graph(extent_path)
     print("Graph created. Writing it") 
     nx.write_gpickle(G, out_path+"walk_graph.gpickle")

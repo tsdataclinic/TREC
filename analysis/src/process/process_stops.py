@@ -117,9 +117,7 @@ def process_stops(config, city_key, out=False):
 
     
     stops_out = stops_out.merge(routes_list,how='left',on='stop_id')
-    stops_out["routes_serviced_str"] = stops_out.routes_serviced.apply(str)
     
-    # stops_with_trips["routes_serviced"] = stops_with_trips.groupby("stop_id")["route_id"].transform(lambda x : ', '.join(x))
     stops_out = stops_out.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
 
 
@@ -129,7 +127,7 @@ def process_stops(config, city_key, out=False):
         stops_path = f"{config['base_path']}/cities/{city_key}/stops.geojson"
 
         with open(stops_path, 'w') as file:
-            file.write(stops.to_json())
+            file.write(stops_out.to_json())
         print("Stops data written to: " + stops_path) 
     else:
         return stops_out

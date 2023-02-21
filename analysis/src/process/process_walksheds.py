@@ -8,6 +8,7 @@ from shapely.geometry import Point, LineString, Polygon, MultiPolygon
 import sys
 from shapely.ops import unary_union
 import numpy as np
+import os
 ox.config(log_console=True)
 ox.__version__
 import json
@@ -127,14 +128,17 @@ def process_walksheds(config, city_key):
     graph_path = f"{config['base_path']}/cities/{city_key}/osm/walk_graph.gpickle"
     graph = nx.read_gpickle(graph_path)
     out_path = f"{config['base_path']}/cities/{city_key}/osm/walksheds/"
+    
+    if not os.path.isdir(out_path):
+        os.makedirs(out_path)
 
-    print("Processing Hospital walksheds")
-    hospitals_path = f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson"
-    points = gpd.read_file(hospitals_path)
-    times = [10,20]
-    for t in times:
-        hosp_walkshed = create_walk_shed(points, graph, trip_time=t, combine=True)
-        hosp_walkshed.to_file(out_path + f"hospitals_combined_{t}m.geojson",driver='GeoJSON')
+    # print("Processing Hospital walksheds")
+    # hospitals_path = f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson"
+    # points = gpd.read_file(hospitals_path)
+    # times = [10,20]
+    # for t in times:
+    #     hosp_walkshed = create_walk_shed(points, graph, trip_time=t, combine=True)
+    #     hosp_walkshed.to_file(out_path + f"hospitals_combined_{t}m.geojson",driver='GeoJSON')
 
 
     print("Processing Transit walksheds")
@@ -142,7 +146,10 @@ def process_walksheds(config, city_key):
     points = gpd.read_file(stops_path)
     transit_walkshed = create_walk_shed(points, graph, combine=False)
     transit_walkshed_fixed = fix_walkshed(graph,transit_walkshed)
-    transit_walkshed_fixed.to_file(out_path + "transit_walkshed.geojson",driver='GeoJSON')
+    with open(out_path + "transit_walkshed.geojson", 'w') as file:
+        file.write(transit_walkshed_fixed.to_json())
+
+    # transit_walkshed_fixed.to_file(out_path + "transit_walkshed.geojson",driver='GeoJSON')
     
     print(f"Processed walkshed polygons written to {out_path}")
 

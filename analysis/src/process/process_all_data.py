@@ -17,8 +17,8 @@ def main():
 
     print("Processing Stops") 
     process_stops(config,opts.city,out=True)
-    print("Processing Hospitals") 
-    process_hospitals(config, opts.city,out=True)
+    # print("Processing Hospitals") 
+    # process_hospitals(config, opts.city,out=True)
     print("Processing Walksheds") 
     process_walksheds(config, opts.city)
     
