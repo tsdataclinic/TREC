@@ -1,8 +1,7 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-
 import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
@@ -30,6 +29,116 @@ function MapComponent({
   );
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
+  const paintLayer = useCallback(
+    (layer: Layer) => {
+      if (!map.current) {
+        return;
+      }
+
+      // if a layer isn't visible, remove it
+      if (!layer.isVisible) {
+        // remove layers
+        sourceLayerConfigs[layer.layerName].forEach(
+          (slConfig: SLConfigType) => {
+            if (map.current?.getLayer(slConfig.layerId)) {
+              map.current?.removeLayer(slConfig.layerId);
+            }
+          },
+        );
+        // remove source
+        if (map.current?.getSource(layer.layerName)) {
+          map.current.removeSource(layer.layerName);
+        }
+      } else {
+        // if a layer is visible, add back the source if it
+        // doesn't exist already
+        if (!map.current?.getSource(layer.layerName)) {
+          if (layer.layerURL.includes('geojson')) {
+            map.current.addSource(layer.layerName, {
+              type: 'geojson',
+              data: layer.layerURL,
+            });
+          } else if (layer.layerURL.includes('mapbox://')) {
+            map.current.addSource(layer.layerName, {
+              type: 'vector',
+              url: layer.layerURL,
+            });
+          } else {
+            map.current.addSource(layer.layerName, {
+              type: 'vector',
+              tiles: [layer.layerURL],
+            });
+          }
+        }
+
+        // add layers
+        sourceLayerConfigs[layer.layerName].forEach(
+          (slConfig: SLConfigType) => {
+            if (!map.current) {
+              return;
+            }
+
+            // add back the layer if it's not already in the map
+            if (!map.current.getLayer(slConfig.layerId)) {
+              if (layer.layerURL.includes('geojson')) {
+                map.current.addLayer({
+                  id: slConfig.layerId,
+                  type: slConfig.layerType,
+                  source: layer.layerName,
+                });
+              } else {
+                map.current.addLayer({
+                  id: slConfig.layerId,
+                  type: slConfig.layerType,
+                  source: layer.layerName,
+                  'source-layer': layer.sourceLayer,
+                });
+              }
+            }
+
+            // reset the layout properties
+            slConfig.layoutProperties.forEach((layoutProperty: any) => {
+              if (map.current) {
+                map.current.setLayoutProperty(
+                  slConfig.layerId,
+                  layoutProperty.name,
+                  layoutProperty.value,
+                  layoutProperty.options,
+                );
+              }
+            });
+
+            // reset the paint properties
+            slConfig.paintProperties.forEach((paintProperty: any) => {
+              if (map.current) {
+                map.current.setPaintProperty(
+                  slConfig.layerId,
+                  paintProperty.name,
+                  paintProperty.value,
+                  paintProperty.options,
+                );
+              }
+            });
+
+            // update the filters
+            if (slConfig.filters) {
+              // first clear all filters
+              map.current.setFilter(slConfig.layerId, null);
+
+              // now reset them
+              slConfig.filters.forEach(filter => {
+                if (map.current) {
+                  map.current.setFilter(slConfig.layerId, filter);
+                }
+              });
+            }
+          },
+        );
+      }
+    },
+    [map, sourceLayerConfigs],
+  );
+
   useEffect(() => {
     if (!map.current) {
       map.current = new mapboxgl.Map({
@@ -47,13 +156,16 @@ function MapComponent({
         if (!map.current) return;
         setIsMapLoaded(true);
         map.current.addControl(new mapboxgl.NavigationControl());
-      map.current.addControl(new mapboxgl.GeolocateControl());
+        map.current.addControl(new mapboxgl.GeolocateControl());
         // load svg icons if needed
         map.current.loadImage('/icons/H.png', (error, image) => {
           if (error) throw error;
           if (!image) throw error;
-          if (!map.current?.hasImage('hospital-icon')) map.current?.addImage('hospital-icon', image);
-        })
+          if (!map.current?.hasImage('hospital-icon'))
+            map.current?.addImage('hospital-icon', image);
+        });
+
+        Object.values(layers).forEach(paintLayer);
       });
 
       map.current.on('click', e => {
@@ -96,97 +208,10 @@ function MapComponent({
   }, [center]);
 
   useEffect(() => {
-    if (isMapLoaded) {     
-      Object.values(layers).forEach((layer: Layer) => {
-        if (!map.current) return;
-        // remove layers
-        sourceLayerConfigs[layer.layerName].forEach(
-          (slConfig: SLConfigType) => {
-            if (map.current?.getLayer(slConfig.layerId)) {
-              map.current?.removeLayer(slConfig.layerId);
-            }
-          },
-        );
-        // remove source
-        if (map.current?.getSource(layer.layerName)) {
-          map.current.removeSource(layer.layerName);
-        }
-        if (layer.isVisible) {
-          // add source if it doesn't exist
-          if (!map.current?.getSource(layer.layerName)) {
-            if (layer.layerURL.includes('geojson')) {
-              map.current.addSource(layer.layerName, {
-                type: 'geojson',
-                data: layer.layerURL,
-              });
-            }  else if (layer.layerURL.includes('mapbox://')) {
-              map.current.addSource(layer.layerName, {
-                type: 'vector',
-                url: layer.layerURL,
-              });
-            }
-            else {
-              map.current.addSource(layer.layerName, {
-                type: 'vector',
-                tiles: [layer.layerURL],
-              });
-            }
-          }
-          // add layers
-          sourceLayerConfigs[layer.layerName].forEach(
-            (slConfig: SLConfigType) => {
-              if (!map.current) return;
-              if (!map.current.getLayer(slConfig.layerId)) {
-                if (layer.layerURL.includes('geojson')) { 
-                  map.current.addLayer({
-                    id: slConfig.layerId,
-                    type: slConfig.layerType,
-                    source: layer.layerName,
-                  });
-                } else {
-                  map.current.addLayer({
-                    id: slConfig.layerId,
-                    type: slConfig.layerType,
-                    source: layer.layerName,
-                    'source-layer': layer.sourceLayer
-                  });
-                }
-
-                slConfig.layoutProperties.forEach((layoutProperty: any) => {
-                  if (map.current) {
-                    map.current.setLayoutProperty(
-                      slConfig.layerId,
-                      layoutProperty.name,
-                      layoutProperty.value,
-                      layoutProperty.options,
-                    );
-                  }
-                });
-                slConfig.paintProperties.forEach((paintProperty: any) => {
-                  if (map.current) {
-                    map.current.setPaintProperty(
-                      slConfig.layerId,
-                      paintProperty.name,
-                      paintProperty.value,
-                      paintProperty.options,
-                    );
-                  }
-                });
-                if (slConfig.filters) {
-                  slConfig.filters.forEach(filter => {
-                    if (map.current) {
-                      map.current.setFilter(slConfig.layerId, filter);
-                    }
-                  });
-                }
-              }
-            },
-          );
-        }
-      });
-
+    if (isMapLoaded) {
+      Object.values(layers).forEach(paintLayer);
     }
-  }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs]);
+  }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
 
   return <div id="map" className="h-full w-full" />;
 }

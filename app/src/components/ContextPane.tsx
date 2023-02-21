@@ -149,34 +149,36 @@ function ContextPane({
                           <ul className="ml-4">
                             {type.routes_serviced.map((route, index) => (
                               <li key={`${index}_${route}`}>
-                                <input
-                                  className="mr-2"
-                                  onChange={e => {
-                                    let newRoutes = [...selectedRoutes];
-                                    if (e.target.checked) {
-                                      newRoutes.push({
-                                        city: routeRecord.city,
-                                        routeType: type.route_type,
-                                        routeServiced: route,
-                                      });
-                                    } else {
-                                      const routeIndex = newRoutes.findIndex(
-                                        r =>
-                                          r.city === routeRecord.city &&
-                                          r.routeType === type.route_type &&
-                                          r.routeServiced === route,
-                                      );
-                                      newRoutes.splice(routeIndex, 1);
-                                    }
-                                    setSelectedRoutes(newRoutes);
-                                  }}
-                                  checked={selectedRoutes
-                                    .map(r => r.routeServiced)
-                                    .includes(route)}
-                                  id={`${index}_${route}`}
-                                  type="checkbox"
-                                />
-                                <label htmlFor={`${index}`}>{route}</label>
+                                <label>
+                                  <input
+                                    className="mr-2"
+                                    onChange={e => {
+                                      let newRoutes = [...selectedRoutes];
+                                      if (e.target.checked) {
+                                        newRoutes.push({
+                                          city: routeRecord.city,
+                                          routeType: type.route_type,
+                                          routeServiced: route,
+                                        });
+                                      } else {
+                                        const routeIndex = newRoutes.findIndex(
+                                          r =>
+                                            r.city === routeRecord.city &&
+                                            r.routeType === type.route_type &&
+                                            r.routeServiced === route,
+                                        );
+                                        newRoutes.splice(routeIndex, 1);
+                                      }
+                                      setSelectedRoutes(newRoutes);
+                                    }}
+                                    checked={selectedRoutes
+                                      .map(r => r.routeServiced)
+                                      .includes(route)}
+                                    id={`${index}_${route}`}
+                                    type="checkbox"
+                                  />
+                                  {route}
+                                </label>
                               </li>
                             ))}
                           </ul>
