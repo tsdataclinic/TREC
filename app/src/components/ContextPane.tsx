@@ -51,25 +51,27 @@ function ContextPane({
 
       <div className="px-4 space-y-4 pt-4 flex flex-col h-full overflow-scroll">
         <div className="border-b border-b-slate-300 pb-4">
-          {Object.values(layers).map(layer => {
-            return (
-              <div className="space-x-2">
-                <FontAwesomeIcon
-                  onClick={() => {
-                    updateLayer({
-                      ...layer,
-                      isVisible: !layer.isVisible,
-                    });
-                  }}
-                  size="1x"
-                  cursor={'pointer'}
-                  icon={layer.isVisible ? faEye : faEyeSlash}
-                  title={layer.isVisible ? 'Hide layer' : 'Show layer'}
-                />
-                <span>{layer?.layerName}</span>
-              </div>
-            );
-          })}
+          {Object.values(layers)
+            .filter(layer => !layer.hideToggle)
+            .map(layer => {
+              return (
+                <div className="space-x-2">
+                  <FontAwesomeIcon
+                    onClick={() => {
+                      updateLayer({
+                        ...layer,
+                        isVisible: !layer.isVisible,
+                      });
+                    }}
+                    size="1x"
+                    cursor={'pointer'}
+                    icon={layer.isVisible ? faEye : faEyeSlash}
+                    title={layer.isVisible ? 'Hide layer' : 'Show layer'}
+                  />
+                  <span>{layer?.layerName}</span>
+                </div>
+              );
+            })}
         </div>
 
         <div className="flex flex-col space-y-2">
