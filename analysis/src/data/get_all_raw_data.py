@@ -3,6 +3,7 @@ from get_LODES import get_LODES
 from get_POI_data import get_poi_data
 from get_walk_graph import make_walk_graph
 # from get_cenus_data import get_census_geographies
+import subprocess
 import argparse
 import os
 import json
@@ -22,7 +23,8 @@ def main():
     get_poi_data(config)
     print("Getting Transit feeds") 
     get_transit_feeds(config, opts.city)
-    # print("Getting Census geographies") 
+    print("Getting Census geographies") 
+    subprocess.run(["get_census_data.R",opts.config,opts.city])
     # get_census_geographies(config, opts.city)
     print("Getting LODES data") 
     get_LODES(config, opts.city)
