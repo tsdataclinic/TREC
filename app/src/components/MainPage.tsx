@@ -44,17 +44,17 @@ export const PROPERTY_LABELS: Record<string, string> = {
 const AVAILABLE_LAYERS: Record<string, Layer> = {
   '1': {
     id: 1,
-    layerName: 'Hospitals',
-    layerURL: '/results/hospitals_v2.geojson',
-    isVisible: true,
-    hideToggle: false,
-  },
-  '2': {
-    id: 2,
     layerName: 'Transit Stops',
     layerURL: '/results/stop_features_v6.geojson',
     isVisible: true,
     hideToggle: true,
+  },
+  '2': {
+    id: 2,
+    layerName: 'Hospitals',
+    layerURL: '/results/hospitals_v2.geojson',
+    isVisible: true,
+    hideToggle: false,
   },
   // "2": {
   //   id: 2,

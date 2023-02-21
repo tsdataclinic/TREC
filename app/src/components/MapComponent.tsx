@@ -158,7 +158,7 @@ function MapComponent({
         map.current.addControl(new mapboxgl.NavigationControl());
         map.current.addControl(new mapboxgl.GeolocateControl());
         // load svg icons if needed
-        map.current.loadImage('/icons/H.png', (error, image) => {
+        map.current.loadImage('/icons/H_official.png', (error, image) => {
           if (error) throw error;
           if (!image) throw error;
           if (!map.current?.hasImage('hospital-icon'))
