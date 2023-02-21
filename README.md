@@ -1,8 +1,14 @@
 <p align="center">
-  <img src="public/site-logo.png" width="400"/>
+  <img src="site-logo.png" width="400"/>
 </p>
 
 # Transit Resilience for Essential Commuting (TREC)
+
+<p align="center">
+  <img src="TREC_screenshot.png" width="800"/>
+</p>
+
+
 In the fall of 2022, Data Clinic took part in [The Opportunity Project](https://opportunity.census.gov/), a semi-annual sprint organized by the U.S. Census in partnership with federal agencies to demonstrate the value of open data, as part of the [Building Climate Change Resilience Through Public Transit](https://opportunity.census.gov/sprints/) sprint sponsored by the U.S. Department of Transportation.
 
 Across our many conversations with transit officials, researchers, and community organizers from across the country about the climate-related challenges and opportunities transportation systems face, a recurring theme was the desire to enable a better understanding of climate's intersectional impact on both transit and communities. In other words, a flooded bus stop doesn't just mean that the bus and passengers can't access the stop, but it may also impede access to a hospital or community support, or to a large amount of essential jobs. How can we share that insight more effectively?
