@@ -10,6 +10,7 @@ type Props = {
 };
 
 const APP_SLATE_COLOR = '#33424e';
+const SLIDER_HEAD_SIZE = 7;
 
 const StyledSlider = styled(RadixSlider.Root)`
   align-items: center;
@@ -36,14 +37,37 @@ const StyledSliderTrack = styled(RadixSlider.Track)`
   flex-grow: 1;
   position: relative;
 
+  &:before {
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
+  }
+
   &[data-orientation='horizontal'] {
     height: 3px;
     width: 100%;
+
+    &:before {
+      border-top: ${SLIDER_HEAD_SIZE}px solid transparent;
+      border-bottom: ${SLIDER_HEAD_SIZE}px solid transparent;
+      border-left: ${SLIDER_HEAD_SIZE + 1}px solid ${APP_SLATE_COLOR};
+      right: -2px;
+      top: -5px;
+    }
   }
 
   &[data-orientation='vertical'] {
     height: 100%;
     width: 3px;
+
+    &:before {
+      border-left: ${SLIDER_HEAD_SIZE}px solid transparent;
+      border-right: ${SLIDER_HEAD_SIZE}px solid transparent;
+      border-bottom: ${SLIDER_HEAD_SIZE + 1}px solid ${APP_SLATE_COLOR};
+      left: -6px;
+      top: -2px;
+    }
   }
 `;
 
