@@ -1,3 +1,5 @@
+import sys 
+sys.path.append('../')
 from src.process.process_stops import process_stops
 from src.process.process_hospitals import process_hospitals
 from src.process.process_walksheds import process_walksheds

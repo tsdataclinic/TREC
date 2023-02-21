@@ -1,3 +1,5 @@
+import sys 
+sys.path.append('../')
 from src.data.get_transit_data import get_transit_feeds
 from src.data.get_LODES import get_LODES
 from src.data.get_POI_data import get_poi_data
