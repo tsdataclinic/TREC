@@ -39,10 +39,20 @@ function AboutModalContents() {
       </h1>
       <p>
         In the fall of 2022, Data Clinic took part in{' '}
-        <a href="https://opportunity.census.gov/">The Opportunity Project</a>, a
-        semi-annual sprint organized by the U.S. Census in partnership with
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://opportunity.census.gov/"
+        >
+          The Opportunity Project
+        </a>
+        , a semi-annual sprint organized by the U.S. Census in partnership with
         federal agencies to demonstrate the value of open data, as part of the{' '}
-        <a href="https://opportunity.census.gov/sprints/">
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://opportunity.census.gov/sprints/"
+        >
           Building Climate Change Resilience Through Public Transit
         </a>{' '}
         sprint sponsored by the U.S. Department of Transportation.
@@ -85,7 +95,13 @@ function AboutModalContents() {
       </p>
       <br />
       <p>
-        <a href="https://github.com/tsdataclinic/trec">TREC Github repo</a>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://github.com/tsdataclinic/trec"
+        >
+          TREC Github repo
+        </a>
       </p>
       <br />
 
@@ -107,7 +123,13 @@ function AboutModalContents() {
       </p>
       <p>
         To learn more visit{' '}
-        <a href="https://dataclinic.twosigma.com">dataclinic.twosigma.com</a>{' '}
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://dataclinic.twosigma.com"
+        >
+          dataclinic.twosigma.com
+        </a>{' '}
         and connect with us via{' '}
         <a href="mailto:dataclinic@twosigma.com">dataclinic@twosigma.com</a>
       </p>
@@ -120,17 +142,34 @@ function AboutModalContents() {
       </p>
       <p>
         If you would like to suggest a feature or improvement, please either{' '}
-        <a href="https://github.com/tsdataclinic/trec/issues">
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://github.com/tsdataclinic/trec/issues"
+        >
           open a ticket on GitHub
         </a>{' '}
-        or reach out to us by <a href="mailto:dataclinic@twosigma.com">email</a>
+        or reach out to us by{' '}
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="mailto:dataclinic@twosigma.com"
+        >
+          email
+        </a>
         .
       </p>
       <p>
         If you want to contribute in a technical capacity, head over to our{' '}
-        <a href="https://github.com/tsdataclinic/trec">GitHub page</a> to open
-        issues, suggest features, contribute pull requests, and find beginner
-        issues.
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://github.com/tsdataclinic/trec"
+        >
+          GitHub page
+        </a>{' '}
+        to open issues, suggest features, contribute pull requests, and find
+        beginner issues.
       </p>
     </>
   );
@@ -256,27 +295,56 @@ function MethodologyModalContents() {
       <ul>
         <li>
           Census tract, block geographies retrieved using{' '}
-          <a href="https://walker-data.com/tidycensus">TidyCensus</a> with data
-          by <a href="https://www.census.gov/">US Census Bureau</a>,{' '}
-          <a href="https://ask.census.gov/prweb/PRServletCustom/app/ECORRAsk2/YACFBFye-rFIz_FoGtyvDRUGg1Uzu5Mn*/!STANDARD?pzuiactionzzz=CXtpbn0rTEpMcGRYOG1vS0tqTFAwaENUZWpvM1NNWEMzZ3p5aFpnWUxzVmw0TjJpQS85RkNvUXZDRVRQWWtWSDFQaWZj*">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://walker-data.com/tidycensus"
+          >
+            TidyCensus
+          </a>{' '}
+          with data by{' '}
+          <a target="_blank" rel="noreferrer" href="https://www.census.gov/">
+            US Census Bureau
+          </a>
+          ,{' '}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://ask.census.gov/prweb/PRServletCustom/app/ECORRAsk2/YACFBFye-rFIz_FoGtyvDRUGg1Uzu5Mn*/!STANDARD?pzuiactionzzz=CXtpbn0rTEpMcGRYOG1vS0tqTFAwaENUZWpvM1NNWEMzZ3p5aFpnWUxzVmw0TjJpQS85RkNvUXZDRVRQWWtWSDFQaWZj*"
+          >
             Public Domain
           </a>
           .
         </li>
         <li>
           Flood risk data from{' '}
-          <a href="https://aws.amazon.com/marketplace/pp/prodview-r36lzzzjacd32?sr=0-1&ref_=beagle&applicationId=AWSMPContessa#overview">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://aws.amazon.com/marketplace/pp/prodview-r36lzzzjacd32?sr=0-1&ref_=beagle&applicationId=AWSMPContessa#overview"
+          >
             First Street Climate-Adjusted Flood Risk - US Aggregate Data by
             First Street Foundation
           </a>
           ,{' '}
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          >
             CC 4.0
           </a>
         </li>
         <li>
-          <a href="https://www.census.gov/">U.S. Census Bureau</a> (2023).{' '}
-          <a href="https://lehd.ces.census.gov/data/">
+          <a target="_blank" rel="noreferrer" href="https://www.census.gov/">
+            U.S. Census Bureau
+          </a>{' '}
+          (2023).{' '}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://lehd.ces.census.gov/data/"
+          >
             LEHD Origin-Destination Employment Statistics Data
           </a>{' '}
           (2002-2019) [computer file]. Washington, DC: U.S. Census Bureau,
@@ -286,81 +354,167 @@ function MethodologyModalContents() {
         </li>
         <li>
           Social vulnerability data from{' '}
-          <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html"
+          >
             CDC/ATSDR Social Vulnerability Index 2020 Database US
           </a>{' '}
           by{' '}
-          <a href="https://www.atsdr.cdc.gov/">
+          <a target="_blank" rel="noreferrer" href="https://www.atsdr.cdc.gov/">
             Centers for Disease Control and Prevention Agency for Toxic
             Substances and Disease Registry
           </a>
           ,{' '}
-          <a href="https://data.cdc.gov/Health-Statistics/CDC-Social-Vulnerability-Index-SVI-/u6k2-rtt3/data">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://data.cdc.gov/Health-Statistics/CDC-Social-Vulnerability-Index-SVI-/u6k2-rtt3/data"
+          >
             Public Domain
           </a>
           .
         </li>
         <li>
           Street networks retrieved using{' '}
-          <a href="https://github.com/gboeing/osmnx">OSMnx</a> with data by{' '}
-          <a href="https://www.openstreetmap.org/about">Open Street Map</a>,{' '}
-          <a href="https://opendatacommons.org/licenses/odbl/">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://github.com/gboeing/osmnx"
+          >
+            OSMnx
+          </a>{' '}
+          with data by{' '}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.openstreetmap.org/about"
+          >
+            Open Street Map
+          </a>
+          ,{' '}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://opendatacommons.org/licenses/odbl/"
+          >
             Open Database License, "ODbL" 1.0
           </a>
         </li>
         <li>
           Hospital location data from{' '}
-          <a href="https://www.usgs.gov/u.s.-board-on-geographic-names/download-gnis-data">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.usgs.gov/u.s.-board-on-geographic-names/download-gnis-data"
+          >
             Geographic Names Information System National File 2021
           </a>
-          , <a href="https://www.usgs.gov/">United States Geological Survey</a>,{' '}
-          <a href="https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits">
+          ,{' '}
+          <a target="_blank" rel="noreferrer" href="https://www.usgs.gov/">
+            United States Geological Survey
+          </a>
+          ,{' '}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+          >
             Public Domain
           </a>
         </li>
         <li>
           New York City transit stops data was downloaded from{' '}
-          <a href="https://new.mta.info/developers">MTA Developer Resources</a>,{' '}
-          <a href="https://new.mta.info/">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://new.mta.info/developers"
+          >
+            MTA Developer Resources
+          </a>
+          ,{' '}
+          <a target="_blank" rel="noreferrer" href="https://new.mta.info/">
             New York City Metropolitan Transportation Authority
           </a>
           ,{' '}
-          <a href="http://web.mta.info/developers/developer-data-terms.html#data">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="http://web.mta.info/developers/developer-data-terms.html#data"
+          >
             Terms of Use
           </a>
         </li>
         <li>
           Hampton Roads transit stops from{' '}
-          <a href="https://gtfs.gohrt.com/">Hampton Roads Transit</a>,{' '}
-          <a href="https://gohrt.com/">Hampton Roads Transit</a>,{' '}
-          <a href="https://gtfs.gohrt.com/terms.php">Terms of Use</a>
+          <a target="_blank" rel="noreferrer" href="https://gtfs.gohrt.com/">
+            Hampton Roads Transit
+          </a>
+          ,{' '}
+          <a target="_blank" rel="noreferrer" href="https://gohrt.com/">
+            Hampton Roads Transit
+          </a>
+          ,{' '}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://gtfs.gohrt.com/terms.php"
+          >
+            Terms of Use
+          </a>
         </li>
         <li>
           Williamsburg transit stops from retrieved from{' '}
-          <a href="https://trilliumtransit.com/">Trillium Transit</a>,{' '}
-          <a href="http://www.gowata.org/">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://trilliumtransit.com/"
+          >
+            Trillium Transit
+          </a>
+          ,{' '}
+          <a target="_blank" rel="noreferrer" href="http://www.gowata.org/">
             Williamsburg Area Transit Authority
           </a>
         </li>
         <li>
           New York City stormwater flood map data was downloaded from{' '}
-          <a href="https://experience.arcgis.com/experience/6f4cc60710dc433585790cd2b4b5dd0e">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://experience.arcgis.com/experience/6f4cc60710dc433585790cd2b4b5dd0e"
+          >
             New York City Stormwater Flood Maps
           </a>
           ,{' '}
-          <a href="https://www.nyc.gov/site/dep/index.page">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.nyc.gov/site/dep/index.page"
+          >
             NYC Department of Environmental Protection
           </a>
           ,{' '}
-          <a href="https://www.nyc.gov/home/terms-of-use.page">Terms of Use</a>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.nyc.gov/home/terms-of-use.page"
+          >
+            Terms of Use
+          </a>
         </li>
         <li>
           Hampton Roads sea-level rise planning scenarios from{' '}
-          <a href="https://www.hrgeo.org/search?q=SLR">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.hrgeo.org/search?q=SLR"
+          >
             Hampton Roads Geographic Exchange Online
           </a>
           ,{' '}
-          <a href="https://www.hrpdcva.gov/">
+          <a target="_blank" rel="noreferrer" href="https://www.hrpdcva.gov/">
             Hampton Roads Planning District Commission
           </a>
         </li>
