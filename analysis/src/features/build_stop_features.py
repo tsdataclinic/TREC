@@ -3,77 +3,13 @@ import geopandas as gpd
 import networkx as nx
 import osmnx as ox
 from shapely.geometry import Point, LineString, Polygon, MultiLineString
-import sys
+import sys 
 sys.path.append('../')
 import argparse
 from src.data.process_stops import process_feeds
 from src.data.process_fsf import process_fsf
 from src.features.count_jobs import count_jobs
 from src.features.jobs_vulnerability import get_worker_svi
-
-BASE_WALKSHED_PATH = '/home/data/osm/'
-CITY_DIRS = ['nyc','hampton_roads']
-
-NYC_TRANSIT_WALKSHED = '/home/data/osm/nyc/walksheds/transit_walkshed_fixed.geojson'
-HR_TRANSIT_WALKSHED = '/home/data/osm/hampton_roads/walksheds/transit_walkshed_fixed.geojson'
-
-NYC_WALK_GRAPH = '/home/data/osm/nyc/NYC_walk_graph.gpickle'
-HR_WALK_GRAPH = '/home/data/osm/hampton_roads/HR_walk_graph.gpickle'
-
-NYC_LODES = '/home/data/census/nyc/LODES/ny_od_main_JT01_2019.csv'
-HR_LODES = '/home/data/census/hampton_roads/LODES/va_od_main_JT01_2019.csv'
-
-NYC_BLOCKS = '/home/data/census/nyc/geo/block_groups.geojson'
-HR_BLOCKS = '/home/data/census/hampton_roads/geo/block_groups.geojson'
-
-NYC_TRACTS = '/home/data/census/nyc/geo/tracts.geojson'
-HR_TRACTS = '/home/data/census/hampton_roads/geo/tracts.geojson'
-
-SVI_PATH = '/home/data/social_vulnerability_index/SVI2020_US.csv'
-
-COLUMNS_TO_KEEP = ["stop_id", 
-        "stop_name", 
-        "route_type",
-        "routes_serviced_str",
-        "risk_category", 
-        "jobs_cat", 
-        "worker_vulnerability_cat", 
-        "access_to_hospital",
-        "geometry"]
-
-
-def fix_walkshed(graph, polygons):
-    """
-    Fixes walksheds for instances where the walk graph around a stop is disconnected. 
-    Manual fix where a buffer of 0.01125 degrees around a stop is used. TODO: Better solution to issue
-    
-    Parameters
-    ----------
-    graph: GraphObject
-        Walk graph of extent
-    polygons: GeoDataFrame
-        Walkshed polygons derived from `get_walkshed`.
-    Returns
-    ----------
-    GeoDataFrame
-        Walkshed polygon with lines and points replaced by polygons
-    """
-    nodes = ox.graph_to_gdfs(graph,nodes=True,edges=False).reset_index()
-    walkshed_lines = polygons.loc[polygons.geometry.geometry.type!='Polygon']
-    unique_nodes = walkshed_lines.osmid.unique()
-    isochrone_polys = []
-    for n in unique_nodes:
-        buffer = nodes[nodes.osmid==n].geometry.buffer(.01125)
-        node_points = nodes.sjoin(gpd.GeoDataFrame(geometry=buffer),how='inner',predicate='intersects').geometry
-        bounding_poly = gpd.GeoSeries(node_points).unary_union.convex_hull
-        isochrone_polys.append(bounding_poly)
-    walksheds = gpd.GeoDataFrame(geometry=isochrone_polys)
-    walksheds['osmid'] = unique_nodes
-    walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds,on='osmid').set_geometry(col='geometry')
-    poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
-    poly_fixed = poly_a.append(walkshed_lines_fixed)
-    
-    return poly_fixed
 
 def add_fs_flood_risk(stops):
     """
@@ -96,7 +32,7 @@ def add_fs_flood_risk(stops):
     return stops
 
 
-def get_hospital_walkshed():
+def get_hospital_walkshed(config, city_key):
     """
     Loads the raw hospital walksheds for (10 and 20 mins) and creates polygons for High and Medium access to hospitals
     
@@ -109,29 +45,18 @@ def get_hospital_walkshed():
         Medium hospital access areas (20min walking distance)
     """
     
-    base_path=BASE_WALKSHED_PATH
-    cities=CITY_DIRS
+    HIGH_PATH = f"{config['base_path']}/cities/{city_key}/osm/walksheds/hospitals_combined_10m.geojson"
+    MED_PATH = f"{config['base_path']}/cities/{city_key}/osm/walksheds/hospitals_combined_20m.geojson"
     
-    walkshed_path = 'walksheds/hospitals_combined_{}m.geojson'
-    
-    high_access_polys = gpd.GeoDataFrame()
-    med_access_polys = gpd.GeoDataFrame()
-    
-    for c in cities:
-        high_path = base_path + c + '/' + walkshed_path.format(10)
-        high_access_polys = high_access_polys.append(gpd.read_file(high_path))
-        med_path = base_path + c + '/' + walkshed_path.format(20)
-        med_access_polys = med_access_polys.append(gpd.read_file(med_path))
+    high_access_polys = gpd.read_file(HIGH_PATH).set_crs(epsg=4326)
+    med_access_polys = gpd.read_file(MED_PATH).set_crs(epsg=4326)
     
     med_access_polys = gpd.GeoDataFrame(geometry=med_access_polys.difference(high_access_polys))
-    
-    high_access_polys = high_access_polys.set_crs(epsg=4326)
-    med_access_polys = med_access_polys.set_crs(epsg=4326)
     
     return high_access_polys, med_access_polys
             
         
-def add_hospital_access(stops):
+def add_hospital_access(stops, config, city_key):
     """
     Adds Hospital access feature to stops file
     
@@ -145,7 +70,7 @@ def add_hospital_access(stops):
         Stops file with access_to_hospital feature
     """
 
-    high, med = get_hospital_walkshed()
+    high, med = get_hospital_walkshed(config, city_key)
     high_idx = gpd.sjoin(stops, high, predicate='within').index
     med_idx = gpd.sjoin(stops, med, predicate='within').index
     
@@ -156,38 +81,7 @@ def add_hospital_access(stops):
     return stops
 
 
-# Add job info
-def get_transit_walksheds():
-    """
-    Gets the raw transit walkshed files and fixes any erroneous (Points, lines) walksheds
-    
-        
-    Returns
-    ----------
-    GeoDataFrame
-        Polygon of walksheds for each stop for NYC
-    GeoDataFrame
-        Polygon of walksheds for each stop for Hampton Roads
-    """
-
-    nyc_poly = gpd.read_file(NYC_TRANSIT_WALKSHED)
-    nyc_poly = nyc_poly.drop_duplicates(subset=['stop_id'])
-    hr_poly = gpd.read_file(HR_TRANSIT_WALKSHED)
-    hr_poly = hr_poly.drop_duplicates(subset=['stop_id'])
-        
-#     nyc_poly = nyc_poly.reset_index().rename(columns={'index':'id'})
-#     hr_poly = hr_poly.reset_index().rename(columns={'index':'id'})
-    
-#     nyc_graph = nx.read_gpickle(NYC_WALK_GRAPH)
-#     hr_graph = nx.read_gpickle(HR_WALK_GRAPH)
-    
-#     nyc_poly_fixed = fix_walkshed(nyc_graph, nyc_poly)
-#     hr_poly_fixed = fix_walkshed(hr_graph, hr_poly)
-    
-    # return nyc_poly_fixed,hr_poly_fixed
-    return nyc_poly,hr_poly
-
-def get_job_counts():
+def get_job_counts(config, city_key):
     """
     Returns job counts for each transit walkshed using blocks and lodes data
         
@@ -196,32 +90,27 @@ def get_job_counts():
     GeoDataFrame
         Transit walkshed file with job counts included
     """
+    TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed_fixed.geojson"
+    BLOCK_GROUPS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/block_groups.geojson"
+    LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2019.csv"
+
+
+    walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
+    lodes = pd.read_csv(LODES_PATH)
+    block_groups = gpd.read_file(BLOCK_GROUPS_PATH)
     
-    nyc_poly_fixed,hr_poly_fixed = get_transit_walksheds()
-    nyc_lodes = pd.read_csv(NYC_LODES)
-    hr_lodes = pd.read_csv(HR_LODES)
-    nyc_blocks = gpd.read_file(NYC_BLOCKS)
-    hr_blocks = gpd.read_file(HR_BLOCKS)
     
-    print("Getting NYC jobs")
-    nyc_jobs = count_jobs(census_geo=nyc_blocks, polygons=nyc_poly_fixed, 
-                          LODES=nyc_lodes, polygon_id_col='stop_id', crs='epsg:2263')
-    print(nyc_jobs.shape)
-    print("Getting Hampton Roads jobs")
-    hr_jobs = count_jobs(census_geo=hr_blocks, polygons=hr_poly_fixed, 
-                         LODES=hr_lodes, polygon_id_col='stop_id', crs='epsg:2283')
-    print(hr_jobs.shape)
-    # nyc_jobs = nyc_poly_fixed.merge(nyc_jobs,how='inner',on='id')
-    # hr_jobs = hr_poly_fixed.merge(hr_jobs,how='inner',on='id')
+    print("Getting jobs")
+    jobs = count_jobs(census_geo=block_groups, polygons=walksheds, 
+                          LODES=lodes, polygon_id_col='stop_id', crs='epsg:2263')
+
     
-    nyc_jobs['jobs_cat'] = pd.qcut(nyc_jobs['jobs'], 3, labels=False, duplicates='drop')
-    hr_jobs['jobs_cat'] = pd.qcut(hr_jobs['jobs'], 3, labels=False, duplicates='drop')
+    jobs['jobs_cat'] = pd.qcut(jobs['jobs'], 3, labels=False, duplicates='drop')
     
-    jobs = pd.concat([nyc_jobs,hr_jobs])
     print(jobs.shape)
     return jobs[['stop_id','jobs','jobs_cat']]
 
-def add_jobs_feature(stops):
+def add_jobs_feature(stops, config, city_key):
     """
     Adds job count feature to stops file
     
@@ -234,47 +123,42 @@ def add_jobs_feature(stops):
     GeoDataFrame
         Stops file with job count features
     """
-    jobs = get_job_counts()
+    jobs = get_job_counts(config, city_key)
 
     stops = stops.merge(jobs, how='inner', on='stop_id')
     
     return stops
 
 
-def get_svi():
+def get_svi(config, city_key):
     
-    nyc_poly_fixed,hr_poly_fixed = get_transit_walksheds()
-    nyc_lodes = pd.read_csv(NYC_LODES)
-    hr_lodes = pd.read_csv(HR_LODES)
-    nyc_tracts = gpd.read_file(NYC_TRACTS)
-    hr_tracts = gpd.read_file(HR_TRACTS)
+    TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed_fixed.geojson"
+    TRACTS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/tracts_2010.geojson"
+    LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2019.csv"
+    SVI_PATH = f"{config['base_path']}/cities/national/SVI2020_US.csv"
+
+    walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
+    lodes = pd.read_csv(LODES_PATH)
+    tracts = gpd.read_file(TRACTS_PATH)
     svi = pd.read_csv(SVI_PATH)
 
-    print("Getting NYC SVI")
-    nyc_svi = get_worker_svi(lodes=nyc_lodes, svi=svi, census_geo=nyc_tracts, polygons=nyc_poly_fixed, polygon_id_col='stop_id', crs='epsg:2263')
-    print("Getting Hampton Roads SVI")
-    hr_svi = get_worker_svi(lodes=hr_lodes, svi=svi, census_geo=hr_tracts, polygons=hr_poly_fixed, polygon_id_col='stop_id', crs='epsg:2283')
-    
-    # nyc_svi = nyc_poly_fixed.merge(nyc_svi,how='inner',on='id')
-    # hr_svi = hr_poly_fixed.merge(hr_svi,how='inner',on='id')
-    
-    nyc_svi['worker_vulnerability_cat'] = pd.qcut(nyc_svi['SVI_total'], 3, labels=False, duplicates='drop')
-    hr_svi['worker_vulnerability_cat'] = pd.qcut(hr_svi['SVI_total'], 3, labels=False, duplicates='drop')
-    
-    vulnerable_workers = pd.concat([nyc_svi,hr_svi])
-    
+    print("Getting SVI")
+    vulnerable_workers = get_worker_svi(lodes=lodes, svi=svi, census_geo=tracts, polygons=walksheds, polygon_id_col='stop_id', crs='epsg:2263')
+        
+    vulnerable_workers['worker_vulnerability_cat'] = pd.qcut(vulnerable_workers['SVI_total'], 3, labels=False, duplicates='drop')
+        
     return vulnerable_workers[['stop_id','SVI_total', 'SVI_SES', 'SVI_household', 'SVI_race','SVI_housing_transport','worker_vulnerability_cat']]
 
 
-def add_vulnerable_workers_feature(stops):
+def add_vulnerable_workers_feature(stops, config, city_key):
     
-    vulnerable_workers = get_svi()
+    vulnerable_workers = get_svi(config, city_key)
     stops = stops.merge(vulnerable_workers, how='inner', on='stop_id')
     
     return stops
 
 
-def get_stops_features():
+def get_stops_features(config, city_key):
     """
     Function that builds the combined feature file
     - Builds stops from feeds
@@ -292,20 +176,32 @@ def get_stops_features():
     GeoDataFrame
         Stops file with access_to_hospital feature
     """
+    STOPS_PATH = f"{config['base_path']}/cities/{city_key}/stops.geojson"
 
-    stops = process_feeds()
+    COLUMNS_TO_KEEP = ["stop_id", 
+        "stop_name", 
+        "route_type",
+        "routes_serviced_str",
+        "risk_category", 
+        "jobs_cat", 
+        "worker_vulnerability_cat", 
+        "access_to_hospital",
+        "geometry"]
+
+    stops = gpd.read_file(STOPS_PATH)
     print(stops.shape)
+
     print("Adding First St. flood risk")
     stops = add_fs_flood_risk(stops)
     print(stops.shape)
     print("Adding Hospital Access")
-    stops = add_hospital_access(stops)
+    stops = add_hospital_access(stops, config, city_key)
     print(stops.shape)
     print("Adding Number of jobs")
-    stops = add_jobs_feature(stops)
+    stops = add_jobs_feature(stops, config, city_key)
     print(stops.shape)
     print("Adding Worker vulnerability")
-    stops = add_vulnerable_workers_feature(stops)
+    stops = add_vulnerable_workers_feature(stops, config, city_key)
     print(stops.shape)
     print("Added all features")
     
@@ -313,10 +209,17 @@ def get_stops_features():
 
 def main():
     parser = argparse.ArgumentParser("Create stop features")
-    parser.add_argument("--out",  required=True)
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--city", required=True)
     
     opts = parser.parse_args()
-    stop_features = get_stops_features()
+    
+    with open(opts.config) as f:
+        config = json.load(f)
+    
+    city_key = opts.city
+    
+    stop_features = get_stops_features(config, city_key)
     stop_features = stop_features[COLUMNS_TO_KEEP]
 
     print(f"Writing feature file to {opts.out}")

@@ -14,9 +14,6 @@ ROUTE_DICT = {'0' : "Tram",
 '11': "Trolleybus",
 '12': "Monorail"}
 
-BASE_PATHS = ["/home/data/transit_feed_data/mta_feeds/", "/home/data/transit_feed_data/hrt_feeds/"]
-CITY_LIST = ['NYC', 'Hampton Roads']
-
 def make_stops(folder_path):
     """
     Loads and processes relevant GTFS files to create feed-level dataset 
@@ -105,7 +102,7 @@ def get_tract_path(feed_path):
         raise Exception("Error: Please add tract geojson paths to get_tract_path")
         
 
-def process_feeds(base_paths=BASE_PATHS, city_list=CITY_LIST):
+def process_feeds(base_paths, city_list):
     """
     Takes list of paths containing (potentially) multiple GTFS feed folders and, for each such folder, applies make_stops() and concatenates the result into full table
     

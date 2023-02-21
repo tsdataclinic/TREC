@@ -1,4 +1,4 @@
-{   "base_path": "/home/data/",
+{   "base_path": "/home/data",
 
     "national":
     {
@@ -21,6 +21,17 @@
             "bus_manhattan": "http://web.mta.info/developers/data/nyct/bus/google_transit_manhattan.zip",
             "bus_queens": "http://web.mta.info/developers/data/nyct/bus/google_transit_queens.zip",
             "bus_staten_island": "http://web.mta.info/developers/data/nyct/bus/google_transit_staten_island.zip"
+        }
+    },
+    "hr": 
+    {
+        "city_name": "Hampton Roads",
+        "city_code": "hr",
+        "msa_code": "C4726",
+        "state":"VA",
+        "transit_feeds": {
+            "hrt": "https://gtfs.gohrt.com/gtfs/google_transit.zip",
+            "williamsburg": "http://data.trilliumtransit.com/gtfs/williamsburg-va-us/williamsburg-va-us.zip"
         }
     }
 }
