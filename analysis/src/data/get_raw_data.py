@@ -8,19 +8,24 @@ import subprocess
 import argparse
 import os
 import json
-CWD = os.getcwd()
+
 
 def get_raw_data(config, city_key):
+    print(config)
+    CWD = os.getcwd()
+    with open(config) as f:
+        config_file = json.load(f)
+
     print("Getting points of interest data") 
-    get_poi_data(config)
+    get_poi_data(config_file)
     print("Getting Transit feeds") 
-    get_transit_feeds(config, city_key)
+    get_transit_feeds(config_file, city_key)
     print("Getting Census geographies") 
     subprocess.run(["Rscript", f"{CWD}/data/get_census_data.R","--config",config,"--city",city_key])
     print("Getting LODES data") 
-    get_LODES(config, city_key)
+    get_LODES(config_file, city_key)
     print("Getting OSM data") 
-    get_osm_data(config, city_key)
+    get_osm_data(config_file, city_key)
 
 def main():
     parser = argparse.ArgumentParser("Get all raw data")
@@ -28,12 +33,8 @@ def main():
     parser.add_argument("--city", required=True)
     
     opts = parser.parse_args()
-    print(opts.config)
-    
-    with open(opts.config) as f:
-        config = json.load(f)
 
-    get_raw_data(config, opts.city)
+    get_raw_data(opts.config, opts.city)
     
     
 if __name__ == "__main__":

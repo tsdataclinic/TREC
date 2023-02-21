@@ -29,7 +29,7 @@ tract_2010_path = "tracts_2010.geojson"
 block_group_path = "block_groups.geojson"
 # block_path = "geo/blocks.geojson"
 # acs_path =  "acs/acs_wide.csv"
-
+print(path)
 dir.create(path)
 
 all_msa <- read_csv("https://www.bls.gov/cew/classifications/areas/qcew-county-msa-csa-crosswalk-csv.csv") # National MSA to county crosswalk
