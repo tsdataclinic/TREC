@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="publicsite-logo.png" width="400"/>
+  <img src="public/site-logo.png" width="400"/>
 </p>
 
 # Transit Resilience for Essential Commuting (TREC)
