@@ -82,7 +82,7 @@ def tag_with_tracts(stops, tracts_path):
     return stops.overlay(tracts_2010).overlay(tracts_2020)
         
 
-def process_feeds(config, city_key):
+def process_stops(config, city_key, out=False):
     """
     Takes list of paths containing (potentially) multiple GTFS feed folders and, for each such folder, applies make_stops() and concatenates the result into full table
     
@@ -125,7 +125,14 @@ def process_feeds(config, city_key):
 
     stops_out = stops_out.merge(feed_city_mapping, how='left', on='feed_name')
 
-    return stops_out
+    if out==True:
+        stops_path = f"{config['base_path']}/cities/{city_key}/stops.geojson"
+
+        with open(stops_path, 'w') as file:
+            file.write(stops.to_json())
+        print("Stops data written to: " + stops_path) 
+    else:
+        return stops_out
 
 def main():
     parser = argparse.ArgumentParser("Process transit feeds")
@@ -137,25 +144,15 @@ def main():
     with open(opts.config) as f:
         config = json.load(f)
 
-    base_path = f"{config['base_path']}/cities/{city_key}/transit_feeds/"
-    process_feeds(base_path, opts.city)
+    base_path = f"{config['base_path']}/cities/{opts.city}/transit_feeds/"
+    stops = process_stops(base_path, opts.city)
     
-if __name__ == "__main__":
-    main()
+    stops_path = f"{config['base_path']}/cities/{opts.city}/stops.geojson"
 
-def main():
-    parser = argparse.ArgumentParser("Process stops")
-    parser.add_argument("--output_path", required=True)
-
-    opts = parser.parse_args()
-    output_path = opts.output_path
-    
-    stops = process_feeds(BASE_PATHS)
-    with open(output_path + "GTFS_stops_processed.geojson" , 'w') as file:
+    with open(stops_path, 'w') as file:
         file.write(stops.to_json())
-    print("Stops data written to: " + output_path + "GTFS_stops_processed.geojson") 
+    print("Stops data written to: " + stops_path) 
+
     
 if __name__ == "__main__":
     main()
-    
-# python3 -m analysis.src.data.process_stops --output_path "/home/data/results/"

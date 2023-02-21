@@ -4,34 +4,12 @@ import networkx as nx
 import osmnx as ox
 from descartes import PolygonPatch
 from shapely.geometry import Point, LineString, Polygon, MultiPolygon
+from src.utils.geo import create_extent
 import argparse
 import sys
 import os
 import json
 ox.config(log_console=True)
-
-
-def create_extent(geo_file_path):
-    """
-    Creates a dissolved geography that will serve as the extent for querying OSM network data
-    
-    Parameters
-    ----------
-    geo_file_path: str
-        Path to geography (tracts, blocks, NTA, etc.)
-        
-    Returns
-    ----------
-    GeoDataFrame
-        Combined geography
-    """
-    
-    gdf = gpd.read_file(geo_file_path)
-    gdf['to_merge'] = 1
-    
-    gdf_extent = gdf.dissolve(by='to_merge')
-    
-    return gdf_extent
 
 
 def get_walk_graph(geo_file_path, network_type='walk'):

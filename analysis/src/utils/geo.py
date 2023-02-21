@@ -1,6 +1,28 @@
-import geopandas as geopd
 import pandas as pd
-import argparse
+import geopandas as gpd
+
+
+def create_extent(geo_file_path):
+    """
+    Creates a dissolved geography that will serve as the extent for querying OSM network data
+    
+    Parameters
+    ----------
+    geo_file_path: str
+        Path to geography (tracts, blocks, NTA, etc.)
+        
+    Returns
+    ----------
+    GeoDataFrame
+        Combined geography
+    """
+    
+    gdf = gpd.read_file(geo_file_path)
+    gdf['to_merge'] = 1
+    
+    gdf_extent = gdf.dissolve(by='to_merge')
+    
+    return gdf_extent
 
 def calculate_census_areas(census_geo):
     """
@@ -104,25 +126,3 @@ def areal_interpolation(census_geo, census_data, polygons, polygon_id_col, drop_
     sums = aggregate_values(census_data, areal_weights, polygon_id_col, drop_cols)
     
     return sums
-
-
-def main():
-    parser = argparse.ArgumentParser("NRI Tract Merge")
-    parser.add_argument("--census_geo_path", required=True)
-    parser.add_argument("--census_data_path", required=True)
-    parser.add_argument("--polygon_path", required=True)
-    parser.add_argument("--polygon_id_col", required=True)
-    parser.add_argument("--out", required=True)
-    
-    opts = parser.parse_args()
-    census_geo = geopd.read_file(opts.census_geo_path)
-    census_data = pd.read_csv(opts.census_data_path)
-    polygons = geopd.read_file(opts.polygon_path)
-    polygon_id_col = opts.polygon_id_col
-    
-    out = areal_interpolation(census_geo, census_data, polygons, polygon_id_col)
-    print("Census data interpolated to polygons. Writing it") 
-    out.to_csv(opts.out)
-    
-if __name__ == "__main__":
-    main()

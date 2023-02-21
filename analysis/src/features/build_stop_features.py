@@ -6,12 +6,23 @@ from shapely.geometry import Point, LineString, Polygon, MultiLineString
 import sys 
 sys.path.append('../')
 import argparse
-from src.data.process_stops import process_feeds
-from src.data.process_fsf import process_fsf
+from src.process.process_fsf import process_fsf
 from src.features.count_jobs import count_jobs
 from src.features.jobs_vulnerability import get_worker_svi
+import json
 
-def add_fs_flood_risk(stops):
+COLUMNS_TO_KEEP = ["stop_id", 
+        "stop_name", 
+        "route_type",
+        "routes_serviced_str",
+        "risk_category", 
+        "jobs_cat", 
+        "worker_vulnerability_cat", 
+        "access_to_hospital",
+        "geometry"]
+
+
+def add_fs_flood_risk(stops, config):
     """
     Adds flood risk based on First Street Foundation's data
     
@@ -24,7 +35,7 @@ def add_fs_flood_risk(stops):
     GeoDataFrame
         Adds flood risk columns to stops file
     """
-    fsf_feature = process_fsf()
+    fsf_feature = process_fsf(config)
     
     stops = stops.merge(fsf_feature[['GEOID','risk_score','pct_moderate_plus','risk_category']],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
@@ -90,7 +101,7 @@ def get_job_counts(config, city_key):
     GeoDataFrame
         Transit walkshed file with job counts included
     """
-    TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed_fixed.geojson"
+    TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed.geojson"
     BLOCK_GROUPS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/block_groups.geojson"
     LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2019.csv"
 
@@ -178,16 +189,6 @@ def get_stops_features(config, city_key):
     """
     STOPS_PATH = f"{config['base_path']}/cities/{city_key}/stops.geojson"
 
-    COLUMNS_TO_KEEP = ["stop_id", 
-        "stop_name", 
-        "route_type",
-        "routes_serviced_str",
-        "risk_category", 
-        "jobs_cat", 
-        "worker_vulnerability_cat", 
-        "access_to_hospital",
-        "geometry"]
-
     stops = gpd.read_file(STOPS_PATH)
     print(stops.shape)
 
@@ -222,8 +223,10 @@ def main():
     stop_features = get_stops_features(config, city_key)
     stop_features = stop_features[COLUMNS_TO_KEEP]
 
-    print(f"Writing feature file to {opts.out}")
-    with open(opts.out, 'w') as file:
+    out_path = f"{config['base_path']}/cities/{city_key}/results/stop_features.geojson"
+    
+    print(f"Writing feature file to {out_path}")
+    with open(out_path, 'w') as file:
         file.write(stop_features.to_json())
 
 if __name__ == "__main__":
