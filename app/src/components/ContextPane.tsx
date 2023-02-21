@@ -119,28 +119,30 @@ function ContextPane({
           <b>Filter by Transit Line</b>
           <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
-        <div className="grid grid-cols-4 p-3 pb-0 gap-1">
-          {selectedRoutes.map(route => (
-            <span
-              key={`${route.city}_${route.routeServiced}`}
-              className="text-xs py-1 px-2 uppercase rounded bg-slate-200 uppercase"
-              title={`${route.routeServiced} - ${route.routeType} | ${route.city}`}
-            >
-              {route.routeServiced}
-            </span>
-          ))}
-        </div>
+        {selectedRoutes.length > 0 ? (
+          <div className="grid grid-cols-4 px-3 gap-1">
+            {selectedRoutes.map(route => (
+              <span
+                key={`${route.city}_${route.routeServiced}`}
+                className="text-xs py-1 px-2 rounded bg-slate-200 uppercase"
+                title={`${route.routeServiced} - ${route.routeType} | ${route.city}`}
+              >
+                {route.routeServiced}
+              </span>
+            ))}
+          </div>
+        ) : null}
         <div className="overflow-y-scroll flex-1">
           <ul>
             {routes.map(availableRoute =>
               Object.values(availableRoute).map(routeRecord => {
                 return (
-                  <details key={routeRecord.city}>
-                    <summary>{routeRecord.city} lines</summary>
+                  <details key={routeRecord.city} className="pb-2">
+                    <summary className="pb-1">{routeRecord.city} lines</summary>
                     {routeRecord.route_types.map((type, index) => {
                       return (
                         <details
-                          className="ml-2"
+                          className="ml-2 pb-1"
                           key={`${routeRecord.city}_${index}`}
                         >
                           <summary>{type.route_type}</summary>
