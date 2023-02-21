@@ -22,12 +22,12 @@ The climate crisis we face requires collective intelligence and creative problem
 
 ### Processed Data Files
 
-Our app relies on two data files that we process using the above data sources. These files are:
+Our app relies on two data files that we process using the data sources (listed below). These files are:
 
-- stops_final.geojson: Stop level dervived metrics described in the data dictionary
-- hospital_locations.geojson: Locations of hospitals within included cities
+- `stops_features.geojson`: Stop level dervived metrics described in the data dictionary
+- `hospitals.geojson`: Locations of hospitals within included cities
 
-### Derived Metrics Data Dictionary
+#### Derived Metrics Data Dictionary
 
 | Variable                   | Description                                                 | Type | License    | Source                                                                                                                                                                                                                                                                                                  |
 | -------------------------- | ----------------------------------------------------------- | ---- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
