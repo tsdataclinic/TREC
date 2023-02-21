@@ -108,13 +108,10 @@ function ContextPane({
                     layer.layerName.toLowerCase().includes('hospital'),
                 );
                 if (hospitalLayer) {
-                  if (value === 'access_to_hospital') {
-                    // select the hospital layer
-                    updateLayer({ ...hospitalLayer, isVisible: true });
-                  } else {
-                    // deselect the hospital layer
-                    updateLayer({ ...hospitalLayer, isVisible: false });
-                  }
+                  updateLayer({
+                    ...hospitalLayer,
+                    isVisible: value === 'access_to_hospital',
+                  });
                 }
 
                 setSelectedProperties([selectedProperties[0], value]);
