@@ -1,7 +1,7 @@
 from get_transit_data import get_transit_feeds
 from get_LODES import get_LODES
 from get_POI_data import get_poi_data
-from get_walk_graph import make_walk_graph
+from get_osm_data import get_osm_data
 # from get_cenus_data import get_census_geographies
 import subprocess
 import argparse
@@ -29,7 +29,7 @@ def main():
     print("Getting LODES data") 
     get_LODES(config, opts.city)
     print("Getting OSM data") 
-    make_walk_graph(config, opts.city)
+    get_osm_data(config, opts.city)
     
     
 if __name__ == "__main__":
