@@ -38,7 +38,7 @@ Our app relies on two data files that we process using the above data sources. T
 - stops_final.geojson: Stop level dervived metrics described in the data dictionary
 - hospital_locations.geojson: Locations of hospitals within included cities
 
-### Data Dictionary
+### Derived Metrics Data Dictionary
 
 | Variable                   | Description                                                 | Type | License    | Source                                                                                                                                                                                                                                                                                                  |
 | -------------------------- | ----------------------------------------------------------- | ---- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
