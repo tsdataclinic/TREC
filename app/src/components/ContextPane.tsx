@@ -75,7 +75,7 @@ function ContextPane({
         </div>
 
         <div className="flex flex-col space-y-2">
-          <label>
+          <label className="space-y-2">
             <div>
               <b>Climate Risk:</b>
             </div>
@@ -102,9 +102,23 @@ function ContextPane({
 
             <Dropdown
               className="!w-full"
-              onChange={value =>
-                setSelectedProperties([selectedProperties[0], value])
-              }
+              onChange={value => {
+                const hospitalLayer = Object.values(layers).find(
+                  (layer: Layer) =>
+                    layer.layerName.toLowerCase().includes('hospital'),
+                );
+                if (hospitalLayer) {
+                  if (value === 'access_to_hospital') {
+                    // select the hospital layer
+                    updateLayer({ ...hospitalLayer, isVisible: true });
+                  } else {
+                    // deselect the hospital layer
+                    updateLayer({ ...hospitalLayer, isVisible: false });
+                  }
+                }
+
+                setSelectedProperties([selectedProperties[0], value]);
+              }}
               placeholder="Select a field..."
               defaultValue={selectedProperties[1]}
               options={Array.from(availableProperties)
