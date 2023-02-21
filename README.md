@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/site-logo.png" width="400"/>
+</p>
+
 # Transit Resilience for Essential Commuting (TREC)
 In the fall of 2022, Data Clinic took part in [The Opportunity Project](https://opportunity.census.gov/), a semi-annual sprint organized by the U.S. Census in partnership with federal agencies to demonstrate the value of open data, as part of the [Building Climate Change Resilience Through Public Transit](https://opportunity.census.gov/sprints/) sprint sponsored by the U.S. Department of Transportation.
 
