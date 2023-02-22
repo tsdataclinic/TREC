@@ -41,9 +41,9 @@ export const useRouteSummary = (
           return {
             route,
             flood_risk: route_data.flood_risk[index],
-            access_to_hospital: route_data.hospital_access[index],
-            jobs_cat: route_data.job_access[index],
-            worker_vulnerability_cat:
+            hospital_access: route_data.hospital_access[index],
+            job_access: route_data.job_access[index],
+            worker_vulnerability:
               route_data.worker_vulnerability[index],
           };
         });
