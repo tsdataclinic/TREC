@@ -66,8 +66,21 @@ export function useSourceLayerConfigs(
           layerType: 'circle',
           layoutProperties: [],
           paintProperties: [
+            { name: 'circle-opacity', value: [
+                'case',
+                ['==', ['get', 'route_type'], 'Subway'],
+                0,
+                1
+              ] 
+            },
             { name: 'circle-stroke-color', value: 'grey' },
-            { name: 'circle-stroke-width', value: 1 },
+            { name: 'circle-stroke-width', value: [
+                'case',
+                ['==', ['get', 'route_type'], 'Subway'],
+                0,
+                1
+              ]
+            },
             {
               name: 'circle-radius',
               value: [

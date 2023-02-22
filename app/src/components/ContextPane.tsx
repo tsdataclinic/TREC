@@ -153,6 +153,7 @@ function ContextPane({
                   <details key={routeRecord.city} className="pb-2">
                     <summary className="pb-1">{routeRecord.display_name} lines</summary>
                     {routeRecord.route_types.map((type, index) => {
+                      if (type.route_type === 'Subway') return <></>
                       return (
                         <details
                           className="ml-2 pb-1"
