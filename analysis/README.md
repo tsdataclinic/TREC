@@ -67,21 +67,34 @@ Project Organization
 
 Directory Structure:
 
-    ├── LICENSE
-    ├── README.md          <- The top-level README for developers using this project.
+    ├── README.md                       <- The top-level README for developers using this project.
     │
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
+    ├── src                             <- Source code for use in this project
+    │   ├── run_pipeline.py             <- Data pipeline script that calls functions from each step
     │   │
-    │   ├── data           <- Scripts to download raw data sources
-    │   │   └── make_dataset.py
+    │   ├── config.json                 <- Config file needed to run the pipeline
     │   │
-    │   ├── process           <- Scripts to perform processing operations on GTFS, hospital data sets
-    │   │   └── make_dataset.py
+    │   ├── data                        <- Scripts to download raw data sources
+    │   │   ├── get_raw_data.py         <- Raw data download pipeline consisting of each of the below steps
+    │   │   ├── get_POI_data.py         
+    │   │   ├── get_transit_feeds.py    
+    │   │   ├── get_census_data.R       
+    │   │   ├── get_LODES.py            
+    │   │   └── get_osm_data.py         
     │   │
-    │   ├── features       <- Scripts to turn raw and processed data into features for the web app
-    │   │   └── build_features.py
+    │   ├── process                     <- Scripts to perform processing operations on GTFS, hospital data, and walksheds
+    │   │   ├── process_data.py         <- Processing pipeline consisting of each of the below steps
+    │   │   ├── process_stops.py         
+    │   │   ├── process_hospitals.py    
+    │   │   ├── process_walksheds.py
+    │   │   └── process_fsf.py          <- Contains a function to process Flood Risk data from FSF
     │   │
+    │   ├── features                    <- Scripts to turn raw and processed data into features for the web app
+    │   │   ├── build_stop_features.py  <- Pipeline to add all features to the stops file
+    │   │   ├── count_jobs.py           
+    │   │   └── jobs_vulnerability.py   
+    │   │
+    │   └── utils                       <- Some geospatial helper functions used across the pipeline
 
 
 --------
