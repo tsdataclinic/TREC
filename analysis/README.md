@@ -3,10 +3,25 @@ Data Analysis overview
 
 
 ## Getting Started
-- Set up R and python environment (Honestly I don't think I know the language to explain this super clearly)
-- Our data pipeline uses a config file to make it easy to adapt our app to other cities and get the pipeline running locally on your own machine. This config file, `src/config.json`, is currently set up such that the data pipeline will retrieve, process, and featurize the needed datasets for New York City and Hampton Roads, Virginia. The config file contains a `base_path` field defining the folder in which the data files will be stored, a `national` feild with urls pointing to three national level data sources that will not change across different cities, and city fields (i.e. `nyc` and `hr`) that have neccessary information about the cities whose data will be downloaded. Particularly, the city fields contain the following: the name of each city, a key for each city, the code for the city's Metropolitan Statistical Area (MSA), the two letter abbreviation of the city's state, and a list of urls to the desired GTFS feeds in that city.
 
-### Data pipeline
+### Set up R and python environment
+
+
+## Data Pipeline
+
+### Config
+Our data pipeline uses a config file to make it easy to adapt our app to other cities and get the pipeline running locally on your own machine. This config file, `src/config.json`, is currently set up such that the data pipeline will retrieve, process, and featurize the needed datasets for New York City and Hampton Roads, Virginia. The config file contains:
+- `base_path`: field defining the folder in which the data files will be stored 
+- `national`: feild with url or paths pointing to three national level data sources that will not change across different cities, and 
+- city fields (i.e. `nyc` and `hr`) that have neccessary information about the cities whose data will be downloaded. Particularly, the city fields contain the following: 
+  - the name of each city 
+  - a key for each city 
+  - the code for the city's Metropolitan Statistical Area (MSA)
+  - the two letter abbreviation of the city's state and 
+  - list of urls to the desired GTFS feeds in that city
+
+
+### Running the pipeline
 
 Our data processing pipeline proceeds in three steps, each with a corresponding python script.
 
@@ -17,15 +32,19 @@ Our data processing pipeline proceeds in three steps, each with a corresponding 
 These scripts are run on a per-city basis from the analysis folder. For instance, the data download script is run for New York City like this:
 
 ```
-python3 -m  data/process_data --config config.json --city 'nyc'
+python3 -m  data/process_data --config="config.json" --city="nyc"
 ```
 
-With the config.json file configured, the full pipeline can be run for all cities by running:
+With the `config.json` file configured, the full pipeline can be run for all cities by running:
 
 ```
-python3 -m run_pipeline --config config.json --city 'all'
+python3 -m run_pipeline --config="config.json" --city="all"
 ``` 
-This script will sequntially run `data/get_all_data.py`, `processs/process_data.py`, and `features/build_stop_features.py` for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file, along with a file containing the hospitals located in each city.
+
+This script will sequntially run the pipeline for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file (`stop_features.geojson`), along with a file containing the hospitals located in each city (`hospitals.geojson`) in the root directory defined in the config.
+
+**NOTE**
+Some of the steps in the pipeline are computationally expensive. Particularly, calculating the number of jobs around each transit stop in NYC consumes a lot of memory. Generating the WalkGraph from OSM for NYC takes fairly long as well. 
 
 ## Feature Methodology:
  
