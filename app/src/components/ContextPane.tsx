@@ -110,7 +110,7 @@ function ContextPane({
                 if (hospitalLayer) {
                   updateLayer({
                     ...hospitalLayer,
-                    isVisible: value === 'access_to_hospital',
+                    isVisible: value === 'access_to_hospital_category',
                   });
                 }
 
