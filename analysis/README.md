@@ -32,22 +32,21 @@ Our data processing pipeline proceeds in three steps, each with a corresponding 
 These scripts are run on a per-city basis from the analysis folder. For instance, the data download script is run for New York City like this:
 
 ```
-python3 -m  data/process_data --config="config.json" --city="nyc"
+python3 -m  src/data/process_data --config src/config.json --city nyc
 ```
 
 With the `config.json` file configured, the full pipeline can be run for all cities by running:
 
 ```
-python3 -m run_pipeline --config="config.json" --city="all"
+python3 src/run_pipeline.py --config src/config.json --city all
 ``` 
 
 This script will sequntially run the pipeline for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file (`stop_features.geojson`), along with a file containing the hospitals located in each city (`hospitals.geojson`) in the root directory defined in the config.
 
-**NOTE**
+**__NOTE__:**
 Some of the steps in the pipeline are computationally expensive. Particularly, calculating the number of jobs around each transit stop in NYC consumes a lot of memory. Generating the WalkGraph from OSM for NYC takes fairly long as well. 
 
-## Feature Methodology:
- 
+## Feature Methodology
 
 All data other than floodplain polygons and hospital locations were processed into a stop level file `stop_features.geojson`. We describe the methods we used to create this file below.
  
