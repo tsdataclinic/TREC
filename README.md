@@ -39,6 +39,14 @@ Our app relies on two data files that we process using the data sources (listed 
 | job_access_category        | Score 0/1/2 indicating low/medium/high number of jobs around transit stop           | int  | [Apache 2.0](Apache2.0) | [](https://lehd.ces.census.gov/data/)[LEHD Origin-Destination Statistics](https://lehd.ces.census.gov/data/),<br>GTFS Feeds                                                                                                                                                                             |
 | vulnerable_worker_category | Score 0/1/2 indicating low/medium/high vulnerability of people working around transit stop | int  | [Apache 2.0](Apache2.0) | [LEHD Origin-Destination Statistics](https://lehd.ces.census.gov/data/),<br>[Open Street Maps](https://www.openstreetmap.org/about),<br>[CDC/ATSDR Social Vulnerability Index](https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html),<br>GTFS Feeds                            |
 | geometry                   | Latitude/longitude point location of stop                   | wkt  | [Apache 2.0](Apache2.0) | GTFS Feeds                                                                                                                                                                                                                                                                                              |
+### Contributing
+To contribute to this project, refer to more details on 
+- setting-up the Data pipeline in [`analysis`](analysis/)
+- running the web-app locally in [`app`](app/)
+
+You can also submit Bug reports or Feature requests with [Github issues](https://github.com/tsdataclinic/TREC/issues/new/choose) using the respective templates.
+
+To discuss tailored adaptations of TREC to your team/city, please email us at dataclinic@twosigma.com
 
 
 ### Data Sources
@@ -55,3 +63,6 @@ All data accessed as of Febuary 21st, 2023.
 - Hampton Roads transit stops were downloaded from [Hampton Roads Transit](https://gtfs.gohrt.com/) and from [Trillium Transit](http://data.trilliumtransit.com/gtfs/williamsburg-va-us/williamsburg-va-us.zip)
 - New York City stormwater flood map data was downloaded from [NYC Department of Environmental Protection](http://nyc.gov/stormwater-map)
 - Hampton Roads sea-level rise planning scenarios were downloaded from [Hampton Roads Geographic Exchange Online](https://www.hrgeo.org/search?q=SLR)
+
+### Data Clinic
+[Data Clinic](https://www.twosigma.com/data-clinic/) is the data and tech-for-good arm of [Two Sigma](https://twosigma.com), a financial sciences company headquartered in NYC. Since Data Clinic was founded in 2014, we have provided pro bono data science and engineering support to mission-driven organizations around the world via close partnerships that pair Two Sigma's talent and way of thinking with our partner's rich content-area expertise. To scale the solutions and insights Data Clinic has gathered over the years, and to contribute to the democratization of data, we also engage in the development of open source tooling and data products.
