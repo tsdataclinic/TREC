@@ -10,6 +10,7 @@ import {
 import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
 import { AVAILABLE_ROUTES } from '../utils/availableRoutes';
 import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
+import * as Fathom from "fathom-client";
 
 export type Layer = {
   id: number;
@@ -175,6 +176,10 @@ export default function MainPage(): JSX.Element {
     },
     [layers],
   );
+
+  useEffect(() => {
+    Fathom.load("LHGHXYKE")
+  }, [])
 
   return (
     <main className="h-full flex">
