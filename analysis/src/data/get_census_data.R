@@ -1,11 +1,10 @@
-library(tidyverse)
-library(tidycensus)
-library(sf)
-library(optparse)
-library(tidyjson)
-library(jsonlite)
-library(purrr)
-
+pacman::p_load(c("tidyverse", 
+                 "tidycensus", 
+                 "sf", 
+                 "optparse",
+                 "tidyjson", 
+                 "jsonlite", 
+                 "purrr"))
 
 option_list = list(
     make_option(c("--config"), type="character", default=NULL, 
