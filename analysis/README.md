@@ -1,22 +1,6 @@
 Data Analysis overview
 ==============================
 
-## Methodology:
- 
-
-All data other than floodplain polygons and hospital locations were processed into a stop level file `stop_features.geojson`. We describe the methods we used to create this file below.
- 
-
-- Stops: The GTFS feed data (refer Data Sources) was processed into a file containing the stop IDs, transit type (e.g. bus, light rail), name, the list of routes servicing the stop, and a latitude/longitude point geometry. 
-
-- Flood risk: First Street Foundation’s aggregated flood risk data categorizes census tracts according to the number of buildings at minor, moderate, major, severe, and extreme flood risk. Transit stops inside tracts where no buildings were above minor risk were labeled ‘low’ risk, stops inside tracts with under 15% of buildings above minor risk were labeled  ‘medium’ risk, and stops inside tracts with more than 15% of buildings above minor risk were labeled as ‘high’ risk.
-
-- Hospital Access: We calculated 10 and 20 minute walk sheds (using walk graphs from OSM and assumptions on average walking pace) centered on each hospital in the GNIS Database and intersected these polygons with the transit stop points. We considered stops within a 10 minute walking distance as providing high access and between 10-20 minutes as providing medium access. All stops not within a walkshed were categorized as providing low access to hospitals.
-
-- Jobs: The Census LODES dataset contains origin-destination employment statistics for all workers within each state which we use to derive the total number of people working in each block. To estimate the total number of workers within walking distance from each transit stop, we first create 15 minute walk sheds (using walk graphs from OSM) around each stop. These polygons do not conform with the census block boundaries, so we use areal interpolation to estimate the jobs within each walkshed. The final count is computed by subtracting the number of people who both live and work in each walkshed from this total to exclude workers who are unlikely to rely on transit to get to their jobs. The high/medium/low categories correspond to the first, second, and third tertiles of these counts.
-
-- Vulnerable workers: We used a similar method to estimate the vulnerability of workers in the area of a transit stop. Instead of aggregating the LODES data to the census block, we matched the origin-destination blocks to their corresponding census tracts, and linked the origin tracts to the SVI dataset. We again used an areal interpolation process to estimate the vulnerability of workers working within the 15 minute stop walksheds based on the census tract in which they live. As with the jobs, we divided the stops into high/medium/low using tertiles.
-
 
 ## Getting Started
 - Set up R and python environment (Honestly I don't think I know the language to explain this super clearly)
@@ -36,7 +20,28 @@ These scripts are run on a per-city basis from the analysis folder. For instance
 python3 -m  data/process_data --config config.json --city 'nyc'
 ```
 
-With the config.json file configured, the full pipeline can be run for all cities by running `python3 -m run_pipeline --config config.json --city 'all'` (again from within the analysis folder). This script will sequntially run `data/get_all_data.py`, `processs/process_data.py`, and `features/build_stop_features.py` for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file, along with a file containing the hospitals located in each city.
+With the config.json file configured, the full pipeline can be run for all cities by running:
+
+```
+python3 -m run_pipeline --config config.json --city 'all'
+``` 
+This script will sequntially run `data/get_all_data.py`, `processs/process_data.py`, and `features/build_stop_features.py` for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file, along with a file containing the hospitals located in each city.
+
+## Feature Methodology:
+ 
+
+All data other than floodplain polygons and hospital locations were processed into a stop level file `stop_features.geojson`. We describe the methods we used to create this file below.
+ 
+
+- Stops: The GTFS feed data (refer Data Sources) was processed into a file containing the stop IDs, transit type (e.g. bus, light rail), name, the list of routes servicing the stop, and a latitude/longitude point geometry. 
+
+- Flood risk: First Street Foundation’s aggregated flood risk data categorizes census tracts according to the number of buildings at minor, moderate, major, severe, and extreme flood risk. Transit stops inside tracts where no buildings were above minor risk were labeled ‘low’ risk, stops inside tracts with under 15% of buildings above minor risk were labeled  ‘medium’ risk, and stops inside tracts with more than 15% of buildings above minor risk were labeled as ‘high’ risk.
+
+- Hospital Access: We calculated 10 and 20 minute walk sheds (using walk graphs from OSM and assumptions on average walking pace) centered on each hospital in the GNIS Database and intersected these polygons with the transit stop points. We considered stops within a 10 minute walking distance as providing high access and between 10-20 minutes as providing medium access. All stops not within a walkshed were categorized as providing low access to hospitals.
+
+- Jobs: The Census LODES dataset contains origin-destination employment statistics for all workers within each state which we use to derive the total number of people working in each block. To estimate the total number of workers within walking distance from each transit stop, we first create 15 minute walk sheds (using walk graphs from OSM) around each stop. These polygons do not conform with the census block boundaries, so we use areal interpolation to estimate the jobs within each walkshed. The final count is computed by subtracting the number of people who both live and work in each walkshed from this total to exclude workers who are unlikely to rely on transit to get to their jobs. The high/medium/low categories correspond to the first, second, and third tertiles of these counts.
+
+- Vulnerable workers: We used a similar method to estimate the vulnerability of workers in the area of a transit stop. Instead of aggregating the LODES data to the census block, we matched the origin-destination blocks to their corresponding census tracts, and linked the origin tracts to the SVI dataset. We again used an areal interpolation process to estimate the vulnerability of workers working within the 15 minute stop walksheds based on the census tract in which they live. As with the jobs, we divided the stops into high/medium/low using tertiles.
 
 Project Organization
 ------------
