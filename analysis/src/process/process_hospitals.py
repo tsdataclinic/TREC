@@ -11,6 +11,9 @@ import os
 import json
 
 NYC_COUNTY_CODES = [5,47,61,81,85]
+COLUMNS_TO_KEEP = ['FEATURE_NAME', 'FEATURE_CLASS',
+                   'geometry']
+
 
 def subset_hospital_points(points, extent, county_list=[]):
     """
@@ -55,6 +58,7 @@ def process_hospitals(config, city_key, out=False):
         county_list = []
 
     hospitals = subset_hospital_points(poi_data, extent,county_list)
+    hospitals = hospitals[COLUMNS_TO_KEEP]
     if out == True:
         out_path = f"{config['base_path']}/cities/{city_key}/results/"
         if not os.path.isdir(out_path):

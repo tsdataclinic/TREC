@@ -169,7 +169,7 @@ def add_vulnerable_workers_feature(stops, config, city_key):
     return stops
 
 
-def get_stops_features(config, city_key):
+def get_stops_features(config, city_key, out=False):
     """
     Function that builds the combined feature file
     - Builds stops from feeds
@@ -205,8 +205,16 @@ def get_stops_features(config, city_key):
     stops = add_vulnerable_workers_feature(stops, config, city_key)
     # print(stops.shape)
     print("Added all features")
+    stops = stops[COLUMNS_TO_KEEP]
     
-    return stops
+    if out == True:
+        out_path = f"{config['base_path']}/cities/{city_key}/results/stop_features.geojson"
+
+        print(f"Writing feature file to {out_path}")
+        with open(out_path, 'w') as file:
+            file.write(stops.to_json())
+    else:
+        return stops
 
 def main():
     parser = argparse.ArgumentParser("Create stop features")
