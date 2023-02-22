@@ -6,6 +6,25 @@ Data Analysis overview
 
 ### Set up R and python environment
 
+We are using R to gather the census geographies using the `tidycensus` library. All the packages needed for this are manged using the `pacman` library. To set-up the R environment, install R and use:
+```R
+install.packages("pacman")
+```
+
+The python environment for this can be built using [`pipenv`](https://pipenv.pypa.io/en/latest/)
+
+If you already have Python and pip, you can easily install Pipenv into your home directory:
+
+```bash
+pip install --user pipenv
+```
+
+Install the libraries needed for this project and start the virtual environment by running 
+
+```bash
+pipenv install
+pipenv shell
+```
 
 ## Data Pipeline
 
@@ -31,13 +50,13 @@ Our data processing pipeline proceeds in three steps, each with a corresponding 
 
 These scripts are run on a per-city basis from the analysis folder. For instance, the data download script is run for New York City like this:
 
-```
+```bash
 python3 -m  src/data/process_data --config src/config.json --city nyc
 ```
 
 With the `config.json` file configured, the full pipeline can be run for all cities by running:
 
-```
+```bash
 python3 src/run_pipeline.py --config src/config.json --city all
 ``` 
 
