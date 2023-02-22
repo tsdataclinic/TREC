@@ -53,11 +53,11 @@ function RouteSummaryPane({
 
             <BarChart label='Flood Risk' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['flood_risk']}></BarChart>
 
-            <BarChart label='Access to Hospitals' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['access_to_hospital']}></BarChart>
+            <BarChart label='Access to Hospitals' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['hospital_access']}></BarChart>
             
-            <BarChart label='Access to Jobs' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['jobs_cat']}></BarChart>
+            <BarChart label='Access to Jobs' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['job_access']}></BarChart>
 
-            <BarChart label='Vulnerable workers' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['worker_vulnerability_cat']}></BarChart>
+            <BarChart label='Vulnerable workers' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['worker_vulnerability']}></BarChart>
 
             
         </div>
