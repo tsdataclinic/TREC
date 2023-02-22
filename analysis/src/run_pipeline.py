@@ -6,21 +6,24 @@ from features.build_stop_features import get_stops_features
 import os
 import json
 import argparse
+import pandas as pd
+import geopandas as gpd
 
-def concat_results(city_keys):
+def concat_results(config, city_keys):
     hospitals = []
     stop_features = []
     for city_key in city_keys:
         h = gpd.read_file(f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson")
-        hospitals = hopitals.extend([h])
+        hospitals.append(h)
         s = gpd.read_file(f"{config['base_path']}/cities/{city_key}/results/stop_features.geojson")
-        stop_features = stop_features.extend([s])
-    
+        stop_features.append(s)
+
     hospitals = pd.concat(hospitals)
     hospitals.to_file(f"{config['base_path']}/hospitals.geojson",driver='GeoJSON')
     stop_features = pd.concat(stop_features)
     with open(f"{config['base_path']}/stop_features.geojson", 'w') as file:
         file.write(stop_features.to_json())
+
     
     
 
@@ -42,12 +45,12 @@ def main():
         
     for city_key in city_keys:
         print(f"Running Data pipeline for: {city_key}")
-        get_raw_data(opts.config, city_key)
-        process_data(config, city_key)
-        get_stops_features(config, city_key, out=True)
+        # get_raw_data(opts.config, city_key)
+        # process_data(config, city_key)
+        # get_stops_features(config, city_key, out=True)
     
-    if len(city_keys) >1:
-        concat_results(city_keys)
+    print(f"Combining the results")
+    concat_results(config, city_keys)
 
 
 if __name__ == "__main__":

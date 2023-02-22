@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../')
-import src.utils.geo as areal
+import utils.geo as areal
 import geopandas as geopd
 import pandas as pd
 import argparse

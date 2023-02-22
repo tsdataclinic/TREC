@@ -96,7 +96,7 @@ def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
         For each row in points, a polygon geometry of the walkshed or a single polygon if combine=True
     """
 
-    graph = ox.project_graph(graph, to_crs='epsg:4326')
+    # graph = ox.project_graph(graph, to_crs='epsg:4326')
     meters_per_minute = speed * 1000 / 60 #km per hour to m per minute
     for u, v, k, data in graph.edges(data=True, keys=True):
         data['time'] = data['length'] / meters_per_minute
@@ -132,13 +132,13 @@ def process_walksheds(config, city_key):
     if not os.path.isdir(out_path):
         os.makedirs(out_path)
 
-    # print("Processing Hospital walksheds")
-    # hospitals_path = f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson"
-    # points = gpd.read_file(hospitals_path)
-    # times = [10,20]
-    # for t in times:
-    #     hosp_walkshed = create_walk_shed(points, graph, trip_time=t, combine=True)
-    #     hosp_walkshed.to_file(out_path + f"hospitals_combined_{t}m.geojson",driver='GeoJSON')
+    print("Processing Hospital walksheds")
+    hospitals_path = f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson"
+    points = gpd.read_file(hospitals_path)
+    times = [10,20]
+    for t in times:
+        hosp_walkshed = create_walk_shed(points, graph, trip_time=t, combine=True)
+        hosp_walkshed.to_file(out_path + f"hospitals_combined_{t}m.geojson",driver='GeoJSON')
 
 
     print("Processing Transit walksheds")
@@ -168,9 +168,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-    
-# python3 features/walk_shed.py --points='/home/data/results/hospitals/hospitals_hampton_roads.geojson' --graph='/home/data/osm/nyc/NYC_walk_graph.gpickle' --out='/home/data/osm/nyc/walksheds/hospitals_combined_10m.geojson' --time=10 --combine=True
-
-# python3 features/walk_shed.py --points='/home/data/results/stop_features/all_nyc_stops.geojson' --graph='/home/data/osm/nyc/NYC_walk_graph.gpickle' --out='/home/data/osm/nyc/walksheds/transit_walkshed.geojson' --time=15 --combine=False
-
-# python3 features/walk_shed.py --points='/home/data/results/stop_features/all_hr_stops.geojson' --graph='/home/data/osm/hampton_roads/HR_walk_graph.gpickle' --out='/home/data/osm/hampton_roads/walksheds/transit_walkshed.geojson' --time=15 --combine=False

@@ -6,9 +6,9 @@ from shapely.geometry import Point, LineString, Polygon, MultiLineString
 import sys 
 sys.path.append('../')
 import argparse
-from src.process.process_fsf import process_fsf
-from src.features.count_jobs import count_jobs
-from src.features.jobs_vulnerability import get_worker_svi
+from process.process_fsf import process_fsf
+from features.count_jobs import count_jobs
+from features.jobs_vulnerability import get_worker_svi
 import json
 
 COLUMNS_TO_KEEP = ["stop_id", 
@@ -169,7 +169,7 @@ def add_vulnerable_workers_feature(stops, config, city_key):
     return stops
 
 
-def get_stops_features(config, city_key, out=False):
+def get_stops_features(config, city_key):
     """
     Function that builds the combined feature file
     - Builds stops from feeds
@@ -206,13 +206,7 @@ def get_stops_features(config, city_key, out=False):
     # print(stops.shape)
     print("Added all features")
     
-    if out == True:
-        out_path = f"{config['base_path']}/cities/{city_key}/results/stop_features.geojson"
-        print(f"Writing feature file to {out_path}")
-        with open(out_path, 'w') as file:
-            file.write(stops.to_json())
-    else:
-        return stops
+    return stops
 
 def main():
     parser = argparse.ArgumentParser("Create stop features")

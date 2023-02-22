@@ -4,7 +4,7 @@ import networkx as nx
 import osmnx as ox
 from descartes import PolygonPatch
 from shapely.geometry import Point, LineString, Polygon, MultiPolygon
-from src.utils.geo import create_extent
+from utils.geo import create_extent
 import argparse
 import sys
 import os
@@ -42,6 +42,7 @@ def get_osm_data(config, city_key):
 
     
     G = get_walk_graph(extent_path)
+    graph = ox.project_graph(G, to_crs='epsg:4326')
     print("Graph created. Writing it") 
     nx.write_gpickle(G, out_path+"walk_graph.gpickle")
 

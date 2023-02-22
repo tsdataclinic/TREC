@@ -1,9 +1,9 @@
 import sys 
 sys.path.append('../')
-from src.data.get_transit_data import get_transit_feeds
-from src.data.get_LODES import get_LODES
-from src.data.get_POI_data import get_poi_data
-from src.data.get_osm_data import get_osm_data
+from data.get_transit_data import get_transit_feeds
+from data.get_LODES import get_LODES
+from data.get_POI_data import get_poi_data
+from data.get_osm_data import get_osm_data
 import subprocess
 import argparse
 import os
@@ -11,7 +11,7 @@ import json
 
 
 def get_raw_data(config, city_key):
-    print(config)
+
     CWD = os.getcwd()
     with open(config) as f:
         config_file = json.load(f)

@@ -6,7 +6,7 @@ import argparse
 from shapely.geometry import Point, LineString, Polygon, MultiLineString
 import sys
 sys.path.append('../')
-from src.utils.geo import create_extent
+from utils.geo import create_extent
 import os
 import json
 

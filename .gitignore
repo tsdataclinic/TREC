@@ -156,8 +156,10 @@ dmypy.json
 #######
 # Data and Cache
 analysis/cache/
+analysis/src/cache/
 analysis/data/
 analysis/notebooks/cache/
+analysis/notebooks/
 /app/public/results/*
 /app/public/results/*/*
 build.tar.gz
