@@ -45,9 +45,9 @@ def main():
         
     for city_key in city_keys:
         print(f"Running Data pipeline for: {city_key}")
-        # get_raw_data(opts.config, city_key)
-        # process_data(config, city_key)
-        # get_stops_features(config, city_key, out=True)
+        get_raw_data(opts.config, city_key)
+        process_data(config, city_key)
+        get_stops_features(config, city_key, out=True)
     
     print(f"Combining the results")
     concat_results(config, city_keys)
