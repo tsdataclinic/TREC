@@ -36,7 +36,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
+Pipfile.lock
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -154,7 +154,13 @@ dmypy.json
 /app/yarn-error.log*
 
 #######
+# Data and Cache
+analysis/cache/
+analysis/src/cache/
+analysis/data/
+analysis/notebooks/cache/
+analysis/notebooks/
 /app/public/results/*
 /app/public/results/*/*
-*.geojson
 build.tar.gz
+
