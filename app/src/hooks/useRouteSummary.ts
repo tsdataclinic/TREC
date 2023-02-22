@@ -5,9 +5,9 @@ export type RouteSummary = {
   route: String;
   count: Number;
   flood_risk: Array<number>;
-  access_to_hospital: Array<number>;
-  jobs_cat: Array<number>;
-  worker_vulnerability_cat: Array<number>;
+  hospital_access: Array<number>;
+  job_access: Array<number>;
+  worker_vulnerability: Array<number>;
 };
 
 export const useRouteSummary = (
@@ -22,16 +22,16 @@ export const useRouteSummary = (
           (a: any) => a.properties.routes_serviced,
         ),
         flood_risk: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.risk_category,
+          (a: any) => a.properties.flood_risk_category,
         ),
-        access_to_hospital: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.access_to_hospital,
+        hospital_access: remoteLayers[0].data.features.map(
+          (a: any) => a.properties.access_to_hospital_category,
         ),
-        jobs_cat: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.jobs_cat,
+        job_access: remoteLayers[0].data.features.map(
+          (a: any) => a.properties.job_access_category,
         ),
-        worker_vulnerability_cat: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.worker_vulnerability_cat,
+        worker_vulnerability: remoteLayers[0].data.features.map(
+          (a: any) => a.properties.worker_vulnerability_category,
         ),
       };
       // console.log(route_data)
@@ -41,10 +41,10 @@ export const useRouteSummary = (
           return {
             route,
             flood_risk: route_data.flood_risk[index],
-            access_to_hospital: route_data.access_to_hospital[index],
-            jobs_cat: route_data.jobs_cat[index],
-            worker_vulnerability_cat:
-              route_data.worker_vulnerability_cat[index],
+            hospital_access: route_data.hospital_access[index],
+            job_access: route_data.job_access[index],
+            worker_vulnerability:
+              route_data.worker_vulnerability[index],
           };
         });
       });
@@ -60,19 +60,19 @@ export const useRouteSummary = (
             summary[item.route] = {
               count: 0,
               flood_risk: [0, 0, 0],
-              access_to_hospital: [0, 0, 0],
-              jobs_cat: [0, 0, 0],
-              worker_vulnerability_cat: [0, 0, 0],
+              hospital_access: [0, 0, 0],
+              job_access: [0, 0, 0],
+              worker_vulnerability: [0, 0, 0],
             };
           summary[item.route]['route'] = item.route;
           summary[item.route]['count'] += 1;
           summary[item.route]['flood_risk'][Math.max(0, item.flood_risk)] += 1;
-          summary[item.route]['access_to_hospital'][
-            Math.max(0, item.access_to_hospital)
+          summary[item.route]['hospital_access'][
+            Math.max(0, item.hospital_access)
           ] += 1;
-          summary[item.route]['jobs_cat'][Math.max(0, item.jobs_cat)] += 1;
-          summary[item.route]['worker_vulnerability_cat'][
-            Math.max(0, item.worker_vulnerability_cat)
+          summary[item.route]['job_access'][Math.max(0, item.job_access)] += 1;
+          summary[item.route]['worker_vulnerability'][
+            Math.max(0, item.worker_vulnerability)
           ] += 1;
           return summary;
         },
@@ -81,9 +81,9 @@ export const useRouteSummary = (
             route: '',
             count: 0,
             flood_risk: [0, 0, 0],
-            access_to_hospital: [0, 0, 0],
-            jobs_cat: [0, 0, 0],
-            worker_vulnerability_cat: [0, 0, 0],
+            hospital_access: [0, 0, 0],
+            job_access: [0, 0, 0],
+            worker_vulnerability: [0, 0, 0],
           },
         },
       );

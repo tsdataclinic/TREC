@@ -110,7 +110,7 @@ function ContextPane({
                 if (hospitalLayer) {
                   updateLayer({
                     ...hospitalLayer,
-                    isVisible: value === 'access_to_hospital',
+                    isVisible: value === 'access_to_hospital_category',
                   });
                 }
 
@@ -151,7 +151,7 @@ function ContextPane({
               Object.values(availableRoute).map(routeRecord => {
                 return (
                   <details key={routeRecord.city} className="pb-2">
-                    <summary className="pb-1">{routeRecord.city} lines</summary>
+                    <summary className="pb-1">{routeRecord.display_name} lines</summary>
                     {routeRecord.route_types.map((type, index) => {
                       return (
                         <details

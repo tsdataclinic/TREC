@@ -85,32 +85,32 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
         <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
                      city={properties.city} route_type={properties.route_type}
                      routes_serviced={properties.routes_serviced}></DataRowLink>
-        <DataRow label={PROPERTY_LABELS['risk_category']}>
+        <DataRow label={PROPERTY_LABELS['flood_risk_category']}>
           <RiskSquares
             color="blue"
             maxRisk={2}
-            riskLevel={properties['risk_category']}
+            riskLevel={properties['flood_risk_category']}
           />
         </DataRow>
-        <DataRow label={PROPERTY_LABELS['access_to_hospital']}>
+        <DataRow label={PROPERTY_LABELS['access_to_hospital_category']}>
           <RiskSquares
             color="green"
             maxRisk={2}
-            riskLevel={properties['access_to_hospital']}
+            riskLevel={properties['access_to_hospital_category']}
           />
         </DataRow>
-        <DataRow label={PROPERTY_LABELS['jobs_cat']}>
+        <DataRow label={PROPERTY_LABELS['job_access_category']}>
           <RiskSquares
             maxRisk={2}
             color="green"
-            riskLevel={properties['jobs_cat']}
+            riskLevel={properties['job_access_category']}
           />
         </DataRow>
-        <DataRow label={PROPERTY_LABELS['worker_vulnerability_cat']}>
+        <DataRow label={PROPERTY_LABELS['worker_vulnerability_category']}>
           <RiskSquares
             maxRisk={2}
             color="green"
-            riskLevel={properties['worker_vulnerability_cat']}
+            riskLevel={properties['worker_vulnerability_category']}
           />
         </DataRow>
       </dl>
