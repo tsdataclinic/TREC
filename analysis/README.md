@@ -20,7 +20,7 @@ All data other than floodplain polygons and hospital locations were processed in
 
 ## Getting Started
 - Set up R and python environment (Honestly I don't think I know the language to explain this super clearly)
-- Our data pipeline uses a config file to make it easy to adapt our app to other cities and get the pipeline running locally on your own machine. This config file, `src/config.json`, is currently set up such that the data pipeline will retrieve, process, and featurize the needed datasets for New York City and Hampton Roads, Virginia. The config file contains a `national` feild with urls pointing to three national level data sources that will not change across different cities and city field (i.e. `nyc` and `hr`) that contain relevant information about the cities whose data will be . 
+- Our data pipeline uses a config file to make it easy to adapt our app to other cities and get the pipeline running locally on your own machine. This config file, `src/config.json`, is currently set up such that the data pipeline will retrieve, process, and featurize the needed datasets for New York City and Hampton Roads, Virginia. The config file contains a `base_path` field defining the folder in which the data files will be stored, a `national` feild with urls pointing to three national level data sources that will not change across different cities, and city fields (i.e. `nyc` and `hr`) that have neccessary information about the cities whose data will be downloaded. Particularly, the city fields contain the following: the name of each city, a key for each city, the code for the city's Metropolitan Statistical Area (MSA), the two letter abbreviation of the city's state, and a list of urls to the desired GTFS feeds in that city.
 
 ### Data pipeline
 
@@ -36,7 +36,7 @@ These scripts are run on a per-city basis from the analysis folder. For instance
 python3 -m  data/process_data --config config.json --city 'nyc'
 ```
 
-With the config.json file correctly configured, the full pipeline can be run for all cities by running `python3 -m run_pipeline --config config.json --city 'all'` (again from within the analysis folder). This script will sequntially run `data/get_all_data.py`, `processs/process_data.py`, and `features/build_stop_features.py` for each city in the config file and concatenate .
+With the config.json file configured, the full pipeline can be run for all cities by running `python3 -m run_pipeline --config config.json --city 'all'` (again from within the analysis folder). This script will sequntially run `data/get_all_data.py`, `processs/process_data.py`, and `features/build_stop_features.py` for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file, along with a file containing the hospitals located in each city.
 
 Project Organization
 ------------
@@ -45,23 +45,19 @@ Directory Structure:
 
     ├── LICENSE
     ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
     │
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
     │   │
-    │   ├── data           <- Scripts to download or generate data
+    │   ├── data           <- Scripts to download raw data sources
     │   │   └── make_dataset.py
     │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
+    │   ├── process           <- Scripts to perform processing operations on GTFS, hospital data sets
+    │   │   └── make_dataset.py
+    │   │
+    │   ├── features       <- Scripts to turn raw and processed data into features for the web app
     │   │   └── build_features.py
     │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
 
 
 --------
