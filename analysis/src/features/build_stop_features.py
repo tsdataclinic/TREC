@@ -12,7 +12,8 @@ from features.jobs_vulnerability import get_worker_svi
 import json
 
 COLUMNS_TO_KEEP = ["stop_id", 
-        "stop_name", 
+        "stop_name",
+        "city",
         "route_type",
         "routes_serviced",
         "flood_risk_category", 

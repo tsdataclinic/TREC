@@ -21,7 +21,7 @@ def get_raw_data(config, city_key):
     print("Getting Transit feeds") 
     get_transit_feeds(config_file, city_key)
     print("Getting Census geographies") 
-    subprocess.run(["Rscript", f"{CWD}/data/get_census_data.R","--config",config,"--city",city_key])
+    subprocess.run(["Rscript", f"{CWD}/src/data/get_census_data.R","--config",config,"--city",city_key])
     print("Getting LODES data") 
     get_LODES(config_file, city_key)
     print("Getting OSM data") 
