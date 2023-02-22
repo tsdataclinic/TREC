@@ -45,6 +45,7 @@ Our data pipeline uses a config file to make it easy to adapt our app to other c
 Our data processing pipeline proceeds in three steps, each with a corresponding python script.
 
 1. Get raw data (`data/get_raw_data.py`) - For the specified city, downloads Census geographies, state-level LODES data, national point-of-interest data, the OSM street network, and the GTFS feed files.
+**__NOTE__:** A few of the required datasets lack a direct download link and need to be added manually to the file structure after this step is run. The  [First Street Climate-Adjusted Flood Risk](https://aws.amazon.com/marketplace/pp/prodview-r36lzzzjacd32?sr=0-1&ref_=beagle&applicationId=AWSMPContessa#overview) and the [CDC/ATSDR Social Vulnerability Index](https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html) should be placed in the `/national` directory created by the get_raw_data script.
 2. Process data (`process/process_data.py`) - Processes GTFS feed files into a single stops file and calculates 15-minute walksheds around each stop. Also calculates 10 and 20 minute walksheds around each hospital within the selected city.
 3. Generate features (`features/build_stop_features.py`) - Uses raw and processed data sources to caclulate flood risk, hospital access, job access, and worker vulnerability. Outputs the resulting stop-level file.
 
@@ -63,7 +64,7 @@ python3 src/run_pipeline.py --config src/config.json --city all
 This script will sequntially run the pipeline for each city in the config file and concatenates the resulting stop-level files into a single multi-city geojson file (`stop_features.geojson`), along with a file containing the hospitals located in each city (`hospitals.geojson`) in the root directory defined in the config.
 
 **__NOTE__:**
-Some of the steps in the pipeline are computationally expensive. Particularly, calculating the number of jobs around each transit stop in NYC consumes a lot of memory. Generating the WalkGraph from OSM for NYC takes fairly long as well. 
+Some of the steps in the pipeline are computationally expensive. Particularly, creating the walkgraph for NYC from OSM data and calculating the number of jobs around each transit stop in NYC consumes a lot of memory and can be time intensive. 
 
 ## Feature Methodology
 
