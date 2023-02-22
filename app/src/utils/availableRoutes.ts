@@ -9,7 +9,7 @@ export type RouteRecord = {
 export const AVAILABLE_ROUTES : Array<Record<string, RouteRecord>> = [
     {
       "Hampton Roads": { 
-        "city": "Hampton Roads",
+        "city": "hr",
         "route_types": [
           {
             "route_type": "Bus",
@@ -109,7 +109,7 @@ export const AVAILABLE_ROUTES : Array<Record<string, RouteRecord>> = [
     },
     {
       "NYC": {
-        "city": "NYC",
+        "city": "nyc",
         "route_types": [
           {
             "route_type": "Bus",

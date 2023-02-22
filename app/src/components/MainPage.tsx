@@ -35,10 +35,10 @@ export type SelectedRoute = {
 };
 
 export const PROPERTY_LABELS: Record<string, string> = {
-  access_to_hospital: 'Access to Hospital',
-  jobs_cat: 'Access to Jobs',
-  worker_vulnerability_cat: 'Vulnerable workers',
-  risk_category: 'Flood Risk',
+  access_to_hospital_category: 'Access to Hospital',
+  job_access_category: 'Access to Jobs',
+  worker_vulnerability_category: 'Vulnerable workers',
+  flood_risk_category: 'Flood Risk',
 };
 
 // TODO - use reducer
@@ -46,14 +46,14 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   '1': {
     id: 1,
     layerName: 'Transit Stops',
-    layerURL: '/results/stop_features_v6.geojson',
+    layerURL: '/results/stop_features.geojson',
     isVisible: true,
     hideToggle: true,
   },
   '2': {
     id: 2,
     layerName: 'Hospitals',
-    layerURL: '/results/hospitals_v2.geojson',
+    layerURL: '/results/hospitals.geojson',
     isVisible: true,
     hideToggle: false,
   },
@@ -98,21 +98,21 @@ export default function MainPage(): JSX.Element {
   );
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
-      'risk_category',
-      'access_to_hospital',
-      'jobs_cat',
-      'worker_vulnerability_cat',
+      'flood_risk_category',
+      'access_to_hospital_category',
+      'job_access_category',
+      'worker_vulnerability_category',
     ]),
   );
   const [selectedProperties, setSelectedProperties] = useState<Array<string>>([
-    'risk_category',
-    'access_to_hospital',
+    'flood_risk_category',
+    'access_to_hospital_category',
   ]);
   const [filters, setFilters] = useState<Record<string, any>>({
-    risk_category: 0,
-    access_to_hospital: 0,
-    jobs_cat: 0,
-    worker_vulnerability_cat: 0,
+    flood_risk_category: 0,
+    access_to_hospital_category: 0,
+    job_access_category: 0,
+    worker_vulnerability_category: 0,
   });
 
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>(

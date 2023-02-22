@@ -22,16 +22,16 @@ export const useRouteSummary = (
           (a: any) => a.properties.routes_serviced,
         ),
         flood_risk: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.risk_category,
+          (a: any) => a.properties.flood_risk_category,
         ),
         access_to_hospital: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.access_to_hospital,
+          (a: any) => a.properties.access_to_hospital_category,
         ),
         jobs_cat: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.jobs_cat,
+          (a: any) => a.properties.job_access_category,
         ),
         worker_vulnerability_cat: remoteLayers[0].data.features.map(
-          (a: any) => a.properties.worker_vulnerability_cat,
+          (a: any) => a.properties.worker_vulnerability_category,
         ),
       };
       // console.log(route_data)
