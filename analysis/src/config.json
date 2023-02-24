@@ -31,7 +31,7 @@
         "state":"VA",
         "transit_feeds": {
             "hrt": "https://gtfs.gohrt.com/gtfs/google_transit.zip",
-            "williamsburg": "http://data.trilliumtransit.com/gtfs/williamsburg-va-us/williamsburg-va-us.zip"
+            "williamsburg": "https://gowata.org/DocumentCenter/View/500/Static-GTFS"
         }
     }
 }
