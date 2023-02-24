@@ -466,14 +466,6 @@ function MethodologyModalContents() {
         </li>
         <li>
           Williamsburg transit stops from retrieved from{' '}
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://trilliumtransit.com/"
-          >
-            Trillium Transit
-          </a>
-          ,{' '}
           <a target="_blank" rel="noreferrer" href="http://www.gowata.org/">
             Williamsburg Area Transit Authority
           </a>
