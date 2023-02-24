@@ -60,7 +60,7 @@ All data accessed as of Febuary 21st, 2023.
 - Street networks retrieved using [OSMnx](https://github.com/gboeing/osmnx) with data by [Open Street Maps](https://www.openstreetmap.org/about),  [Open Database License, "ODbL" 1.0](http://www.opendatacommons.org/licenses/odbl/) 
 - Hospital location data from [here](https://geonames.usgs.gov/docs/stategaz/NationalFile.zip) (direct download link) by [United States Geological Survey](https://www.usgs.gov/) 
 - New York City transit stops data was downloaded from [Metropolitan Transportation Authority](http://web.mta.info/developers/developer-data-terms.html#data) 
-- Hampton Roads transit stops were downloaded from [Hampton Roads Transit](https://gtfs.gohrt.com/) and from [Trillium Transit](http://data.trilliumtransit.com/gtfs/williamsburg-va-us/williamsburg-va-us.zip)
+- Hampton Roads transit stops were downloaded from [Hampton Roads Transit](https://gtfs.gohrt.com/)
 - New York City stormwater flood map data was downloaded from [NYC Department of Environmental Protection](http://nyc.gov/stormwater-map)
 - Hampton Roads sea-level rise planning scenarios were downloaded from [Hampton Roads Geographic Exchange Online](https://www.hrgeo.org/search?q=SLR)
 
