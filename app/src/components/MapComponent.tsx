@@ -213,7 +213,7 @@ function MapComponent({
     }
   }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
 
-  return <div id="map" className="h-full w-full" />;
+  return <div id="map" className="h-96 w-full sm:h-full" />;
 }
 
 export default MapComponent;

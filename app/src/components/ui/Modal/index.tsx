@@ -48,6 +48,7 @@ const StyledModalContent = styled(Dialog.Content)`
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   left: 50%;
   max-height: 85vh;
+  width: 80vw;
   max-width: 90vw;
   position: fixed;
   top: 50%;

@@ -182,7 +182,17 @@ export default function MainPage(): JSX.Element {
   }, [])
 
   return (
-    <main className="h-full flex">
+    <main className="flex flex-col-reverse overflow-scroll sm:flex-row sm:h-full">
+      <Filter
+        filters={filters}
+        setFilter={(value: Record<string, any>) =>
+          setFilters({
+            ...filters,
+            ...value,
+          })
+        }
+        selectedProperties={selectedProperties}
+      />
       <ContextPane
         regions={AVAILABLE_REGIONS}
         setSelectedRegion={setSelectedRegion}
@@ -209,16 +219,7 @@ export default function MainPage(): JSX.Element {
         sourceLayerConfigs={sourceLayerConfigs}
         setDetailedRoutes={setDetailedRoutes}
       />
-      <Filter
-        filters={filters}
-        setFilter={(value: Record<string, any>) =>
-          setFilters({
-            ...filters,
-            ...value,
-          })
-        }
-        selectedProperties={selectedProperties}
-      />
+
     </main>
   );
 }

@@ -515,19 +515,43 @@ function MethodologyModalContents() {
   );
 }
 
-function Header() {
+function Header(props: { isMobile: boolean; }) {
+  const [isDropdownMenuOpen, setIsDropdownMenuOpen] = React.useState(false);
+  function handleToggleMenu() {
+    setIsDropdownMenuOpen(!isDropdownMenuOpen);
+  }
+
+  React.useEffect(() => {
+    if (!props.isMobile) {
+      setIsDropdownMenuOpen(false)
+    }
+  }, [props.isMobile])
   return (
-    <header className="px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
-      <div className="flex space-x-4 items-center">
-        <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
-        <h1 className="text-lg">TREC - Census TOP</h1>
-      </div>
+    <header className="h-10 px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
+      {
+        isDropdownMenuOpen ?
+        <div>
+          <ModalLink modalContents={<MethodologyModalContents />}>Methodology</ModalLink>
+          <ModalLink modalContents={<AboutModalContents />}>About</ModalLink>
+          <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
+        </div>
+        :
+        <div className="flex space-x-4 items-center">
+          <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
+          <h1 className="text-lg">TREC - Census TOP</h1>
+        </div>
+      }
       <div className="flex">
-        <ModalLink modalContents={<MethodologyModalContents />}>
-          Methodology
-        </ModalLink>
-        <ModalLink modalContents={<AboutModalContents />}>About</ModalLink>
-        <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
+        <div className='hidden sm:block'>
+          <ModalLink modalContents={<MethodologyModalContents />}>Methodology</ModalLink>
+          <ModalLink modalContents={<AboutModalContents />}>About</ModalLink>
+          <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
+        </div>
+        <div className='block sm:hidden'>
+          <button onClick={handleToggleMenu}>
+            {isDropdownMenuOpen ? 'Close' : 'Menu'}
+          </button>
+        </div>
       </div>
     </header>
   );

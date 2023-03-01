@@ -32,7 +32,7 @@ function ContextPane({
   return (
     <div
       id="ContextPane"
-      className="bg-white w-1/5 min-w-fit max-w-sm h-full shadow flex flex-col"
+      className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:max-w-sm sm:w-1/5"
     >
       <div className="p-5 border-b border-b-slate-400">
         <select
