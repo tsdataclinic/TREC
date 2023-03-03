@@ -182,7 +182,7 @@ export default function MainPage(): JSX.Element {
   }, [])
 
   return (
-    <main className="flex flex-col-reverse overflow-scroll sm:flex-row sm:h-full">
+    <main className="flex flex-col-reverse overflow-scroll sm:overflow-hidden sm:flex-row sm:h-full">
       <Filter
         filters={filters}
         setFilter={(value: Record<string, any>) =>

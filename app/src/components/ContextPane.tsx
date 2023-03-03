@@ -32,7 +32,7 @@ function ContextPane({
   return (
     <div
       id="ContextPane"
-      className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:max-w-sm sm:w-1/5"
+      className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:overflow-y-hidden sm:h-full sm:max-w-sm sm:w-1/5"
     >
       <div className="p-5 border-b border-b-slate-400">
         <select
@@ -49,7 +49,7 @@ function ContextPane({
         </select>
       </div>
 
-      <div className="px-4 space-y-4 pt-4 flex flex-col h-full overflow-scroll">
+      <div className="px-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers)
             .filter(layer => !layer.hideToggle)
@@ -145,7 +145,7 @@ function ContextPane({
             ))}
           </div>
         ) : null}
-        <div className="overflow-y-scroll flex-1">
+        <div className="flex-1 sm:overflow-y-scroll">
           <ul>
             {routes.map(availableRoute =>
               Object.values(availableRoute).map(routeRecord => {
