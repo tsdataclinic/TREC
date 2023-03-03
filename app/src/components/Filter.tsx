@@ -9,19 +9,19 @@ type Props = {
 };
 
 export function getFilterGridColors(
-  prop0: number,
-  prop1: number,
+  prop0: number[],
+  prop1: number[],
 ): Array<COLORS | string> {
   return [
-    prop0 > 2 || prop1 > 0 ? 'white' : COLORS.darkgreen,
-    prop0 > 2 || prop1 > 1 ? 'white' : COLORS.darkpurple,
-    prop0 > 2 || prop1 > 2 ? 'white' : COLORS.darkred,
-    prop0 > 1 || prop1 > 0 ? 'white' : COLORS.mediumgreen,
-    prop0 > 1 || prop1 > 1 ? 'white' : COLORS.mediumpurple,
-    prop0 > 1 || prop1 > 2 ? 'white' : COLORS.mediumred,
-    prop0 > 0 || prop1 > 0 ? 'white' : COLORS.lightgreen,
-    prop0 > 0 || prop1 > 1 ? 'white' : COLORS.lightpurple,
-    prop0 > 0 || prop1 > 2 ? 'white' : COLORS.lightred,
+    (prop0[1] < 2 || prop0[0] > 2) || (prop1[1] < 0 || prop1[0] > 0) ? 'white' : COLORS.darkgreen,
+    (prop0[1] < 2 || prop0[0] > 2) || (prop1[1] < 1 || prop1[0] > 1) ? 'white' : COLORS.darkpurple,
+    (prop0[1] < 2 || prop0[0] > 2) || (prop1[1] < 2 || prop1[0] > 2) ? 'white' : COLORS.darkred,
+    (prop0[1] < 1 || prop0[0] > 1) || (prop1[1] < 0 || prop1[0] > 0) ? 'white' : COLORS.mediumgreen,
+    (prop0[1] < 1 || prop0[0] > 1) || (prop1[1] < 1 || prop1[0] > 1) ? 'white' : COLORS.mediumpurple,
+    (prop0[1] < 1 || prop0[0] > 1) || (prop1[1] < 2 || prop1[0] > 2) ? 'white' : COLORS.mediumred,
+    (prop0[1] < 0 || prop0[0] > 0) || (prop1[1] < 0 || prop1[0] > 0) ? 'white' : COLORS.lightgreen,
+    (prop0[1] < 0 || prop0[0] > 0) || (prop1[1] < 1 || prop1[0] > 1) ? 'white' : COLORS.lightpurple,
+    (prop0[1] < 0 || prop0[0] > 0) || (prop1[1] < 2 || prop1[0] > 2) ? 'white' : COLORS.lightred,
   ];
 }
 
@@ -49,10 +49,10 @@ function Filter({
       <div className="grid grid-cols-4 grid-rows-4 h-full p-3 pb-0">
         <div className="row-span-3">
           <Slider
-            value={[filters[selectedProperties[0]]]}
+            value={filters[selectedProperties[0]]}
             onValueChange={(e: number[]) => {
               setFilter({
-                [selectedProperties[0]]: Number.parseInt(`${e[0]}`),
+                [selectedProperties[0]]: e // Number.parseInt(`${e[0]}`),
               });
             }}
             orientation="vertical"
@@ -62,10 +62,10 @@ function Filter({
         <div className="col-span-3 row-span-3">{colorGrid}</div>
         <div className="col-start-2 col-span-3 pt-1">
           <Slider
-            value={[filters[selectedProperties[1]]]}
+            value={filters[selectedProperties[1]]}
             onValueChange={(e: number[]) => {
               setFilter({
-                [selectedProperties[1]]: Number.parseInt(`${e[0]}`),
+                [selectedProperties[1]]: e //Number.parseInt(`${e[0]}`),
               });
             }}
             orientation="horizontal"

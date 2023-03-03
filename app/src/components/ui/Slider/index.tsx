@@ -120,6 +120,7 @@ export default function Slider({
           <StyledSliderRange />
         </StyledSliderTrack>
         <StyledSliderThumb />
+        <StyledSliderThumb />
       </StyledSlider>
     </div>
   );

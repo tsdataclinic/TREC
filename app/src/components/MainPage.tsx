@@ -109,10 +109,10 @@ export default function MainPage(): JSX.Element {
     'access_to_hospital_category',
   ]);
   const [filters, setFilters] = useState<Record<string, any>>({
-    flood_risk_category: 0,
-    access_to_hospital_category: 0,
-    job_access_category: 0,
-    worker_vulnerability_category: 0,
+    flood_risk_category: [0, 2],
+    access_to_hospital_category: [0, 2],
+    job_access_category: [0, 2],
+    worker_vulnerability_category: [0, 2],
   });
 
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>(
@@ -139,10 +139,22 @@ export default function MainPage(): JSX.Element {
         'all',
         ...Object.keys(filters)
           .filter(f => selectedProperties.includes(f))
+          .map(x => { 
+            console.log(x, filters[x]);
+            return x
+          })
           .map((f: any) => [
-            '>=',
-            ['get', f],
-            isNaN(filters[f]) ? 0 : filters[f],
+            'all',
+            [
+              '<=',
+              ['get', f],
+              isNaN(filters[f][1]) ? 0 : filters[f][1],
+            ],
+            [
+              '>=',
+              ['get', f],
+              isNaN(filters[f][0]) ? 0 : filters[f][0],
+            ]
           ]),
 
         ...(selectedRoutes.length > 0
@@ -185,11 +197,13 @@ export default function MainPage(): JSX.Element {
     <main className="flex flex-col-reverse overflow-scroll sm:overflow-hidden sm:flex-row sm:h-full">
       <Filter
         filters={filters}
-        setFilter={(value: Record<string, any>) =>
+        setFilter={(value: Record<string, any>) => {
+          console.log(value);
           setFilters({
             ...filters,
             ...value,
           })
+        }
         }
         selectedProperties={selectedProperties}
       />

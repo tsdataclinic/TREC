@@ -48,7 +48,7 @@ function RiskSquares(props: {
 }): JSX.Element {
   const { color, riskLevel, maxRisk } = props;
   const squares = Array.from({ length: maxRisk + 1 }).map((_, i) => {
-    const filterColors = color === 'blue' ? getFilterGridColors(riskLevel, 0) : getFilterGridColors(0, riskLevel);
+    const filterColors = color === 'blue' ? getFilterGridColors([riskLevel, 2], [0, 0]) : getFilterGridColors([0, 0], [riskLevel, 2]);
     const filterColor = color === 'blue' ? filterColors[0] : filterColors[filterColors.length-1];
     const squareColor = i <= riskLevel ? filterColor : EMPTY_RISK_COLOR;
     return <div key={i} className={`h-4 w-6`} style={{ backgroundColor: squareColor }}></div>;
