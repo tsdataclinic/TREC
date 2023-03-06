@@ -140,7 +140,6 @@ export default function MainPage(): JSX.Element {
         ...Object.keys(filters)
           .filter(f => selectedProperties.includes(f))
           .map(x => { 
-            console.log(x, filters[x]);
             return x
           })
           .map((f: any) => [
@@ -198,7 +197,6 @@ export default function MainPage(): JSX.Element {
       <Filter
         filters={filters}
         setFilter={(value: Record<string, any>) => {
-          console.log(value);
           setFilters({
             ...filters,
             ...value,
