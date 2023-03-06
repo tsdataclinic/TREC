@@ -308,10 +308,10 @@ export function useSourceLayerConfigs(
               value: [
                 'case',
                 ['==', ['get', 'Flooding_Category'], 'Deep flooding (>1ft)'],
-                `${COLORS.darkgreen}`,
+                `#ff8e52`,
                 ['==', ['get', 'Flooding_Category'], 'Future high tides'],
-                `${COLORS.mediumgreen}`,
-                `${COLORS.lightgreen}`,
+                `#ffc7a9`,
+                `#ffddcb`
               ],
             },
           ],
@@ -331,8 +331,8 @@ export function useSourceLayerConfigs(
               value: [
                 'case',
                 ['==', ['get', 'CLASS'], 'Low Lying'],
-                `${COLORS.mediumgreen}`,
-                `${COLORS.darkgreen}`,
+                `#ff8e52`,
+                `#ffc7a9`,
               ],
             },
           ],
