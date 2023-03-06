@@ -198,7 +198,7 @@ function MapComponent({
         }
       });
     }
-  }, [center, layers]);
+  }, [center, layers, paintLayer, setDetailedRoutes]);
 
   useEffect(() => {
     if (map.current) {
