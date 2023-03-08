@@ -54,6 +54,7 @@ const StyledSliderTrack = styled(RadixSlider.Track)`
       border-left: ${SLIDER_HEAD_SIZE + 1}px solid ${APP_SLATE_COLOR};
       right: -2px;
       top: -5px;
+      left: 102%;
     }
   }
 
@@ -66,7 +67,7 @@ const StyledSliderTrack = styled(RadixSlider.Track)`
       border-right: ${SLIDER_HEAD_SIZE}px solid transparent;
       border-bottom: ${SLIDER_HEAD_SIZE + 1}px solid ${APP_SLATE_COLOR};
       left: -6px;
-      top: -2px;
+      top: -10px;
     }
   }
 `;
