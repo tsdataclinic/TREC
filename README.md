@@ -27,6 +27,8 @@ Our app relies on two data files that we process using the data sources (listed 
 - [Stop Features](public/data/stop_features.geojson): Stop level dervived metrics described in the data dictionary
 - [Hospitals](public/data/hospitals.geojson): Locations of hospitals within included cities
 
+We have also included csv files of the stops and summaries by route in the same [directory](public/data/).
+
 #### Derived Metrics Data Dictionary
 
 | Variable                   | Description                                                 | Type | License    | Source                                                                                                                                                                                                                                                                                                  |
