@@ -12,11 +12,18 @@ export type RouteSummary = {
 
 export const useRouteSummary = (
   remoteLayers: RemoteLayer[],
-  detailedRoutes: SelectedRoute,
+  detailedRoutes: SelectedRoute[],
 ): Array<RouteSummary> => {
+  
+  // Since there can be common stops in different routes
+  // Summary(A+B) != Summary(A) + Summary(B)
+  // Therefore we cannot reuse computation done for A and B separately to find A+B's summary
+  const detailedRoutesServiced = detailedRoutes.flatMap(route => route.routeServiced);
+  const combinedRouteName = detailedRoutesServiced.join(", ");
+
   const routeSummary = useMemo(() => {
     let routeSummary: any = {};
-    if (remoteLayers[0].isSuccess && detailedRoutes) {
+    if (remoteLayers[0].isSuccess && detailedRoutes.length > 0) {
       let route_data = {
         routes: remoteLayers[0].data.features.map(
           (a: any) => a.properties.routes_serviced,
@@ -34,44 +41,43 @@ export const useRouteSummary = (
           (a: any) => a.properties.worker_vulnerability_category,
         ),
       };
-      // console.log(route_data)
+      
       // Flattening this data so that we have scores for each stop on a route
-      let route_features = route_data.routes.flatMap((r: any, index: any) => {
-        return r.map((route: any) => {
-          return {
-            route,
-            flood_risk: route_data.flood_risk[index],
-            hospital_access: route_data.hospital_access[index],
-            job_access: route_data.job_access[index],
-            worker_vulnerability:
-              route_data.worker_vulnerability[index],
-          };
-        });
+      // Also ensuring that each stop gets included at most once in case of multiple routes
+      let stop_features = route_data.routes.map((r: any, index: any) => {
+        return {
+          routes: r,
+          flood_risk: route_data.flood_risk[index],
+          hospital_access: route_data.hospital_access[index],
+          job_access: route_data.job_access[index],
+          worker_vulnerability:
+          route_data.worker_vulnerability[index],
+        }
       });
 
-      route_features = route_features.filter(
-        (route: any) => route.route == detailedRoutes.routeServiced,
+      stop_features = stop_features.filter(
+        (f: any) => f.routes.some((route: string) => detailedRoutesServiced.includes(route))
       );
 
       // Aggregating this data to get count of stops and the count of different scores on each route.
-      let routeStats = route_features.reduce(
+      let routeStats = stop_features.reduce(
         (summary: any, item: any) => {
-          if (!summary[item.route])
-            summary[item.route] = {
+          if (!summary[combinedRouteName])
+            summary[combinedRouteName] = {
               count: 0,
               flood_risk: [0, 0, 0],
               hospital_access: [0, 0, 0],
               job_access: [0, 0, 0],
               worker_vulnerability: [0, 0, 0],
             };
-          summary[item.route]['route'] = item.route;
-          summary[item.route]['count'] += 1;
-          summary[item.route]['flood_risk'][Math.max(0, item.flood_risk)] += 1;
-          summary[item.route]['hospital_access'][
+          summary[combinedRouteName]['route'] = combinedRouteName;
+          summary[combinedRouteName]['count'] += 1;
+          summary[combinedRouteName]['flood_risk'][Math.max(0, item.flood_risk)] += 1;
+          summary[combinedRouteName]['hospital_access'][
             Math.max(0, item.hospital_access)
           ] += 1;
-          summary[item.route]['job_access'][Math.max(0, item.job_access)] += 1;
-          summary[item.route]['worker_vulnerability'][
+          summary[combinedRouteName]['job_access'][Math.max(0, item.job_access)] += 1;
+          summary[combinedRouteName]['worker_vulnerability'][
             Math.max(0, item.worker_vulnerability)
           ] += 1;
           return summary;

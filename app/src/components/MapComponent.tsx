@@ -13,7 +13,7 @@ type MapProps = {
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   center: [number, number];
-  setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
 };
 
 function MapComponent({

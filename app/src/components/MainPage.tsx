@@ -118,17 +118,15 @@ export default function MainPage(): JSX.Element {
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>(
     [],
   );
-  const [detailedRoutes, setDetailedRoutes] = useState<SelectedRoute>({
-    city: '',
-    routeType: '',
-    routeServiced: '',
-  });
+  const [detailedRoutes, setDetailedRoutes] = useState<Array<SelectedRoute>>(
+    [],
+  );
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers);
   // console.log(remoteLayers)
   let routeSummary = useRouteSummary(remoteLayers, detailedRoutes);
-  // console.log(routeSummary)
+  // console.log(routeSummary);
   // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
 
   let sourceLayerConfigs = useSourceLayerConfigs(
@@ -216,14 +214,13 @@ export default function MainPage(): JSX.Element {
         routes={AVAILABLE_ROUTES}
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
+        setDetailedRoutes={setDetailedRoutes}
       />
-      {detailedRoutes.city != '' && (
-        <RouteSummaryPane
-          routeSummary={routeSummary}
-          detailedRoutes={detailedRoutes}
-          setDetailedRoutes={setDetailedRoutes}
-        />
-      )}
+      <RouteSummaryPane
+        routeSummary={routeSummary}
+        detailedRoutes={detailedRoutes}
+        setDetailedRoutes={setDetailedRoutes}
+      />
       <MapComponent
         center={selectedRegion}
         layers={layers}

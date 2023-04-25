@@ -24,7 +24,7 @@ function DataRowLink(props: {
   route_type:string;
   routes_serviced:string;
   label: string;
-  setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
 }): JSX.Element {
   const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
   let routes = JSON.parse(routes_serviced)
@@ -33,9 +33,8 @@ function DataRowLink(props: {
   return (
     <div className="w-full flex text-sm">
       <dt className="flex-1 pr-2">{label}</dt>
-      {routes.map((r:string, i:number) => (<dd className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs" key={i} onClick={()=>setDetailedRoutes({city:city,routeType:route_type,routeServiced:r})}>{i< r_len-1 ? r+',' : r}</dd>)
+      {routes.map((r:string, i:number) => (<dd className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs" key={i} onClick={()=>setDetailedRoutes([{city:city,routeType:route_type,routeServiced:r}])}>{i< r_len-1 ? r+',' : r}</dd>)
       )}
-      
     </div>
   );
 }
@@ -59,7 +58,7 @@ function RiskSquares(props: {
 type Props = {
   feature: MapboxGeoJSONFeature;
   onDismiss: () => void;
-  setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
 };
 
 function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element {
