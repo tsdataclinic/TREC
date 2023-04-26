@@ -532,7 +532,7 @@ function Header(props: { isMobile: boolean; }) {
         isDropdownMenuOpen ?
         <div>
           <ModalLink modalContents={<MethodologyModalContents />}>Methodology</ModalLink>
-          <ModalLink modalContents={<AboutModalContents />}>About</ModalLink>
+          <a href='/about'>About</a>
           <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
         </div>
         :
@@ -544,7 +544,7 @@ function Header(props: { isMobile: boolean; }) {
       <div className="flex">
         <div className='hidden sm:block'>
           <ModalLink modalContents={<MethodologyModalContents />}>Methodology</ModalLink>
-          <ModalLink modalContents={<AboutModalContents />}>About</ModalLink>
+          <a href='/about'>About</a>
           <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
         </div>
         <div className='block sm:hidden'>
