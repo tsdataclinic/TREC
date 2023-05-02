@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
 import { RouteRecord } from '../utils/availableRoutes';
+import { Cities } from '../lib/cities';
 
 type Props = {
   availableProperties: Set<string>;
@@ -10,8 +11,9 @@ type Props = {
   selectedProperties: Array<string>;
   layers: Record<string, Layer>;
   updateLayer: (layer: Layer) => void;
-  regions: Record<string, [number, number]>;
-  setSelectedRegion: React.Dispatch<React.SetStateAction<[number, number]>>;
+  regions: Record<Cities, [number, number]>;
+  selectedCity: Cities;
+  setSelectedCity: React.Dispatch<React.SetStateAction<Cities>>;
   routes: Array<Record<string, RouteRecord>>;
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
@@ -24,7 +26,8 @@ function ContextPane({
   selectedProperties,
   setSelectedProperties,
   regions,
-  setSelectedRegion,
+  selectedCity,
+  setSelectedCity,
   routes,
   selectedRoutes,
   setSelectedRoutes,
@@ -37,7 +40,7 @@ function ContextPane({
       <div className="p-5 border-b border-b-slate-400">
         <select
           onChange={e => {
-            setSelectedRegion(regions[e.target.value]);
+            setSelectedCity(e.target.value as Cities);
           }}
           className="text-2xl"
         >
@@ -52,7 +55,7 @@ function ContextPane({
       <div className="px-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers)
-            .filter(layer => !layer.hideToggle)
+            .filter(layer => !layer.hideToggle && (layer.city === undefined || layer.city === selectedCity))
             .map(layer => {
               return (
                 <div className="space-x-2">
@@ -149,7 +152,7 @@ function ContextPane({
           <ul>
             {routes.map(availableRoute =>
               Object.values(availableRoute).map(routeRecord => {
-                return (
+                return ((routeRecord.city === selectedCity) ? (
                   <details key={routeRecord.city} className="pb-2">
                     <summary className="pb-1">{routeRecord.display_name} lines</summary>
                     {routeRecord.route_types.map((type, index) => {
@@ -199,7 +202,7 @@ function ContextPane({
                         </details>
                       );
                     })}
-                  </details>
+                  </details>): <></>
                 );
               }),
             )}

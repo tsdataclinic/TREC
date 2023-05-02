@@ -1,5 +1,7 @@
+import { Cities } from "../lib/cities";
+
 export type RouteRecord = {
-  city: string;
+  city: Cities;
   display_name: string;
   route_types: Array<{
     route_type: string;
@@ -10,7 +12,7 @@ export type RouteRecord = {
 export const AVAILABLE_ROUTES : Array<Record<string, RouteRecord>> = [
     {
       "Hampton Roads": { 
-        "city": "hr",
+        "city": Cities.HamptonRoads,
         "display_name": "Hampton Roads",
         "route_types": [
           {
@@ -111,7 +113,7 @@ export const AVAILABLE_ROUTES : Array<Record<string, RouteRecord>> = [
     },
     {
       "NYC": {
-        "city": "nyc",
+        "city": Cities.NewYorkCity,
         "display_name": "New York City",
         "route_types": [
           {
