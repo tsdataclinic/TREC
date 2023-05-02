@@ -1,4 +1,22 @@
 import React from 'react';
+import MediaQuery from 'react-responsive';
+
+
+function FlexImage(props: {
+   src: string;
+   alt: string;
+   query: string;
+   style?: React.CSSProperties | undefined;
+}) {
+    const { src, alt, query, style } = props;
+    return (
+        <MediaQuery query={query}>
+            <div className='flexColumn'>
+	        <img src={src} alt={alt} style={style}/>
+	    </div>
+	</MediaQuery>
+    )
+}
 
 const About = () => {
     return (
@@ -34,14 +52,12 @@ const About = () => {
 			    hospital or community support, or to a large amount of essential jobs.
 			    How can we share that insight more effectively?
 	                </div>
+			<FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
                     </div>
-	            <div className='flexColumn'>
-	            </div>
+		    <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
 	        </div>
                 <div className='segment' style={{ backgroundColor: '#F0F5FF', color: '#103470', display: 'flex' }}>
-                    <div className='flexColumn'>
-		       <img src=''/>
-	            </div>
+		    <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
 	            <div className='flexColumn'>
                         <h1 className='headings'>
                             TREC (Transit Resilience for Essential Commuting)
@@ -58,6 +74,7 @@ const About = () => {
 	                    filter those with the highest climate risk and highest importance for
 	                    access.
 	                </div>
+			<FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
 	            </div>
 	        </div>
 	        <div className='segment' style={{ backgroundColor: 'white', color: '#103470', display: 'flex' }}>
@@ -85,18 +102,15 @@ const About = () => {
 				</a>
 	                    </div>
 	                </div>
+			<FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
 	            </div>
-	            <div className='flexColumn'>
-		        <img src=''/>
-	            </div>
+		    <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
 	        </div>
 	        <div className='segment' style={{ backgroundColor: '#F0F5FF', color: '#103470', display: 'flex' }}>
-	            <div className='flexColumn'>
-                        <img
-                           style={{ width: '300px', height: '300px', margin: 'auto' }}
-		           src="https://miro.medium.com/max/3152/1*6g_929Nj-THV-1BYC0egZA.png"
-		        />
-	            </div>
+		    <FlexImage src="https://miro.medium.com/max/3152/1*6g_929Nj-THV-1BYC0egZA.png" 
+		               alt="Data Clinic"
+			       query="(min-width: 451px)"
+			       style={{ width: '300px', height: '300px', margin: 'auto' }}/>
 	            <div className='flexColumn'>
 			<h1 className='headings'>What is Data Clinic?</h1>
 	                <div className='body'>
@@ -125,6 +139,10 @@ const About = () => {
 				and connect with us via{' '}
 				<a href="mailto:dataclinic@twosigma.com">dataclinic@twosigma.com</a>
 	                </div>
+			<FlexImage src="https://miro.medium.com/max/3152/1*6g_929Nj-THV-1BYC0egZA.png"
+                                   alt="Data Clinic"
+                                   query="(max-width: 450px)"
+                                   style={{ width: '300px', height: '300px', margin: 'auto' }}/>
 	            </div>
                 </div>
                <div className='segment' style={{ backgroundColor: 'white', color: '#103470', display: 'flex' }}>
@@ -158,9 +176,9 @@ const About = () => {
 			   to open issues, suggest features, contribute pull requests, and find
 			   beginner issues.
 		       </div>
+		       <FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
 		   </div>
-		   <div className='flexColumn'>
-		   </div>
+		   <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
                </div>
       </div>
    )
