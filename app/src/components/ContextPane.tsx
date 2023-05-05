@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
 import { RouteRecord } from '../utils/availableRoutes';
-import { Cities } from '../lib/cities';
+import { Cities } from '../libs/cities';
 
 type Props = {
   availableProperties: Set<string>;

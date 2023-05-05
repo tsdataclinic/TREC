@@ -1,4 +1,4 @@
-import { Cities } from "../lib/cities";
+import { Cities } from "../libs/cities";
 
 export type RouteRecord = {
   city: Cities;

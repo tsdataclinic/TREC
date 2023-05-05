@@ -11,7 +11,7 @@ import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
 import { AVAILABLE_ROUTES } from '../utils/availableRoutes';
 import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
-import { Cities } from '../lib/cities';
+import { Cities } from '../libs/cities';
 
 export type Layer = {
   id: number;
