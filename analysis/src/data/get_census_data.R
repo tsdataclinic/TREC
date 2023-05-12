@@ -24,6 +24,12 @@ config <- map_dfr(config[city], as_tibble)
 msa_code <- config[config$city_code==city,]$msa_code
 
 path = paste0(base_path,"/cities/",city,"/census/geo/")
+
+old_geo_files <- list.files(path, include.dirs = F, full.names = T, recursive = T)
+# remove the files
+file.remove(old_geo_files)
+
+msa_path = paste0(base_path,"/cities/national/qcew-county-msa-csa-crosswalk-csv.csv")
 tract_path = "tracts.geojson"
 tract_2010_path = "tracts_2010.geojson"
 block_group_path = "block_groups.geojson"
@@ -32,7 +38,7 @@ block_group_path = "block_groups.geojson"
 print(path)
 dir.create(path)
 
-all_msa <- read_csv("https://www.bls.gov/cew/classifications/areas/qcew-county-msa-csa-crosswalk-csv.csv") # National MSA to county crosswalk
+all_msa <- read_csv(msa_path, locale = locale(encoding = "ISO-8859-1")) # National MSA to county crosswalk
 selected_msa <- all_msa %>% filter(`MSA Code` == msa_code)
 selected_msa_counties <- selected_msa %>% pull(`County Code`)
 selected_msa_states <- selected_msa %>% separate(`County Title`, sep = ",", into = c("name", "state")) %>%  pull(state) %>% unique()
