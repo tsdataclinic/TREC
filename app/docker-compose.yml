@@ -1,0 +1,25 @@
+services:
+  db:
+    container_name: trec
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PG_DATA: /data/postgres
+    ports:
+      - "5438:5432"
+    volumes:
+      - postgis_data:/data/postgres
+      - ./data/:/data/
+      - ./11-create_tables.sql:/docker-entrypoint-initdb.d/11-create_tables.sql
+      - ./12-insert_initial_data.sql:/docker-entrypoint-initdb.d/12-insert_initial_data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+volumes:
+  postgis_data: 
