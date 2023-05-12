@@ -1,13 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Lato", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  color: #1890ff;
+}
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+div.segment {
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+}
+
+div.body {
+  line-height: 2.1715;
+  font-size: 1.125rem;
+  padding-bottom: 20px;
+}
+
+h1.headings {
+  color: '#103470';
+  font-weight: 300;
+  font-size: 3rem;
+  font-family: Lato, sans-serif;
+  font-style: 'normal';
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+}
+
+div.blockLink {
+  background-color: rgb(214, 228, 255);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+div.flexColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+}
+
+div.imageColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
 }

@@ -3,9 +3,10 @@ import gzip
 import shutil
 import argparse
 import os
+import json
 
 
-def get_LODES(area_folder_name, state):
+def get_LODES(config, city_key):
     """
     Computes areally interpolated sums total number of people working inside supplied polygons
     
@@ -19,13 +20,13 @@ def get_LODES(area_folder_name, state):
     ----------
     Writes and unzips LODES file for speicified state
     """
-    
+    path = f"{config['base_path']}/cities/{city_key}/census/LODES/"
+    state = config[city_key]['state']
     file_name = state + "_od_main_JT01_2019.csv.gz"
-    path = "/home/data/census/" + area_folder_name + "/LODES/"
-    url = "https://lehd.ces.census.gov/data/lodes/LODES7/" + state + "/od/" + state + "_od_main_JT01_2019.csv.gz"
+    url = "https://lehd.ces.census.gov/data/lodes/LODES7/" + state.lower() + "/od/" + state.lower() + "_od_main_JT01_2019.csv.gz"
 
     if not os.path.isdir(path):
-        os.mkdir(path)
+        os.makedirs(path)
     
     urllib.request.urlretrieve(url, path + file_name)
 
@@ -34,15 +35,15 @@ def get_LODES(area_folder_name, state):
 
 def main():
     parser = argparse.ArgumentParser("Get LODES")
-    parser.add_argument("--area_folder_name", required=True)
-    parser.add_argument("--state", required=True)
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--city", required=True)
     
     opts = parser.parse_args()
     
-    area_folder_name = opts.area_folder_name
-    state = opts.state
+    with open(opts.config) as f:
+        config = json.load(f)
 
-    get_LODES(area_folder_name, state)
+    get_LODES(config, opts.city)
     print("LODES data written and unzipped") 
     
 if __name__ == "__main__":

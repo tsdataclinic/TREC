@@ -44,3 +44,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+## Requirements
+
+You'll need to create an `.env` file based on `.env.sample` for the app to run.
+
+## Datasets
+
+For Flood risk data, the data is converted to tileset data via the [tippecanoe](https://github.com/felt/tippecanoe) tool and then hosted on Mapbox.
