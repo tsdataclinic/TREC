@@ -52,12 +52,12 @@ const About = () => {
 			    hospital or community support, or to a large amount of essential jobs.
 			    How can we share that insight more effectively?
 	                </div>
-			<FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
+			<FlexImage src="" alt="" query="(max-width: 450px)"/>
                     </div>
-		    <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
+		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
 	        </div>
                 <div className='segment' style={{ backgroundColor: '#F0F5FF', color: '#103470', display: 'flex' }}>
-		    <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
+		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
 	            <div className='flexColumn'>
                         <h1 className='headings'>
                             TREC (Transit Resilience for Essential Commuting)
@@ -74,7 +74,7 @@ const About = () => {
 	                    filter those with the highest climate risk and highest importance for
 	                    access.
 	                </div>
-			<FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
+			<FlexImage src="" alt="" query="(max-width: 450px)"/>
 	            </div>
 	        </div>
 	        <div className='segment' style={{ backgroundColor: 'white', color: '#103470', display: 'flex' }}>
@@ -102,9 +102,9 @@ const About = () => {
 				</a>
 	                    </div>
 	                </div>
-			<FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
+			<FlexImage src="" alt="" query="(max-width: 450px)"/>
 	            </div>
-		    <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
+		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
 	        </div>
 	        <div className='segment' style={{ backgroundColor: '#F0F5FF', color: '#103470', display: 'flex' }}>
 		    <FlexImage src="https://miro.medium.com/max/3152/1*6g_929Nj-THV-1BYC0egZA.png" 
@@ -176,9 +176,9 @@ const About = () => {
 			   to open issues, suggest features, contribute pull requests, and find
 			   beginner issues.
 		       </div>
-		       <FlexImage src="foo.png" alt="image TBD" query="(max-width: 450px)"/>
+		       <FlexImage src="" alt="" query="(max-width: 450px)"/>
 		   </div>
-		   <FlexImage src="foo.png" alt="image TBD" query="(min-width: 451px)"/>
+		   <FlexImage src="" alt="" query="(min-width: 451px)"/>
                </div>
       </div>
    )
