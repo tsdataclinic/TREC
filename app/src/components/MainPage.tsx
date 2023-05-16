@@ -11,6 +11,7 @@ import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
 import { AVAILABLE_ROUTES } from '../utils/availableRoutes';
 import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
+import { Cities } from '../libs/cities';
 
 export type Layer = {
   id: number;
@@ -19,6 +20,7 @@ export type Layer = {
   layerURL: string;
   isVisible: boolean;
   hideToggle: boolean;
+  city?: Cities;
 };
 
 export type RemoteLayer = {
@@ -76,6 +78,7 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     isVisible: false,
     sourceLayer: 'hr_2050_flood_zones',
     hideToggle: false,
+    city: Cities.HamptonRoads,
   },
   '5': {
     id: 5,
@@ -84,18 +87,17 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     isVisible: false,
     sourceLayer: 'nyc_2050_flooding',
     hideToggle: false,
+    city: Cities.NewYorkCity,
   },
 };
 
-const AVAILABLE_REGIONS: Record<string, [number, number]> = {
-  'New York City': [-73.95, 40.72],
-  'Hampton Roads': [-76.39, 36.96],
+const AVAILABLE_REGIONS: Record<Cities, [number, number]> = {
+  [Cities.NewYorkCity]: [-73.95, 40.72],
+  [Cities.HamptonRoads]: [-76.39, 36.96],
 };
 
 export default function MainPage(): JSX.Element {
-  const [selectedRegion, setSelectedRegion] = useState<[number, number]>(
-    AVAILABLE_REGIONS['New York City'],
-  );
+  const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       'flood_risk_category',
@@ -207,7 +209,8 @@ export default function MainPage(): JSX.Element {
       />
       <ContextPane
         regions={AVAILABLE_REGIONS}
-        setSelectedRegion={setSelectedRegion}
+        selectedCity={selectedCity}
+        setSelectedCity={setSelectedCity}
         layers={layers}
         updateLayer={updateLayer}
         availableProperties={availableProperties}
@@ -225,7 +228,7 @@ export default function MainPage(): JSX.Element {
         />
       )}
       <MapComponent
-        center={selectedRegion}
+        center={AVAILABLE_REGIONS[selectedCity]}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
