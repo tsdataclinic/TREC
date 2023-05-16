@@ -33,5 +33,16 @@
             "hrt": "https://gtfs.gohrt.com/gtfs/google_transit.zip",
             "williamsburg": "https://gowata.org/DocumentCenter/View/500/Static-GTFS"
         }
-    }
+    },
+    "chi": 
+    {
+        "city_name": "Chicago",
+        "city_code": "chi",
+        "msa_code": "C4726",
+        "state":"IL",
+        "transit_feeds": {
+            "hrt": "https://gtfs.gohrt.com/gtfs/google_transit.zip",
+            "williamsburg": "https://gowata.org/DocumentCenter/View/500/Static-GTFS"
+        }
+    },
 }
