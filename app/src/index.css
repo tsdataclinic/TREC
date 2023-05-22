@@ -49,6 +49,7 @@ div.blockLink {
   background-color: rgb(214, 228, 255);
   padding: 10px;
   border-radius: 10px;
+  margin-bottom: 5px;
 }
 
 div.flexColumn {
