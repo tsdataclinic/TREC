@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://trec.tsdataclinic.com/"],
+      "method": ["GET","HEAD"],
+      "responseHeader": ["range","etag"],
+      "maxAgeSeconds": 300
+    }
+]

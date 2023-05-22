@@ -1,7 +1,11 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from 'mapbox-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import mapbox from 'mapbox-gl';
+import maplibre from 'maplibre-gl'
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
+import pmlayers from 'protomaps-themes-base'
+import * as pmtiles from "pmtiles";
 import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
@@ -23,9 +27,9 @@ function MapComponent({
   center,
   setDetailedRoutes,
 }: MapProps): JSX.Element {
-  let map = useRef<mapboxgl.Map | null>(null);
+  let map = useRef<maplibregl.Map | null>(null);
   const tooltipRef = useRef(
-    new mapboxgl.Popup({ offset: 15, maxWidth: '400px', closeButton: false }),
+    new maplibre.Popup({ offset: 15, maxWidth: '400px', closeButton: false }),
   );
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
@@ -141,10 +145,22 @@ function MapComponent({
 
   useEffect(() => {
     if (!map.current) {
-      map.current = new mapboxgl.Map({
-        accessToken: MAPBOX_KEY,
+      let protocol = new pmtiles.Protocol();
+      maplibre.addProtocol("pmtiles",protocol.tile);
+
+      map.current = new maplibre.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/light-v11',
+        style: {
+          "version": 8,
+          "sources": {
+            "protomaps": {
+                "type": "vector",
+                 "url": "pmtiles://https://storage.googleapis.com/dev_trec-tiles/NewYork.pmtiles",
+            }
+          },
+          "glyphs": "https://cdn.protomaps.com/fonts/pbf/{fontstack}/{range}.pbf",
+          "layers": pmlayers("protomaps","light")
+        },
         center: center, // [-73.95, 40.72],
         zoom: 10,
         bearing: 0,
@@ -155,8 +171,8 @@ function MapComponent({
       map.current.on('load', () => {
         if (!map.current) return;
         setIsMapLoaded(true);
-        map.current.addControl(new mapboxgl.NavigationControl());
-        map.current.addControl(new mapboxgl.GeolocateControl());
+        map.current.addControl(new maplibre.NavigationControl({}));
+        map.current.addControl(new maplibre.GeolocateControl({}));
         // load svg icons if needed
         map.current.loadImage('/icons/H_wiki.png', (error, image) => {
           if (error) throw error;
@@ -181,20 +197,20 @@ function MapComponent({
           const tooltipNode = document.createElement('div');
           const root = createRoot(tooltipNode);
 
-          root.render(
-            <Tooltip
-              feature={feature}
-              onDismiss={() => {
-                tooltipRef.current.remove();
-              }}
-              setDetailedRoutes={setDetailedRoutes}
-            />,
-          );
+          // root.render(
+          //   <Tooltip
+          //     feature={feature}
+          //     onDismiss={() => {
+          //       tooltipRef.current.remove();
+          //     }}
+          //     setDetailedRoutes={setDetailedRoutes}
+          //   />,
+          // );
 
-          tooltipRef.current
-            .setLngLat(e.lngLat)
-            .setDOMContent(tooltipNode)
-            .addTo(map.current);
+          // tooltipRef.current
+          //   .setLngLat(e.lngLat)
+          //   .setDOMContent(tooltipNode)
+          //   .addTo(map.current);
         }
       });
     }
