@@ -24,7 +24,7 @@ const About = () => {
 	        <div className='segment' style={{ backgroundColor: 'white', color: '#103470', display: 'flex' }}>
 	            <div className='flexColumn'>
 		        <h1 className='headings'>
-		            Background
+					Transit Resilience for Essential Commuting
 		        </h1>
 		        <div className='body'>In the fall of 2022, Data Clinic took part in{' '}
                             <a target="_blank"
@@ -52,18 +52,7 @@ const About = () => {
 			    hospital or community support, or to a large amount of essential jobs.
 			    How can we share that insight more effectively?
 	                </div>
-			<FlexImage src="" alt="" query="(max-width: 450px)"/>
-                    </div>
-		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
-	        </div>
-                <div className='segment' style={{ backgroundColor: '#F0F5FF', color: '#103470', display: 'flex' }}>
-		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
-	            <div className='flexColumn'>
-                        <h1 className='headings'>
-                            TREC (Transit Resilience for Essential Commuting)
-                        </h1>
-
-                        <div className='body'>
+					<div className='body'>
 	                    In response, we built Transit Resilience for Essential Commuting (TREC),
 	                    an open source tool that allows users to efficiently assess the climate
 	                    risk for transit stations within the context of the access it provides
@@ -74,12 +63,7 @@ const About = () => {
 	                    filter those with the highest climate risk and highest importance for
 	                    access.
 	                </div>
-			<FlexImage src="" alt="" query="(max-width: 450px)"/>
-	            </div>
-	        </div>
-	        <div className='segment' style={{ backgroundColor: 'white', color: '#103470', display: 'flex' }}>
-	            <div className='flexColumn'>
-	                <div className='body'>
+					<div className='body'>
 			    Our hope is that this human-centered and geospatial approach to the
 		            intersectional impact of climate change on transit and communities will
 			    give transit planners a more holistic picture to inform their
@@ -93,6 +77,31 @@ const About = () => {
 			    problem solving, and democratizing access to these kinds of tools will
 		            be crucial in making progress.
                         </div>
+				<div className='blockLink'>
+				<a target="_blank"
+				   rel="noreferrer"
+				   href="https://github.com/tsdataclinic/trec">
+					TREC Github repo
+				</a>
+	                    </div>
+			<FlexImage src="" alt="" query="(max-width: 450px)"/>
+                    </div>
+		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
+	        </div>
+                <div className='segment' style={{ backgroundColor: '#F0F5FF', color: '#103470', display: 'flex' }}>
+		    <FlexImage src="" alt="" query="(min-width: 451px)"/>
+	            <div className='flexColumn'>
+                        <h2>
+                            Methodology
+                        </h2>
+
+                       
+			<FlexImage src="" alt="" query="(max-width: 450px)"/>
+	            </div>
+	        </div>
+	        <div className='segment' style={{ backgroundColor: 'white', color: '#103470', display: 'flex' }}>
+	            <div className='flexColumn'>
+	                <h2>Data Sources</h2>
 	                <div className='body'>
 	                    <div className='blockLink'>
 				<a target="_blank"
