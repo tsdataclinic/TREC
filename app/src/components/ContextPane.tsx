@@ -17,6 +17,7 @@ type Props = {
   routes: Array<Record<string, RouteRecord>>;
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
+  setDetailedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
 };
 
 function ContextPane({
@@ -31,6 +32,7 @@ function ContextPane({
   routes,
   selectedRoutes,
   setSelectedRoutes,
+  setDetailedRoutes,
 }: Props): JSX.Element {
   return (
     <div
@@ -133,7 +135,10 @@ function ContextPane({
         <hr />
         <div className="text-lg flex justify-between">
           <b>Filter by Transit Line</b>
-          <button onClick={() => setSelectedRoutes([])}>Reset</button>
+          <button onClick={() => {
+            setSelectedRoutes([])
+            setDetailedRoutes([])
+          }}>Reset</button>
         </div>
         {selectedRoutes.length > 0 ? (
           <div className="grid grid-cols-4 px-3 gap-1">
@@ -146,6 +151,11 @@ function ContextPane({
                 {route.routeServiced}
               </span>
             ))}
+            <a href='#'
+               className='underline text-blue-600 hover:text-blue-800 py-1 px-2'
+               onClick={() => setDetailedRoutes(selectedRoutes)}>
+              Show summary
+            </a>
           </div>
         ) : null}
         <div className="flex-1 sm:overflow-y-scroll">

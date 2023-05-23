@@ -17,30 +17,36 @@ function LineLabel(props: {
 type RouteProps = {
     routeSummary: Array<RouteSummary>;
     // routes: Array<Record<string, RouteRecord>>;
-    detailedRoutes: SelectedRoute;
-    setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
+    detailedRoutes: Array<SelectedRoute>;
+    setDetailedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
   };
 
 function RouteSummaryPane({
     routeSummary,
     detailedRoutes,
     setDetailedRoutes,
-  }: RouteProps): JSX.Element {  
+  }: RouteProps): JSX.Element {
+
+    if (detailedRoutes.length === 0) {
+        return <></>
+    }
+
+    const combinedRouteName = detailedRoutes.flatMap(r => r.routeServiced).join(", ");
+
     return (
         <div
             id="SummaryPane"
             className="bg-white min-w-fit h-full shadow flex flex-col"
         >
-            {/* min-w-max max-w-sm */}
-            
+           
             <div className="p-2 border-b border-b-slate-400">
                 <FontAwesomeIcon 
                     icon={IconType.faArrowLeft} 
-                    onClick={()=>{setDetailedRoutes({city:'',routeType:'',routeServiced:''})}}
+                    onClick={()=>{setDetailedRoutes([])}}
                     className="text-base font-xl hover:bg-slate-200 cursor-pointer transition-colors pt-3"/>
-                <b className="pl-4 pt-2">{detailedRoutes.routeServiced}</b>
+                <b className="pl-4 pt-2">{combinedRouteName}</b>
                 <div className="flex flex-col pl-7 space-y-2">
-                    {detailedRoutes.routeType} Route
+                    {(detailedRoutes.length === 1) ? detailedRoutes[0].routeType + " Route": "Multiple Routes"}
                 </div>
             </div>
             
@@ -48,16 +54,16 @@ function RouteSummaryPane({
             <div className="flex flex-col pt-4 pl-4 space-y-2"><b>Total Stops</b></div>
 
             <div className="flex flex-col pt-2 pl-4 space-y-2">
-                <b className="text-xl">{JSON.stringify(routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['count'])}</b>
+                <b className="text-xl">{JSON.stringify(routeSummary.filter(function(e:any) {return e.route == combinedRouteName})[0]['count'])}</b>
             </div>
 
-            <BarChart label='Flood Risk' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['flood_risk']}></BarChart>
+            <BarChart label='Flood Risk' data={routeSummary.filter(function(e:any) {return e.route == combinedRouteName})[0]['flood_risk']}></BarChart>
 
-            <BarChart label='Access to Hospitals' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['hospital_access']}></BarChart>
+            <BarChart label='Access to Hospitals' data={routeSummary.filter(function(e:any) {return e.route == combinedRouteName})[0]['hospital_access']}></BarChart>
             
-            <BarChart label='Access to Jobs' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['job_access']}></BarChart>
+            <BarChart label='Access to Jobs' data={routeSummary.filter(function(e:any) {return e.route == combinedRouteName})[0]['job_access']}></BarChart>
 
-            <BarChart label='Vulnerable workers' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['worker_vulnerability']}></BarChart>
+            <BarChart label='Vulnerable workers' data={routeSummary.filter(function(e:any) {return e.route == combinedRouteName})[0]['worker_vulnerability']}></BarChart>
 
             
         </div>
