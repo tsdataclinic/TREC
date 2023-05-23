@@ -91,6 +91,11 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   },
 };
 
+const AVAILABLE_BASEMAPS: Record<Cities, string> = {
+  [Cities.NewYorkCity]: `/basemaps/NewYorkCity.pmtiles`,
+  [Cities.HamptonRoads]: `/basemaps/HamptonRoads.pmtiles`,
+}
+
 const AVAILABLE_REGIONS: Record<Cities, [number, number]> = {
   [Cities.NewYorkCity]: [-73.95, 40.72],
   [Cities.HamptonRoads]: [-76.39, 36.96],
@@ -229,6 +234,7 @@ export default function MainPage(): JSX.Element {
       )}
       <MapComponent
         center={AVAILABLE_REGIONS[selectedCity]}
+        basemapUrl={AVAILABLE_BASEMAPS[selectedCity]}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}

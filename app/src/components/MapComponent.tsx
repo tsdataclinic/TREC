@@ -10,10 +10,14 @@ import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
 
+let protocol = new pmtiles.Protocol();
+maplibre.addProtocol("pmtiles",protocol.tile);
+
 const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 
 type MapProps = {
   layers: Record<string, Layer>;
+  basemapUrl: string;
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   center: [number, number];
@@ -23,6 +27,7 @@ type MapProps = {
 function MapComponent({
   remoteLayers,
   layers,
+  basemapUrl,
   sourceLayerConfigs,
   center,
   setDetailedRoutes,
@@ -145,8 +150,7 @@ function MapComponent({
 
   useEffect(() => {
     if (!map.current) {
-      let protocol = new pmtiles.Protocol();
-      maplibre.addProtocol("pmtiles",protocol.tile);
+      
 
       map.current = new maplibre.Map({
         container: 'map',
@@ -155,17 +159,18 @@ function MapComponent({
           "sources": {
             "protomaps": {
                 "type": "vector",
-                 "url": "pmtiles://https://storage.googleapis.com/dev_trec-tiles/NewYork.pmtiles",
+                "url": `pmtiles://${basemapUrl}`,
             }
           },
           "glyphs": "https://cdn.protomaps.com/fonts/pbf/{fontstack}/{range}.pbf",
-          "layers": pmlayers("protomaps","light")
+          "layers": pmlayers("protomaps","grayscale")
         },
         center: center, // [-73.95, 40.72],
         zoom: 10,
         bearing: 0,
         pitch: 0,
         pitchWithRotate: false,
+        attributionControl: false
       });
 
       map.current.on('load', () => {
@@ -173,6 +178,9 @@ function MapComponent({
         setIsMapLoaded(true);
         map.current.addControl(new maplibre.NavigationControl({}));
         map.current.addControl(new maplibre.GeolocateControl({}));
+        map.current.addControl(new maplibre.AttributionControl({
+          customAttribution: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+        }), 'top-left');
         // load svg icons if needed
         map.current.loadImage('/icons/H_wiki.png', (error, image) => {
           if (error) throw error;
@@ -214,7 +222,23 @@ function MapComponent({
         }
       });
     }
-  }, [center, layers, paintLayer, setDetailedRoutes]);
+  }, [basemapUrl, center, layers, paintLayer, setDetailedRoutes]);
+
+  useEffect(() => {
+    if (map.current) {
+      map.current.setStyle({
+        "version": 8,
+        "sources": {
+          "protomaps": {
+              "type": "vector",
+              "url": `pmtiles://${basemapUrl}`,
+          }
+        },
+        "glyphs": "https://cdn.protomaps.com/fonts/pbf/{fontstack}/{range}.pbf",
+        "layers": pmlayers("protomaps","grayscale")
+      });
+    }
+  }, [basemapUrl])
 
   useEffect(() => {
     if (map.current) {
