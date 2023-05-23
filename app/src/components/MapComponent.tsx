@@ -10,9 +10,6 @@ import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
 
-let protocol = new pmtiles.Protocol();
-maplibre.addProtocol("pmtiles",protocol.tile);
-
 const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 
 type MapProps = {
@@ -252,6 +249,14 @@ function MapComponent({
       Object.values(layers).forEach(paintLayer);
     }
   }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
+
+  useEffect(() => {
+    let protocol = new pmtiles.Protocol();
+    maplibre.addProtocol("pmtiles",protocol.tile);
+    return () => {
+      maplibre.removeProtocol("pmtiles");
+    }
+  }, [])
 
   return <div id="map" className="h-96 w-full sm:h-full" />;
 }
