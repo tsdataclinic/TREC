@@ -53,3 +53,15 @@ You'll need to create an `.env` file based on `.env.sample` for the app to run.
 ## Datasets
 
 For Flood risk data, the data is converted to tileset data via the [tippecanoe](https://github.com/felt/tippecanoe) tool and then hosted on Mapbox.
+
+## Initializing the DB
+
+```
+docker-compose up
+docker ps # to get container id
+docker -it <container_id> /bin/bash
+
+ogr2ogr -f "PostgreSQL" PG:"dbname=trec user=postgres" "/data/public/hospitals.geojson" -nln hospitals
+ogr2ogr -f "PostgreSQL" PG:"dbname=trec user=postgres" "/data/public/stop_features.geojson" -nln stop_features
+
+```
