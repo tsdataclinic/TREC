@@ -13,6 +13,8 @@ import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
 
+const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
+
 export type Layer = {
   id: number;
   layerName: string;
@@ -48,14 +50,14 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   '1': {
     id: 1,
     layerName: 'Transit Stops',
-    layerURL: '/results/stop_features.geojson',
+    layerURL: `${BACKEND_URI}/stop_features.geojson`,
     isVisible: true,
     hideToggle: true,
   },
   '2': {
     id: 2,
     layerName: 'Hospitals',
-    layerURL: '/results/hospitals.geojson',
+    layerURL: `${BACKEND_URI}/hospitals.geojson`,
     isVisible: true,
     hideToggle: false,
   },
