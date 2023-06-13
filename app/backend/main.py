@@ -46,8 +46,8 @@ async def hospitals():
     ) FROM (
       SELECT jsonb_build_object(
         'type', 'Feature',
-        'geometry', ST_AsGeoJSON(geometry)::jsonb,
-        'properties', to_jsonb(row) - 'geometry'
+        'geometry', ST_AsGeoJSON(wkb_geometry)::jsonb,
+        'properties', to_jsonb(row) - 'wkb_geometry'
       ) AS feature
       FROM (SELECT * from public.hospitals) row) features
     """
@@ -71,8 +71,8 @@ async def stop_features(city: str | None = None):
     ) FROM (
       SELECT jsonb_build_object(
         'type', 'Feature',
-        'geometry', ST_AsGeoJSON(geometry)::jsonb,
-        'properties', to_jsonb(row) - 'geometry'
+        'geometry', ST_AsGeoJSON(wkb_geometry)::jsonb,
+        'properties', to_jsonb(row) - 'wkb_geometry'
       ) AS feature
       FROM (SELECT * from public.stop_features {"where city = %s" if city else ""}) row) features
     """
