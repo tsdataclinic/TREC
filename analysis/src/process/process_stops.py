@@ -114,10 +114,10 @@ def process_stops(config, city_key, out=False):
     
     # Routes as list
     routes_list = stops_out.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
-
+    
     
     stops_out = stops_out.merge(routes_list,how='left',on='stop_id')
-    
+    stops_out['routes_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['routes_serviced']]
     stops_out = stops_out.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
 
 

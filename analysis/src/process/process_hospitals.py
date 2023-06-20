@@ -59,6 +59,7 @@ def process_hospitals(config, city_key, out=False):
 
     hospitals = subset_hospital_points(poi_data, extent,county_list)
     hospitals = hospitals[COLUMNS_TO_KEEP]
+    hospitals['city'] = city_key
     if out == True:
         out_path = f"{config['base_path']}/cities/{city_key}/results/"
         if not os.path.isdir(out_path):

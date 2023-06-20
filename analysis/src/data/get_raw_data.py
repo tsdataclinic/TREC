@@ -17,15 +17,15 @@ def get_raw_data(config, city_key):
         config_file = json.load(f)
 
     print("Getting points of interest data") 
-    # get_poi_data(config_file)
+    get_poi_data(config_file)
     print("Getting Transit feeds") 
-    # get_transit_feeds(config_file, city_key)
+    get_transit_feeds(config_file, city_key)
     print("Getting Census geographies") 
     subprocess.run(["Rscript", f"{CWD}/src/data/get_census_data.R","--config",config,"--city",city_key])
     print("Getting LODES data") 
-    # get_LODES(config_file, city_key)
+    get_LODES(config_file, city_key)
     print("Getting OSM data") 
-    # get_osm_data(config_file, city_key)
+    get_osm_data(config_file, city_key)
 
 def main():
     parser = argparse.ArgumentParser("Get all raw data")

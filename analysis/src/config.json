@@ -1,5 +1,5 @@
 {   "base_path": "/home/data/test",
-
+    "transit_land_api_key": "gQXW5VMAZXBevcrQLvkiSvGTiTf4ONQr",
     "national":
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
@@ -38,11 +38,31 @@
     {
         "city_name": "Chicago",
         "city_code": "chi",
-        "msa_code": "C4726",
+        "msa_code": "C1698",
         "state":"IL",
         "transit_feeds": {
-            "hrt": "https://gtfs.gohrt.com/gtfs/google_transit.zip",
-            "williamsburg": "https://gowata.org/DocumentCenter/View/500/Static-GTFS"
+            "cta": "http://www.transitchicago.com/downloads/sch_data/google_transit.zip"
         }
     },
+    "phi": 
+    {
+        "city_name": "Philadelphia",
+        "city_code": "phi",
+        "msa_code": "C3798",
+        "state":"PA",
+        "transit_feeds": {
+            "septa": "https://github.com/septadev/GTFS/releases/latest/download/gtfs_public.zip#google_bus.zip"
+        }
+    },
+    "nola": 
+    {
+        "city_name": "New Orleans",
+        "city_code": "nola",
+        "msa_code": "C3538",
+        "state":"LA",
+        "transit_feeds": {
+            "norta": "f-9vrf-neworleansrta"
+            
+        }
+    }
 }

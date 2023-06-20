@@ -29,7 +29,7 @@ old_geo_files <- list.files(path, include.dirs = F, full.names = T, recursive = 
 # remove the files
 file.remove(old_geo_files)
 
-msa_path = paste0(base_path,"/cities/national/qcew-county-msa-csa-crosswalk-csv.csv")
+msa_path = paste0(base_path,"/national/qcew-county-msa-csa-crosswalk-csv.csv")
 tract_path = "tracts.geojson"
 tract_2010_path = "tracts_2010.geojson"
 block_group_path = "block_groups.geojson"

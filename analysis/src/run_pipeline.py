@@ -39,18 +39,18 @@ def main():
     
     cities = opts.city
     if cities == 'all':
-        city_keys = list(set(config.keys()) - set(['base_path','national']))
+        city_keys = list(set(config.keys()) - set(['base_path','transit_land_api_key','national']))
     else:
         city_keys = [opts.city]
         
     for city_key in city_keys:
         print(f"Running Data pipeline for: {city_key}")
-        # get_raw_data(opts.config, city_key)
-        # process_data(config, city_key)
+        get_raw_data(opts.config, city_key)
+        process_data(config, city_key)
         get_stops_features(config, city_key, out=True)
     
     print(f"Combining the results")
-    city_keys = list(set(config.keys()) - set(['base_path','national']))
+    city_keys = list(set(config.keys()) - set(['base_path','transit_land_api_key','national']))
     concat_results(config, city_keys)
 
 
