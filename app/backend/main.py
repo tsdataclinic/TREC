@@ -42,14 +42,8 @@ async def hospitals():
   query = """
     SELECT jsonb_build_object(
       'type', 'FeatureCollection',
-      'features', jsonb_agg(feature)
-    ) FROM (
-      SELECT jsonb_build_object(
-        'type', 'Feature',
-        'geometry', ST_AsGeoJSON(wkb_geometry)::jsonb,
-        'properties', to_jsonb(row) - 'wkb_geometry'
-      ) AS feature
-      FROM (SELECT * from public.hospitals) row) features
+      'features', jsonb_agg(ST_AsGeoJSON(row.*)::json)
+    ) FROM (SELECT * FROM public.hospitals) as row
     """
 
   cursor.execute(query)
@@ -60,21 +54,32 @@ async def hospitals():
   return result
 
 @app.get("/stop_features.geojson")
-async def stop_features(city: str | None = None):
+async def stop_features(city: str = ''):
   connection = get_db_connection()
   cursor = connection.cursor()
 
   query = f"""
     SELECT jsonb_build_object(
       'type', 'FeatureCollection',
-      'features', jsonb_agg(feature)
+      'features', jsonb_agg(ST_AsGeoJSON(row.*)::json)
     ) FROM (
-      SELECT jsonb_build_object(
-        'type', 'Feature',
-        'geometry', ST_AsGeoJSON(wkb_geometry)::jsonb,
-        'properties', to_jsonb(row) - 'wkb_geometry'
-      ) AS feature
-      FROM (SELECT * from public.stop_features {"where city = %s" if city else ""}) row) features
+        SELECT 
+          access_to_hospital_category,
+          city,
+          flood_risk_category,
+          flood_risk_pct,
+          id,
+          job_access_category,
+          jobs_access_count,
+          route_type,
+          string_to_array(routes_serviced, ',') as routes_serviced,
+          stop_id,
+          stop_name,
+          worker_vulnerability_category,
+          worker_vulnerability_score,
+          wkb_geometry
+        FROM public.stop_features {"where city = %s" if city else ""}
+      ) as row
     """
 
   """
@@ -88,18 +93,12 @@ async def stop_features(city: str | None = None):
       city = "hr"
     else:
       raise HTTPException(status_code=404, detail="City not found")
-
     cursor.execute(query, (city,))
   else:
     cursor.execute(query)
   
   result = cursor.fetchone()[0]
 
-  # convert comma separated string to array
-  for feature in result['features']:
-    properties = feature['properties']
-    properties['routes_serviced'] = properties['routes_serviced'].split(",")
-  
   cursor.close()
   connection.close()
 
