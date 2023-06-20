@@ -52,7 +52,8 @@
         "state":"PA",
         "transit_feeds": {
             "septa": "https://github.com/septadev/GTFS/releases/latest/download/gtfs_public.zip#google_bus.zip"
-        }
+        },
+        "FEMA_file_name": "NFHL_42_20230410"
     },
     "nola": 
     {
@@ -63,6 +64,7 @@
         "transit_feeds": {
             "norta": "f-9vrf-neworleansrta"
             
-        }
+        },
+        "FEMA_file_name": "NFHL_22_20230223"
     }
 }
