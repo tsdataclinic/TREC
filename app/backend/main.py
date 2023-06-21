@@ -1,6 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
-import psycopg2
+from psycopg2 import pool
 from dotenv import load_dotenv
 import os
 
@@ -23,60 +23,68 @@ app.add_middleware(
   max_age=3600,
 )
 
-def get_db_connection():
-  return psycopg2.connect(user=POSTGRES_USER,
+@app.on_event("startup")
+async def startup():
+  app.state.db_pool = pool.SimpleConnectionPool(1, 20, user=POSTGRES_USER,
                   password=POSTGRES_PASSWORD,
                   host=POSTGRES_HOST,
                   port=POSTGRES_PORT,
                   database=POSTGRES_DB)
 
+@app.on_event("shutdown")
+async def shutdown():
+  app.state.db_pool.SimpleConnectionPool.closeall()
+
 @app.get("/ping")
 async def ping():
   return {"message": "pong"}
 
+@app.get("/routes")
+async def get_all_routes(city: str = ''):
+
+  return {}
+
 @app.get("/hospitals.geojson")
 async def hospitals():
-  connection = get_db_connection()
+  connection = app.state.db_pool.getconn()
   cursor = connection.cursor()
 
   query = """
-    SELECT jsonb_build_object(
+    SELECT json_build_object(
       'type', 'FeatureCollection',
-      'features', jsonb_agg(ST_AsGeoJSON(row.*)::json)
+      'features', json_agg(ST_AsGeoJSON(row.*)::json)
     ) FROM (SELECT * FROM public.hospitals) as row
     """
 
   cursor.execute(query)
   result = cursor.fetchone()[0]
   cursor.close()
-  connection.close()
+  app.state.db_pool.putconn(connection)
+  
 
   return result
 
 @app.get("/stop_features.geojson")
 async def stop_features(city: str = ''):
-  connection = get_db_connection()
+  connection = app.state.db_pool.getconn()
   cursor = connection.cursor()
 
   query = f"""
-    SELECT jsonb_build_object(
+    SELECT json_build_object(
       'type', 'FeatureCollection',
-      'features', jsonb_agg(ST_AsGeoJSON(row.*)::json)
+      'features', json_agg(ST_AsGeoJSON(row.*)::json)
     ) FROM (
         SELECT 
           access_to_hospital_category,
           city,
           flood_risk_category,
-          flood_risk_pct,
           id,
           job_access_category,
-          jobs_access_count,
-          route_type,
           string_to_array(routes_serviced, ',') as routes_serviced,
+          route_type,
           stop_id,
           stop_name,
           worker_vulnerability_category,
-          worker_vulnerability_score,
           wkb_geometry
         FROM public.stop_features {"where city = %s" if city else ""}
       ) as row
@@ -100,6 +108,5 @@ async def stop_features(city: str = ''):
   result = cursor.fetchone()[0]
 
   cursor.close()
-  connection.close()
-
+  app.state.db_pool.putconn(connection)
   return result
