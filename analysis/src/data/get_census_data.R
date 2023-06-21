@@ -36,7 +36,7 @@ block_group_path = "block_groups.geojson"
 # block_path = "geo/blocks.geojson"
 # acs_path =  "acs/acs_wide.csv"
 print(path)
-dir.create(path)
+dir.create(path, recursive = TRUE)
 
 all_msa <- read_csv(msa_path, locale = locale(encoding = "ISO-8859-1")) # National MSA to county crosswalk
 selected_msa <- all_msa %>% filter(`MSA Code` == msa_code)
