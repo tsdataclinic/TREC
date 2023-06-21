@@ -129,7 +129,7 @@ export default function MainPage(): JSX.Element {
   });
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
-  let remoteLayers = useRemoteLayers(layers);
+  let remoteLayers = useRemoteLayers(layers, selectedCity);
   // console.log(remoteLayers)
   let routeSummary = useRouteSummary(remoteLayers, detailedRoutes);
   // console.log(routeSummary)
@@ -192,6 +192,7 @@ export default function MainPage(): JSX.Element {
     [layers],
   );
 
+
   useEffect(() => {
     Fathom.load("LHGHXYKE")
   }, [])
@@ -235,6 +236,7 @@ export default function MainPage(): JSX.Element {
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
         setDetailedRoutes={setDetailedRoutes}
+        selectedCity={selectedCity}
       />
 
     </main>

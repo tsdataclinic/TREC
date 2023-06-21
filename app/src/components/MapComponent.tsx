@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
+import { Cities } from '../libs/cities';
 
 const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 
@@ -12,6 +13,7 @@ type MapProps = {
   layers: Record<string, Layer>;
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
+  selectedCity: Cities;
   center: [number, number];
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
@@ -20,6 +22,7 @@ function MapComponent({
   remoteLayers,
   layers,
   sourceLayerConfigs,
+  selectedCity,
   center,
   setDetailedRoutes,
 }: MapProps): JSX.Element {
@@ -30,13 +33,12 @@ function MapComponent({
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
   const paintLayer = useCallback(
-    (layer: Layer) => {
+    (layer: Layer, remoteLayer: RemoteLayer) => {
       if (!map.current) {
         return;
       }
-
       // if a layer isn't visible, remove it
-      if (!layer.isVisible) {
+      if (!layer.isVisible || remoteLayer.isLoading === true) {
         // remove layers
         sourceLayerConfigs[layer.layerName].forEach(
           (slConfig: SLConfigType) => {
@@ -56,7 +58,7 @@ function MapComponent({
           if (layer.layerURL.includes('geojson')) {
             map.current.addSource(layer.layerName, {
               type: 'geojson',
-              data: layer.layerURL,
+              data: remoteLayer.data,
             });
           } else if (layer.layerURL.includes('mapbox://')) {
             map.current.addSource(layer.layerName, {
@@ -164,8 +166,7 @@ function MapComponent({
           if (!map.current?.hasImage('hospital-icon'))
             map.current?.addImage('hospital-icon', image);
         });
-
-        Object.values(layers).forEach(paintLayer);
+        Object.values(layers).forEach((layer, index) => paintLayer(layer, remoteLayers[index]));
       });
 
       map.current.on('click', e => {
@@ -198,7 +199,7 @@ function MapComponent({
         }
       });
     }
-  }, [center, layers, paintLayer, setDetailedRoutes]);
+  }, [center, layers, paintLayer, remoteLayers, setDetailedRoutes]);
 
   useEffect(() => {
     if (map.current) {
@@ -209,7 +210,7 @@ function MapComponent({
 
   useEffect(() => {
     if (isMapLoaded) {
-      Object.values(layers).forEach(paintLayer);
+      Object.values(layers).forEach((layer, layerIndex) => paintLayer(layer, remoteLayers[layerIndex]));
     }
   }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
 
