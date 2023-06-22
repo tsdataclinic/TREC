@@ -42,7 +42,7 @@ async def startup():
 
 @app.on_event("shutdown")
 async def shutdown():
-  app.state.db_pool.SimpleConnectionPool.closeall()
+  app.state.db_pool.closeall()
 
 @app.get("/ping")
 async def ping():
