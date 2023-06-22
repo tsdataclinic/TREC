@@ -14,7 +14,7 @@ import { useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import usePrevious from '../hooks/usePrevious';
 
-const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
+const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_APP_DEV_BACKEND_URI;
 
 export type Layer = {
   id: number;
