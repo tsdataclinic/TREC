@@ -5,13 +5,16 @@ import Filter from './Filter';
 import MapComponent from './MapComponent';
 import {
   useRemoteLayers,
-  useRemoteLayerPropertyValues,
 } from '../hooks/useRemoteLayer';
 import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
-import { AVAILABLE_ROUTES } from '../utils/availableRoutes';
-import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
+import { useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
+import { useAvailableCities } from '../hooks/useAvailableCities';
+import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import usePrevious from '../hooks/usePrevious';
+
+const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
 
 export type Layer = {
   id: number;
@@ -28,6 +31,7 @@ export type RemoteLayer = {
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
+  refetch: () => void
 };
 
 export type SelectedRoute = {
@@ -48,31 +52,19 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   '1': {
     id: 1,
     layerName: 'Transit Stops',
-    layerURL: '/results/stop_features.geojson',
+    layerURL: `${BACKEND_URI}/stop_features.geojson`,
     isVisible: true,
     hideToggle: true,
   },
   '2': {
     id: 2,
     layerName: 'Hospitals',
-    layerURL: '/results/hospitals.geojson',
+    layerURL: `${BACKEND_URI}/hospitals.geojson`,
     isVisible: true,
     hideToggle: false,
   },
-  // "2": {
-  //   id: 2,
-  //   layerName: "NYC Transit Stops",
-  //   layerURL: "/results/NYC-stop_features_v3.geojson",
-  //   isVisible: true,
-  // },
-  // "3": {
-  //   id: 3,
-  //   layerName: "Hampton Roads Transit Stops",
-  //   layerURL: "/results/HR-stop_features_v3.geojson",
-  //   isVisible: true,
-  // },
-  '4': {
-    id: 4,
+  '3': {
+    id: 3,
     layerName: '2050 Hampton Roads Floods (Projected)',
     layerURL: 'mapbox://indraneel-tsdataclinic.9hi3xl8q',
     isVisible: false,
@@ -80,8 +72,8 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     hideToggle: false,
     city: Cities.HamptonRoads,
   },
-  '5': {
-    id: 5,
+  '4': {
+    id: 4,
     layerName: '2050 NYC Floods (Projected)',
     layerURL: 'mapbox://indraneel-tsdataclinic.1ku89xc7',
     isVisible: false,
@@ -91,13 +83,12 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   },
 };
 
-const AVAILABLE_REGIONS: Record<Cities, [number, number]> = {
-  [Cities.NewYorkCity]: [-73.95, 40.72],
-  [Cities.HamptonRoads]: [-76.39, 36.96],
-};
 
 export default function MainPage(): JSX.Element {
+  const availableRoutes = useAvailableRoutes();
+  const availableCities = useAvailableCities();
   const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
+  const previousSelectedCity = usePrevious(selectedCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       'flood_risk_category',
@@ -127,11 +118,8 @@ export default function MainPage(): JSX.Element {
   });
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
-  let remoteLayers = useRemoteLayers(layers);
-  // console.log(remoteLayers)
+  let remoteLayers = useRemoteLayers(layers, selectedCity);
   let routeSummary = useRouteSummary(remoteLayers, detailedRoutes);
-  // console.log(routeSummary)
-  // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
 
   let sourceLayerConfigs = useSourceLayerConfigs(
     selectedProperties,
@@ -191,6 +179,11 @@ export default function MainPage(): JSX.Element {
   );
 
   useEffect(() => {
+    // reset selected lines 
+    setSelectedRoutes([]);
+  }, [selectedCity])
+
+  useEffect(() => {
     Fathom.load("LHGHXYKE")
   }, [])
 
@@ -208,7 +201,7 @@ export default function MainPage(): JSX.Element {
         selectedProperties={selectedProperties}
       />
       <ContextPane
-        regions={AVAILABLE_REGIONS}
+        cities={availableCities}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
         layers={layers}
@@ -216,7 +209,7 @@ export default function MainPage(): JSX.Element {
         availableProperties={availableProperties}
         selectedProperties={selectedProperties}
         setSelectedProperties={setSelectedProperties}
-        routes={AVAILABLE_ROUTES}
+        routes={availableRoutes}
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
       />
@@ -228,11 +221,14 @@ export default function MainPage(): JSX.Element {
         />
       )}
       <MapComponent
-        center={AVAILABLE_REGIONS[selectedCity]}
+        center={availableCities && availableCities.find((region) => region.display_name === selectedCity)?.center}
+        bounds={availableCities && availableCities.find((region) => region.display_name === selectedCity)?.bbox}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
         setDetailedRoutes={setDetailedRoutes}
+        selectedCity={selectedCity}
+        previousSelectedCity={previousSelectedCity}
       />
 
     </main>

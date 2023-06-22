@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
+import { Cities } from '../libs/cities';
 
 const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 
@@ -12,7 +13,10 @@ type MapProps = {
   layers: Record<string, Layer>;
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
-  center: [number, number];
+  selectedCity: Cities;
+  previousSelectedCity?: Cities;
+  center?: [number, number];
+  bounds?: [[number, number], [number, number]]
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
 
@@ -20,7 +24,10 @@ function MapComponent({
   remoteLayers,
   layers,
   sourceLayerConfigs,
+  selectedCity,
+  previousSelectedCity,
   center,
+  bounds,
   setDetailedRoutes,
 }: MapProps): JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
@@ -30,13 +37,14 @@ function MapComponent({
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
   const paintLayer = useCallback(
-    (layer: Layer) => {
+    (layer: Layer, remoteLayer: RemoteLayer,
+      selectedCity: string, previousSelectedCity: string) => {
+      
       if (!map.current) {
         return;
       }
-
       // if a layer isn't visible, remove it
-      if (!layer.isVisible) {
+      if (!layer.isVisible || remoteLayer.isLoading === true || previousSelectedCity !== selectedCity) {
         // remove layers
         sourceLayerConfigs[layer.layerName].forEach(
           (slConfig: SLConfigType) => {
@@ -56,7 +64,7 @@ function MapComponent({
           if (layer.layerURL.includes('geojson')) {
             map.current.addSource(layer.layerName, {
               type: 'geojson',
-              data: layer.layerURL,
+              data: remoteLayer.data,
             });
           } else if (layer.layerURL.includes('mapbox://')) {
             map.current.addSource(layer.layerName, {
@@ -93,6 +101,14 @@ function MapComponent({
                   source: layer.layerName,
                   'source-layer': layer.sourceLayer,
                 });
+              }
+              // Manually move Hospitals to the top on insert
+              if (layer.layerName !== 'Hospitals') {
+                sourceLayerConfigs['Hospitals'].forEach((hospitalLayer: SLConfigType) => {
+                  if (map.current) {
+                    map.current.moveLayer(slConfig.layerId, hospitalLayer.layerId)
+                  }
+                })
               }
             }
 
@@ -145,7 +161,7 @@ function MapComponent({
         accessToken: MAPBOX_KEY,
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
-        center: center, // [-73.95, 40.72],
+        center: [-73.95, 40.72],
         zoom: 10,
         bearing: 0,
         pitch: 0,
@@ -164,8 +180,9 @@ function MapComponent({
           if (!map.current?.hasImage('hospital-icon'))
             map.current?.addImage('hospital-icon', image);
         });
-
-        Object.values(layers).forEach(paintLayer);
+        if (previousSelectedCity) {
+          Object.values(layers).forEach((layer, index) => paintLayer(layer, remoteLayers[index], selectedCity, previousSelectedCity));
+        }
       });
 
       map.current.on('click', e => {
@@ -198,20 +215,22 @@ function MapComponent({
         }
       });
     }
-  }, [center, layers, paintLayer, setDetailedRoutes]);
+  }, [layers, paintLayer, previousSelectedCity, remoteLayers, selectedCity, setDetailedRoutes]);
 
   useEffect(() => {
-    if (map.current) {
+    if (map.current && center) {
       map.current.setCenter(center);
-      map.current.setZoom(10);
     }
   }, [center]);
 
   useEffect(() => {
-    if (isMapLoaded) {
-      Object.values(layers).forEach(paintLayer);
+    if (isMapLoaded && previousSelectedCity) {
+      Object.values(layers).forEach((layer, layerIndex) => {
+        paintLayer(layer, remoteLayers[layerIndex], selectedCity, previousSelectedCity)
+      });
     }
-  }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
+  }, [selectedCity, previousSelectedCity, isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
+
 
   return <div id="map" className="h-96 w-full sm:h-full" />;
 }
