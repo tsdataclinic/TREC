@@ -5,10 +5,9 @@ import Filter from './Filter';
 import MapComponent from './MapComponent';
 import {
   useRemoteLayers,
-  useRemoteLayerPropertyValues,
 } from '../hooks/useRemoteLayer';
 import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
-import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
+import { useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
 import { useAvailableCities } from '../hooks/useAvailableCities';
@@ -94,11 +93,6 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   },
 };
 
-const AVAILABLE_REGIONS: Record<Cities, [number, number]> = {
-  [Cities.NewYorkCity]: [-73.95, 40.72],
-  [Cities.HamptonRoads]: [-76.39, 36.96],
-};
-
 
 export default function MainPage(): JSX.Element {
   const availableRoutes = useAvailableRoutes();
@@ -134,10 +128,7 @@ export default function MainPage(): JSX.Element {
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers, selectedCity);
-  // console.log(remoteLayers)
   let routeSummary = useRouteSummary(remoteLayers, detailedRoutes);
-  // console.log(routeSummary)
-  // let remoteLayerPropertyValues = useRemoteLayerPropertyValues(remoteLayers, selectedProperties);
 
   let sourceLayerConfigs = useSourceLayerConfigs(
     selectedProperties,
