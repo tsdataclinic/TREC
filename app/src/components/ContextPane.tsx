@@ -2,8 +2,8 @@ import { Layer, PROPERTY_LABELS, SelectedRoute } from './MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
-import { RouteRecord } from '../utils/availableRoutes';
 import { Cities } from '../libs/cities';
+import { RouteRecord } from '../hooks/useAvailableRoutes';
 
 type Props = {
   availableProperties: Set<string>;
@@ -11,10 +11,15 @@ type Props = {
   selectedProperties: Array<string>;
   layers: Record<string, Layer>;
   updateLayer: (layer: Layer) => void;
-  regions: Record<Cities, [number, number]>;
+  regions: Array<{
+    "city": string,
+    "display_name": string,
+    "bbox": [[number, number], [number, number]],
+    "center": [number, number]
+  }> | undefined;
   selectedCity: Cities;
   setSelectedCity: React.Dispatch<React.SetStateAction<Cities>>;
-  routes: Array<Record<string, RouteRecord>>;
+  routes: RouteRecord[];
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
 };
@@ -43,10 +48,14 @@ function ContextPane({
             setSelectedCity(e.target.value as Cities);
           }}
           className="text-2xl"
+          defaultValue={'New York City'}
         >
-          {Object.keys(regions).map(r => (
-            <option key={r} value={r}>
-              {r}
+          {regions && regions.map(r => (
+            <option
+              key={r.city}
+              value={r.display_name}
+              selected={r.city === 'nyc'}>
+                {r.display_name}
             </option>
           ))}
         </select>
@@ -150,39 +159,38 @@ function ContextPane({
         ) : null}
         <div className="flex-1 sm:overflow-y-scroll">
           <ul>
-            {routes.map(availableRoute =>
-              Object.values(availableRoute).map(routeRecord => {
-                return ((routeRecord.city === selectedCity) ? (
-                  <details key={routeRecord.city} className="pb-2">
-                    <summary className="pb-1">{routeRecord.display_name} lines</summary>
-                    {routeRecord.route_types.map((type, index) => {
-                      if (type.route_type === 'Subway') return <></>
-                      return (
-                        <details
+            {routes && 
+              routes.map(route => {
+                if (route.display_name === selectedCity) {
+                  return <details key={route.city} className="pb-2">
+                    <summary className="pb-1">{route.display_name} lines</summary>
+                    {
+                      Object.values(route.route_types).map((route_type_obj) => {
+                        return <details
                           className="ml-2 pb-1"
-                          key={`${routeRecord.city}_${index}`}
+                          key={`${route.city}_${route_type_obj}`}
                         >
-                          <summary>{type.route_type}</summary>
+                          <summary>{route_type_obj.route_type}</summary>
                           <ul className="ml-4">
-                            {type.routes_serviced.map((route, index) => (
-                              <li key={`${index}_${route}`}>
+                            {route_type_obj.routes_serviced.map((route_serviced, index) => (
+                              <li key={`${index}_${route_serviced}`}>
                                 <label>
                                   <input
-                                    className="mr-2"
+                                    className='mr-2'
                                     onChange={e => {
                                       let newRoutes = [...selectedRoutes];
                                       if (e.target.checked) {
                                         newRoutes.push({
-                                          city: routeRecord.city,
-                                          routeType: type.route_type,
-                                          routeServiced: route,
+                                          city: route.city,
+                                          routeType: route_type_obj.route_type,
+                                          routeServiced: route_serviced,
                                         });
                                       } else {
                                         const routeIndex = newRoutes.findIndex(
                                           r =>
-                                            r.city === routeRecord.city &&
-                                            r.routeType === type.route_type &&
-                                            r.routeServiced === route,
+                                            r.city === route.city &&
+                                            r.routeType === route_type_obj.route_type &&
+                                            r.routeServiced === route_serviced,
                                         );
                                         newRoutes.splice(routeIndex, 1);
                                       }
@@ -190,22 +198,23 @@ function ContextPane({
                                     }}
                                     checked={selectedRoutes
                                       .map(r => r.routeServiced)
-                                      .includes(route)}
-                                    id={`${index}_${route}`}
-                                    type="checkbox"
+                                      .includes(route_serviced)}
+                                    id={`${index}_${route_serviced}`}
+                                    type='checkbox'
                                   />
-                                  {route}
+                                  {route_serviced}
                                 </label>
                               </li>
                             ))}
                           </ul>
                         </details>
-                      );
-                    })}
-                  </details>): <></>
-                );
-              }),
-            )}
+                      })
+                    }
+                  </details>
+                }
+                return <></>
+              })
+            }
           </ul>
         </div>
       </div>

@@ -60,7 +60,6 @@ export const useRemoteLayers = (
 ): Array<RemoteLayer> => {
   const queries = Object.values(availableLayers) //.filter(layer => layer.isVisible)
     .map((layer: Layer) => {
-      console.log('queryKey: ' + layer.id + selectedCity)
       const query = {
         queryKey: [layer.id+selectedCity],
         queryFn: () => fetchLayerFn(layer, selectedCity),

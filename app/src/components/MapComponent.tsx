@@ -14,7 +14,8 @@ type MapProps = {
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   selectedCity: Cities;
-  center: [number, number];
+  center?: [number, number];
+  bounds?: [[number, number], [number, number]]
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
 
@@ -24,6 +25,7 @@ function MapComponent({
   sourceLayerConfigs,
   selectedCity,
   center,
+  bounds,
   setDetailedRoutes,
 }: MapProps): JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
@@ -147,7 +149,7 @@ function MapComponent({
         accessToken: MAPBOX_KEY,
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
-        center: center, // [-73.95, 40.72],
+        center: [-73.95, 40.72],
         zoom: 10,
         bearing: 0,
         pitch: 0,
@@ -199,12 +201,11 @@ function MapComponent({
         }
       });
     }
-  }, [center, layers, paintLayer, remoteLayers, setDetailedRoutes]);
+  }, [layers, paintLayer, remoteLayers, setDetailedRoutes]);
 
   useEffect(() => {
-    if (map.current) {
+    if (map.current && center) {
       map.current.setCenter(center);
-      map.current.setZoom(10);
     }
   }, [center]);
 

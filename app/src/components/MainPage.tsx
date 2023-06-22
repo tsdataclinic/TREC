@@ -8,10 +8,11 @@ import {
   useRemoteLayerPropertyValues,
 } from '../hooks/useRemoteLayer';
 import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
-import { AVAILABLE_ROUTES } from '../utils/availableRoutes';
 import { RouteSummary, useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
+import { useAvailableCities } from '../hooks/useAvailableCities';
+import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 
 const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
 
@@ -98,7 +99,10 @@ const AVAILABLE_REGIONS: Record<Cities, [number, number]> = {
   [Cities.HamptonRoads]: [-76.39, 36.96],
 };
 
+
 export default function MainPage(): JSX.Element {
+  const availableRoutes = useAvailableRoutes();
+  const availableRegions = useAvailableCities();
   const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
@@ -211,7 +215,7 @@ export default function MainPage(): JSX.Element {
         selectedProperties={selectedProperties}
       />
       <ContextPane
-        regions={AVAILABLE_REGIONS}
+        regions={availableRegions}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
         layers={layers}
@@ -219,7 +223,7 @@ export default function MainPage(): JSX.Element {
         availableProperties={availableProperties}
         selectedProperties={selectedProperties}
         setSelectedProperties={setSelectedProperties}
-        routes={AVAILABLE_ROUTES}
+        routes={availableRoutes}
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
       />
@@ -231,7 +235,8 @@ export default function MainPage(): JSX.Element {
         />
       )}
       <MapComponent
-        center={AVAILABLE_REGIONS[selectedCity]}
+        center={availableRegions && availableRegions.find((region) => region.display_name === selectedCity)?.center}
+        bounds={availableRegions && availableRegions.find((region) => region.display_name === selectedCity)?.bbox}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
