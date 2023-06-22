@@ -12,6 +12,7 @@ import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
 import { useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import usePrevious from '../hooks/usePrevious';
 
 const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
 
@@ -30,6 +31,7 @@ export type RemoteLayer = {
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
+  refetch: () => void
 };
 
 export type SelectedRoute = {
@@ -61,20 +63,8 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     isVisible: true,
     hideToggle: false,
   },
-  // "2": {
-  //   id: 2,
-  //   layerName: "NYC Transit Stops",
-  //   layerURL: "/results/NYC-stop_features_v3.geojson",
-  //   isVisible: true,
-  // },
-  // "3": {
-  //   id: 3,
-  //   layerName: "Hampton Roads Transit Stops",
-  //   layerURL: "/results/HR-stop_features_v3.geojson",
-  //   isVisible: true,
-  // },
-  '4': {
-    id: 4,
+  '3': {
+    id: 3,
     layerName: '2050 Hampton Roads Floods (Projected)',
     layerURL: 'mapbox://indraneel-tsdataclinic.9hi3xl8q',
     isVisible: false,
@@ -82,8 +72,8 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     hideToggle: false,
     city: Cities.HamptonRoads,
   },
-  '5': {
-    id: 5,
+  '4': {
+    id: 4,
     layerName: '2050 NYC Floods (Projected)',
     layerURL: 'mapbox://indraneel-tsdataclinic.1ku89xc7',
     isVisible: false,
@@ -98,6 +88,7 @@ export default function MainPage(): JSX.Element {
   const availableRoutes = useAvailableRoutes();
   const availableCities = useAvailableCities();
   const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
+  const previousSelectedCity = usePrevious(selectedCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       'flood_risk_category',
@@ -187,7 +178,6 @@ export default function MainPage(): JSX.Element {
     [layers],
   );
 
-
   useEffect(() => {
     Fathom.load("LHGHXYKE")
   }, [])
@@ -233,6 +223,7 @@ export default function MainPage(): JSX.Element {
         sourceLayerConfigs={sourceLayerConfigs}
         setDetailedRoutes={setDetailedRoutes}
         selectedCity={selectedCity}
+        previousSelectedCity={previousSelectedCity}
       />
 
     </main>

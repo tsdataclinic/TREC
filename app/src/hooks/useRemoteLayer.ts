@@ -61,7 +61,7 @@ export const useRemoteLayers = (
   const queries = Object.values(availableLayers) //.filter(layer => layer.isVisible)
     .map((layer: Layer) => {
       const query = {
-        queryKey: [layer.id+selectedCity],
+        queryKey: [`${layer.id}_${selectedCity}`],
         queryFn: () => fetchLayerFn(layer, selectedCity),
         staleTime: 1000 * 60 * 60, // one hour,
       };
@@ -70,5 +70,6 @@ export const useRemoteLayers = (
   const results = useQueries({
     queries,
   });
+
   return results;
 };

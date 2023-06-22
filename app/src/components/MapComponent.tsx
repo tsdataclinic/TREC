@@ -14,6 +14,7 @@ type MapProps = {
   remoteLayers: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   selectedCity: Cities;
+  previousSelectedCity?: Cities;
   center?: [number, number];
   bounds?: [[number, number], [number, number]]
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
@@ -24,6 +25,7 @@ function MapComponent({
   layers,
   sourceLayerConfigs,
   selectedCity,
+  previousSelectedCity,
   center,
   bounds,
   setDetailedRoutes,
@@ -35,12 +37,14 @@ function MapComponent({
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
   const paintLayer = useCallback(
-    (layer: Layer, remoteLayer: RemoteLayer) => {
+    (layer: Layer, remoteLayer: RemoteLayer,
+      selectedCity: string, previousSelectedCity: string) => {
+      
       if (!map.current) {
         return;
       }
       // if a layer isn't visible, remove it
-      if (!layer.isVisible || remoteLayer.isLoading === true) {
+      if (!layer.isVisible || remoteLayer.isLoading === true || previousSelectedCity !== selectedCity) {
         // remove layers
         sourceLayerConfigs[layer.layerName].forEach(
           (slConfig: SLConfigType) => {
@@ -168,7 +172,9 @@ function MapComponent({
           if (!map.current?.hasImage('hospital-icon'))
             map.current?.addImage('hospital-icon', image);
         });
-        Object.values(layers).forEach((layer, index) => paintLayer(layer, remoteLayers[index]));
+        if (previousSelectedCity) {
+          Object.values(layers).forEach((layer, index) => paintLayer(layer, remoteLayers[index], selectedCity, previousSelectedCity));
+        }
       });
 
       map.current.on('click', e => {
@@ -201,7 +207,7 @@ function MapComponent({
         }
       });
     }
-  }, [layers, paintLayer, remoteLayers, setDetailedRoutes]);
+  }, [layers, paintLayer, previousSelectedCity, remoteLayers, selectedCity, setDetailedRoutes]);
 
   useEffect(() => {
     if (map.current && center) {
@@ -210,10 +216,13 @@ function MapComponent({
   }, [center]);
 
   useEffect(() => {
-    if (isMapLoaded) {
-      Object.values(layers).forEach((layer, layerIndex) => paintLayer(layer, remoteLayers[layerIndex]));
+    if (isMapLoaded && previousSelectedCity) {
+      Object.values(layers).forEach((layer, layerIndex) => {
+        paintLayer(layer, remoteLayers[layerIndex], selectedCity, previousSelectedCity)
+      });
     }
-  }, [isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
+  }, [selectedCity, previousSelectedCity, isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
+
 
   return <div id="map" className="h-96 w-full sm:h-full" />;
 }
