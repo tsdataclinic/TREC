@@ -166,6 +166,7 @@ function ContextPane({
                     <summary className="pb-1">{route.display_name} lines</summary>
                     {
                       Object.values(route.route_types).map((route_type_obj) => {
+                        if (route_type_obj.route_type === 'Subway') return;
                         return <details
                           className="ml-2 pb-1"
                           key={`${route.city}_${route_type_obj}`}
