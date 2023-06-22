@@ -11,7 +11,7 @@ type Props = {
   selectedProperties: Array<string>;
   layers: Record<string, Layer>;
   updateLayer: (layer: Layer) => void;
-  regions: Array<{
+  cities: Array<{
     "city": string,
     "display_name": string,
     "bbox": [[number, number], [number, number]],
@@ -30,7 +30,7 @@ function ContextPane({
   availableProperties,
   selectedProperties,
   setSelectedProperties,
-  regions,
+  cities,
   selectedCity,
   setSelectedCity,
   routes,
@@ -50,7 +50,7 @@ function ContextPane({
           className="text-2xl"
           defaultValue={'New York City'}
         >
-          {regions && regions.map(r => (
+          {cities && cities.map(r => (
             <option
               key={r.city}
               value={r.display_name}

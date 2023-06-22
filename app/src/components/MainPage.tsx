@@ -96,7 +96,7 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
 
 export default function MainPage(): JSX.Element {
   const availableRoutes = useAvailableRoutes();
-  const availableRegions = useAvailableCities();
+  const availableCities = useAvailableCities();
   const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
@@ -206,7 +206,7 @@ export default function MainPage(): JSX.Element {
         selectedProperties={selectedProperties}
       />
       <ContextPane
-        regions={availableRegions}
+        cities={availableCities}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
         layers={layers}
@@ -226,8 +226,8 @@ export default function MainPage(): JSX.Element {
         />
       )}
       <MapComponent
-        center={availableRegions && availableRegions.find((region) => region.display_name === selectedCity)?.center}
-        bounds={availableRegions && availableRegions.find((region) => region.display_name === selectedCity)?.bbox}
+        center={availableCities && availableCities.find((region) => region.display_name === selectedCity)?.center}
+        bounds={availableCities && availableCities.find((region) => region.display_name === selectedCity)?.bbox}
         layers={layers}
         remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
