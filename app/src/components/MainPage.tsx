@@ -179,6 +179,11 @@ export default function MainPage(): JSX.Element {
   );
 
   useEffect(() => {
+    // reset selected lines 
+    setSelectedRoutes([]);
+  }, [selectedCity])
+
+  useEffect(() => {
     Fathom.load("LHGHXYKE")
   }, [])
 
