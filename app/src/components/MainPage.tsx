@@ -99,6 +99,15 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     hideToggle: false,
     city: Cities.NewOrleans,
   },
+  '7': {
+    id: 7,
+    layerName: 'Pittsburgh Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.5pmuaism',
+    isVisible: false,
+    sourceLayer: 'pitt_processed_fema',
+    hideToggle: false,
+    city: Cities.Pittsburgh,
+  },
 };
 
 
