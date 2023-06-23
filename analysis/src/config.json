@@ -53,7 +53,8 @@
         "state":"PA",
         "transit_feeds": {
             "septa": "f-dr4-septa~bus"
-        }
+        },
+        "FEMA_file_name": "NFHL_42_20230410"
     },
     "nola": 
     {
@@ -64,7 +65,8 @@
         "transit_feeds": {
             "norta": "f-9vrf-neworleansrta",  
             "jet" : "f-jefferson~parish"
-        }
+        },
+	  "FEMA_file_name": "NFHL_22_20230223"
     },
     "sf": 
     {
