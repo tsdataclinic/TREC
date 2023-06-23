@@ -413,7 +413,7 @@ function Header(props: { isMobile: boolean; }) {
         <div className="flex space-x-4 items-center">
           <button onClick={() => window.location.href = "/"} className="flex">
             <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
-            <h1 className="text-lg">TREC - Census TOP</h1>
+            <h1 className="text-lg">TREC</h1>
           </button>
         </div>
       }
