@@ -81,6 +81,24 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     hideToggle: false,
     city: Cities.NewYorkCity,
   },
+  '5': {
+    id: 5,
+    layerName: 'Philadelphia Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.5b5bn5hs',
+    isVisible: false,
+    sourceLayer: 'phi_processed_fema',
+    hideToggle: false,
+    city: Cities.Philadelphia,
+  },
+  '6': {
+    id: 6,
+    layerName: 'New Orleans Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.6hr9lz8d',
+    isVisible: false,
+    sourceLayer: 'nola_processed_fema',
+    hideToggle: false,
+    city: Cities.NewOrleans,
+  },
 };
 
 

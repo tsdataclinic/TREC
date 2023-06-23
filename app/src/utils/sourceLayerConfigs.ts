@@ -173,8 +173,8 @@ export function useSourceLayerConfigs(
       ],
       '2050 NYC Floods (Projected)': [
         {
-          sourceId: 'nyc2050',
-          layerId: 'nyc2050',
+          sourceId: 'nyc_2050_flooding',
+          layerId: 'nyc_2050_flooding',
           layerType: 'fill',
           layoutProperties: [],
           paintProperties: [
@@ -209,6 +209,52 @@ export function useSourceLayerConfigs(
                 ['==', ['get', 'CLASS'], 'Low Lying'],
                 `#ff8e52`,
                 `#ffc7a9`,
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'Philadelphia Current FEMA Flood Layer': [
+        {
+          sourceId: 'phi_processed_fema',
+          layerId: 'phi_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                // ['==', ['get', 'ZONE_SUBTY'], 'AREA OF MINIMAL FLOOD HAZARD'],
+                // `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'New Orleans Current FEMA Flood Layer': [
+        {
+          sourceId: 'nyc2050',
+          layerId: 'nyc2050',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA OF MINIMAL FLOOD HAZARD'],
+                `#ffc7a9`,
+                `transparent`
               ],
             },
           ],
