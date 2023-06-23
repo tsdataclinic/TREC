@@ -13,7 +13,7 @@ function ModalLink(props: {
     <>
       <Button
         unstyled
-        className="hover:bg-slate-600 px-4 py-4"
+        className="hover:bg-slate-600 m-4"
         onClick={() => setIsModalOpen(true)}
       >
         {children}
@@ -40,7 +40,7 @@ function ButtonLink(props: {
    return (
       <Button
           unstyled
-          className="hover:bg-slate-600 px-4 py-4"
+          className="hover:bg-slate-600 m-4"
           onClick={(e) => {
 	    e.preventDefault();
 	    window.location.href=url;
