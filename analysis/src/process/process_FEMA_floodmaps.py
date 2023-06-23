@@ -40,7 +40,7 @@ def main():
     base_path = config["base_path"]
     FEMA_file_prefix = config[city]["FEMA_file_name"]
     city_path = f"{base_path}/cities/{city}"
-    zip_path = f"{city_path}/floodmaps/{FEMA_file_prefix}.zip"
+    zip_path = f"{base_path}/national/floodmaps/{FEMA_file_prefix}.zip"
     extracted_folder_path = f"{city_path}/floodmaps/{FEMA_file_prefix}"
     gdb_folder_path = f"{extracted_folder_path}/{FEMA_file_prefix}.gdb"
     tract_path = f"{city_path}/census/geo/tracts.geojson"
@@ -54,7 +54,7 @@ def main():
     FEMA_flood = FEMA_flood.to_crs(4326)
     FEMA_flood["geometry"] = FEMA_flood.simplify(0.0001)
 
-    tracts_combined = geopd.GeoDataFrame({'geometry' : geopd.read_file(tract_path).unary_union}).set_crs(4326)
+    tracts_combined = geopd.GeoDataFrame({'geometry' : geopd.read_file(tract_path).unary_union}, index=[0]).set_crs(4326)
 
     out = FEMA_flood.overlay(tracts_combined)
     out.to_file(f"{city_path}/floodmaps/processed_fema.geojson")
