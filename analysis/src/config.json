@@ -62,7 +62,8 @@
         "msa_code": "C3538",
         "state":"LA",
         "transit_feeds": {
-            "norta": "f-9vrf-neworleansrta"  
+            "norta": "f-9vrf-neworleansrta",  
+            "jet" : "f-jefferson~parish"
         }
     },
     "sf": 
