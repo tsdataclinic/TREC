@@ -173,8 +173,8 @@ export function useSourceLayerConfigs(
       ],
       '2050 NYC Floods (Projected)': [
         {
-          sourceId: 'nyc2050',
-          layerId: 'nyc2050',
+          sourceId: 'nyc_2050_flooding',
+          layerId: 'nyc_2050_flooding',
           layerType: 'fill',
           layoutProperties: [],
           paintProperties: [
@@ -209,6 +209,95 @@ export function useSourceLayerConfigs(
                 ['==', ['get', 'CLASS'], 'Low Lying'],
                 `#ff8e52`,
                 `#ffc7a9`,
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'Philadelphia Current FEMA Flood Layer': [
+        {
+          sourceId: 'phi_processed_fema',
+          layerId: 'phi_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /**
+                 * "1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL"
+                    "FLOODWAY"
+                    "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                    "AREA OF MINIMAL FLOOD HAZARD"
+                    "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                    "1 PCT DEPTH LESS THAN 1 FOOT"
+                 */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'New Orleans Current FEMA Flood Layer': [
+        {
+          sourceId: 'nola_processed_fema',
+          layerId: 'nola_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /**
+                 * "FLOODWAY"
+                    "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                    "AREA OF MINIMAL FLOOD HAZARD"
+                    "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                 */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE'],
+                `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'Pittsburgh Current FEMA Flood Layer': [
+        {
+          sourceId: 'pitt_processed_fema',
+          layerId: 'pitt_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /*
+                  "FLOODWAY"
+                  "AREA OF MINIMAL FLOOD HAZARD"
+                  "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                  "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE'],
+                `#ffc7a9`,
+                `transparent`
               ],
             },
           ],

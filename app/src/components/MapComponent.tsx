@@ -103,13 +103,13 @@ function MapComponent({
                 });
               }
               // Manually move Hospitals to the top on insert
-              if (layer.layerName !== 'Hospitals') {
-                sourceLayerConfigs['Hospitals'].forEach((hospitalLayer: SLConfigType) => {
-                  if (map.current) {
-                    map.current.moveLayer(slConfig.layerId, hospitalLayer.layerId)
-                  }
-                })
-              }
+              // if (layer.layerName !== 'Hospitals') {
+              //   sourceLayerConfigs['Hospitals'].forEach((hospitalLayer: SLConfigType) => {
+              //     if (map.current) {
+              //       map.current.moveLayer(slConfig.layerId, hospitalLayer.layerId)
+              //     }
+              //   })
+              // }
             }
 
             // reset the layout properties

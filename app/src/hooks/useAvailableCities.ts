@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
+const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_APP_DEV_BACKEND_URI;
 
 export const useAvailableCities = () : Array<{
     "city": string,

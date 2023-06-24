@@ -14,7 +14,7 @@ import { useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import usePrevious from '../hooks/usePrevious';
 
-const BACKEND_URI = process.env.BACKEND_URI ?? 'http://localhost:8000';
+const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_APP_DEV_BACKEND_URI;
 
 export type Layer = {
   id: number;
@@ -80,6 +80,33 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     sourceLayer: 'nyc_2050_flooding',
     hideToggle: false,
     city: Cities.NewYorkCity,
+  },
+  '5': {
+    id: 5,
+    layerName: 'Philadelphia Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.5b5bn5hs',
+    isVisible: false,
+    sourceLayer: 'phi_processed_fema',
+    hideToggle: false,
+    city: Cities.Philadelphia,
+  },
+  '6': {
+    id: 6,
+    layerName: 'New Orleans Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.6hr9lz8d',
+    isVisible: false,
+    sourceLayer: 'nola_processed_fema',
+    hideToggle: false,
+    city: Cities.NewOrleans,
+  },
+  '7': {
+    id: 7,
+    layerName: 'Pittsburgh Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.5pmuaism',
+    isVisible: false,
+    sourceLayer: 'pitt_processed_fema',
+    hideToggle: false,
+    city: Cities.Pittsburgh,
   },
 };
 
