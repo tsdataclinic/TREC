@@ -463,6 +463,18 @@ const About = () => {
                   </a>
                 </li>
               </div>
+              <div className="blockLink">
+                <li>
+                  Station locations from{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.transit.land/terms"
+                  >
+                    Transitland
+                  </a>
+                </li>
+              </div>
             </ul>
           </div>
           <FlexImage src="" alt="" query="(max-width: 450px)" />

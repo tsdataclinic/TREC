@@ -166,6 +166,8 @@ function MapComponent({
         bearing: 0,
         pitch: 0,
         pitchWithRotate: false,
+        attributionControl: true,
+        customAttribution: '<a href="https://www.transit.land/terms">Transitland</a>'
       });
 
       map.current.on('load', () => {
