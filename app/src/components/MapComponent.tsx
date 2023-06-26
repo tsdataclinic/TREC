@@ -89,27 +89,27 @@ function MapComponent({
             // add back the layer if it's not already in the map
             if (!map.current.getLayer(slConfig.layerId)) {
               if (layer.layerURL.includes('geojson')) {
-                map.current.addLayer({
-                  id: slConfig.layerId,
-                  type: slConfig.layerType,
-                  source: layer.layerName,
-                });
+                if (layer.layerName === 'Hospitals') {
+                  map.current.addLayer({
+                    id: slConfig.layerId,
+                    type: slConfig.layerType,
+                    source: layer.layerName,
+                  });
+                } else {
+                  map.current.addLayer({
+                    id: slConfig.layerId,
+                    type: slConfig.layerType,
+                    source: layer.layerName,
+                  }, 'z-index-1');
+                }
               } else {
                 map.current.addLayer({
                   id: slConfig.layerId,
                   type: slConfig.layerType,
                   source: layer.layerName,
                   'source-layer': layer.sourceLayer,
-                });
+                }, 'z-index-2');
               }
-              // Manually move Hospitals to the top on insert
-              // if (layer.layerName !== 'Hospitals') {
-              //   sourceLayerConfigs['Hospitals'].forEach((hospitalLayer: SLConfigType) => {
-              //     if (map.current) {
-              //       map.current.moveLayer(slConfig.layerId, hospitalLayer.layerId)
-              //     }
-              //   })
-              // }
             }
 
             // reset the layout properties
@@ -185,6 +185,22 @@ function MapComponent({
         if (previousSelectedCity) {
           Object.values(layers).forEach((layer, index) => paintLayer(layer, remoteLayers[index], selectedCity, previousSelectedCity));
         }
+        // This is to control layer order as described here:
+        // https://github.com/mapbox/mapbox-gl-js/issues/7016#issuecomment-598452713
+        map.current.addSource('empty', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: [] }
+        });
+        map.current.addLayer({
+          id: 'z-index-1',
+          type: 'symbol',
+          source: 'empty'
+        });
+        map.current.addLayer({
+          id: 'z-index-2',
+          type: 'symbol',
+          source: 'empty'
+        }, 'z-index-1');
       });
 
       map.current.on('click', e => {
