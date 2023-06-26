@@ -6,12 +6,13 @@ from dotenv import load_dotenv
 import os
 
 class Cities(Enum):
-  pitt = "Pittsburgh"
-  nyc = "New York City"
-  nola = "New Orleans"
-  hr = "Hampton Roads"
-  phi = "Philadelphia"
   chi = "Chicago"
+  hr = "Hampton Roads"
+  nola = "New Orleans"
+  nyc = "New York City"
+  phi = "Philadelphia"
+  pitt = "Pittsburgh"
+  sf = "San Francisco"
 
 load_dotenv('../.env')
 
