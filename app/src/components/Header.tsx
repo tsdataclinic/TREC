@@ -402,7 +402,7 @@ function Header(props: { isMobile: boolean; }) {
     }
   }, [props.isMobile])
   return (
-    <header className="h-10 px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
+    <header className="h-16 px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
       {
         isDropdownMenuOpen ?
         <div>
