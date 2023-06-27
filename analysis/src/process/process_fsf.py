@@ -62,8 +62,8 @@ def process_fsf(config):
    
    fsf["pct_moderate_plus"] = fsf["pct_moderate"] + fsf["pct_major"] + fsf["pct_severe"] + fsf["pct_extreme"]
    fsf["pct_moderate_plus"] = fsf["pct_moderate_plus"].fillna(0)
-   fsf["risk_category"] = pd.cut(fsf["pct_moderate_plus"], bins = [-1, 0, .15, 1], labels = [0, 1, 2])
-   fsf["risk_category"] = fsf.risk_category.cat.codes
+   fsf["risk_category"] = pd.qcut(fsf["pct_moderate_plus"], 3, labels=False, duplicates='drop')
+   # fsf["risk_category"] = fsf.risk_category.cat.codes
    
    
    return fsf
