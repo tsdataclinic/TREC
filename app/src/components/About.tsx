@@ -133,12 +133,17 @@ const About = () => {
                     Flood risk: First Street Foundation's aggregated flood risk
                     data categorizes census tracts according to the number of
                     buildings at minor, moderate, major, severe, and extreme
-                    flood risk. Transit stops inside tracts where no buildings
-                    were above minor risk were labeled 'low' risk, stops inside
-                    tracts with under 15% of buildings above minor risk were
-                    labeled 'medium' risk, and stops inside tracts with more
-                    than 15% of buildings above minor risk were labeled as
-                    'high' risk.
+                    flood risk. First Street Foundation's risk categories were 
+                    quantized from 1-10, and an aggregated risk score calculated 
+                    for each census tract. For a city, risk scores were cut
+                    into tertiles and stops within these tracts categorized 
+                    as High, Medium, and Low flood risk respectively. 
+                    
+                    Note: Flood risk at Transit stops within a city are relative
+                    to other locations within that city. For example: While overall 
+                    flood risk is higher in New Orleans compared to New York City, 
+                    there are transit locations categorized a "Low" flood risk in New Orleans
+                    as they have lower chance of flooding compared to other areas of New Orleans. 
                   </li>
                   <li>
                     Hospital Access: We calculated 10 and 20 minute walk sheds
