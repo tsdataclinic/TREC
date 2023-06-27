@@ -1,7 +1,7 @@
 services:
   db:
     container_name: trec
-    image: postgis/postgis:15-3.3
+    image: postgis/postgis:15-master
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -11,14 +11,15 @@ services:
       - "5438:5432"
     volumes:
       - postgis_data:/data/postgres
-      - ./11-create_tables.sql:/docker-entrypoint-initdb.d/11-create_tables.sql
-      - ./12-insert_initial_data.sql:/docker-entrypoint-initdb.d/12-insert_initial_data.sql
+      - ../public/data/stop_features.geojson:/data/public/stop_features.geojson
+      - ../public/data/hospitals.geojson:/data/public/hospitals.geojson
+      # - ./11-create_tables.sql:/docker-entrypoint-initdb.d/11-create_tables.sql
+      # - ./12-insert_initial_data.sql:/docker-entrypoint-initdb.d/12-insert_initial_data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-
 
 volumes:
   postgis_data: 

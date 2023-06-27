@@ -21,6 +21,10 @@ scikit-learn = "*"
 peartree = "*"
 pygeos = "*"
 sqlalchemy = "*"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+psycopg2 = "*"
+
 
 [dev-packages]
 

@@ -14,6 +14,7 @@ CREATE TABLE public.stop_features (
     job_access_category bigint,
     jobs_access_count double precision,
     route_type text,
+    routes_serviced text,
     stop_id text,
     stop_name text,
     worker_vulnerability_category bigint,

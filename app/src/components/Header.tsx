@@ -13,7 +13,7 @@ function ModalLink(props: {
     <>
       <Button
         unstyled
-        className="hover:bg-slate-600 px-4 py-4"
+        className="hover:bg-slate-600 m-4"
         onClick={() => setIsModalOpen(true)}
       >
         {children}
@@ -40,7 +40,7 @@ function ButtonLink(props: {
    return (
       <Button
           unstyled
-          className="hover:bg-slate-600 px-4 py-4"
+          className="hover:bg-slate-600 m-4"
           onClick={(e) => {
 	    e.preventDefault();
 	    window.location.href=url;
@@ -402,12 +402,10 @@ function Header(props: { isMobile: boolean; }) {
     }
   }, [props.isMobile])
   return (
-    <header className="h-10 px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
+    <header className="h-16 px-4 flex justify-between items-center top-0 z-10 bg-app-slate text-white">
       {
         isDropdownMenuOpen ?
         <div>
-	  <ButtonLink url="/">Home</ButtonLink>
-          <ModalLink modalContents={<MethodologyModalContents />}>Methodology</ModalLink>
           <ButtonLink url="/about">About</ButtonLink>
           <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
         </div>
@@ -415,14 +413,12 @@ function Header(props: { isMobile: boolean; }) {
         <div className="flex space-x-4 items-center">
           <button onClick={() => window.location.href = "/"} className="flex">
             <img width="40px" alt="two-sigma-data-clinic-logo" src="/logo.png" />
-            <h1 className="text-lg">TREC - Census TOP</h1>
+            <h1 className="text-lg">TREC</h1>
           </button>
         </div>
       }
       <div className="flex">
         <div className='hidden sm:block'>
-	  <ButtonLink url="/">Home</ButtonLink>
-          <ModalLink modalContents={<MethodologyModalContents />}>Methodology</ModalLink>
           <ButtonLink url="/about">About</ButtonLink>
           <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
         </div>

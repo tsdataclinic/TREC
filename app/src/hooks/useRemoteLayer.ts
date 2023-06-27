@@ -1,11 +1,14 @@
 import { useQueries } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Layer, RemoteLayer } from "../components/MainPage";
+import { Cities } from "../libs/cities";
 
-export const fetchLayerFn = async (layer: Layer) => {
+export const fetchLayerFn = async (layer: Layer, selectedCity: Cities) => {
   if (layer.layerName && layer.layerURL) {
     if (layer.layerURL.includes('geojson')) {
-      const res = await fetch(layer.layerURL);
+      const res = await fetch(`${layer.layerURL}?${new URLSearchParams({
+        city: selectedCity
+      })}`);
       const json = await res.json();
       const result = {
         ...json,
@@ -52,13 +55,14 @@ export const useRemoteLayerPropertyValues = (
 };
 
 export const useRemoteLayers = (
-  availableLayers: Record<string, Layer>
+  availableLayers: Record<string, Layer>,
+  selectedCity: Cities
 ): Array<RemoteLayer> => {
   const queries = Object.values(availableLayers) //.filter(layer => layer.isVisible)
     .map((layer: Layer) => {
       const query = {
-        queryKey: [layer.id],
-        queryFn: () => fetchLayerFn(layer),
+        queryKey: [`${layer.id}_${selectedCity}`],
+        queryFn: () => fetchLayerFn(layer, selectedCity),
         staleTime: 1000 * 60 * 60, // one hour,
       };
       return query;
@@ -66,6 +70,6 @@ export const useRemoteLayers = (
   const results = useQueries({
     queries,
   });
-  
+
   return results;
 };
