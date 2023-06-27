@@ -1,5 +1,5 @@
 {   "base_path": "/home/data/test",
-    "transit_land_api_key": "gQXW5VMAZXBevcrQLvkiSvGTiTf4ONQr",
+    "transit_land_api_key": "<enter_key_here>",
     "national":
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",

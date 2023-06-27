@@ -142,130 +142,6 @@ export function useSourceLayerConfigs(
           filters,
         },
       ],
-      // 'NYC Transit Stops': [
-      //     {
-      //         sourceId: 'NYC-stop_features',
-      //         layerId: 'NYC-stop_features-icon',
-      //         layerType: 'symbol',
-      //         layoutProperties: [
-      //             { name: 'icon-image', value: ['match', ['get', 'route_type'],
-      //                     'Bus', 'bus-11',
-      //                     'Subway', 'rail-11',
-      //                     'bus-11'
-      //                 ], options: { sdf: true }}
-      //         ],
-      //         paintProperties: [
-      //             // { name: 'icon-color', value: 'red'},
-      //             // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
-      //         ]
-      //     },
-      //     {
-      //         sourceId: 'NYC-stop_features',
-      //         layerId: 'NYC-stop_features-risk_category',
-      //         layerType: 'circle',
-      //         layoutProperties: [
-      //         ],
-      //         paintProperties: [
-      //             { name: 'circle-stroke-color', value: 'grey'},
-      //             { name: 'circle-stroke-width', value: 1},
-      //             { name: 'circle-radius', value: [
-      //                 'interpolate',
-      //                 ['linear'],
-      //                 ['zoom'],
-      //                 0, .1,
-      //                 7, .5,
-      //                 14, 5,
-      //                 15, 10,
-      //                 16, 12,
-      //                 17, 20,
-      //                 19, 25
-      //             ]},
-      //             { name: 'circle-color', value: [
-      //                 'interpolate',
-      //                 ['linear'],
-      //                 ['get', selectedProperties[0]],
-      //                 0,
-      //                     ['case',
-      //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
-      //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
-      //                     `${COLORS.lightred}`],
-      //                 1,
-      //                 ['case',
-      //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
-      //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
-      //                     `${COLORS.mediumred}`],
-      //                 2,
-      //                 ['case',
-      //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
-      //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
-      //                     `${COLORS.darkred}`],
-      //             ]},
-      //         ],
-      //         filters
-      //     }
-      // ],
-      // 'Hampton Roads Transit Stops': [
-      //     {
-      //         sourceId: 'HR-stop_features',
-      //         layerId: 'HR-stop_features-icon',
-      //         layerType: 'symbol',
-      //         layoutProperties: [
-      //             { name: 'icon-image', value: ['match', ['get', 'route_type'],
-      //                     'Bus', 'bus-11',
-      //                     'Subway', 'rail-11',
-      //                     'bus-11'
-      //                 ], options: { sdf: true }}
-      //         ],
-      //         paintProperties: [
-      //             // { name: 'icon-color', value: 'red'},
-      //             // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
-      //         ]
-      //     },
-      //     {
-      //         sourceId: 'HR-stop_features',
-      //         layerId: 'HR-stop_features-risk_category',
-      //         layerType: 'circle',
-      //         layoutProperties: [
-      //         ],
-      //         paintProperties: [
-      //             { name: 'circle-stroke-color', value: 'grey'},
-      //             { name: 'circle-stroke-width', value: 1},
-      //             { name: 'circle-radius', value: [
-      //                 'interpolate',
-      //                 ['linear'],
-      //                 ['zoom'],
-      //                 0, .1,
-      //                 7, .5,
-      //                 14, 5,
-      //                 15, 10,
-      //                 16, 12,
-      //                 17, 20,
-      //                 19, 25
-      //             ]},
-      //             { name: 'circle-color', value: [
-      //                 'interpolate',
-      //                 ['linear'],
-      //                 ['get', selectedProperties[0]],
-      //                 0,
-      //                     ['case',
-      //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.lightgreen}`,
-      //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.lightblue}`,
-      //                     `${COLORS.lightred}`],
-      //                 1,
-      //                 ['case',
-      //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.mediumgreen}`,
-      //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.mediumblue}`,
-      //                     `${COLORS.mediumred}`],
-      //                 2,
-      //                 ['case',
-      //                     ['==', ['get',selectedProperties[1]], 0], `${COLORS.darkgreen}`,
-      //                     ['==', ['get',selectedProperties[1]], 1], `${COLORS.darkblue}`,
-      //                     `${COLORS.darkred}`],
-      //             ]},
-      //         ],
-      //         filters
-      //     }
-      // ],
       Hospitals: [
         {
           sourceId: 'hospitals',
@@ -297,8 +173,8 @@ export function useSourceLayerConfigs(
       ],
       '2050 NYC Floods (Projected)': [
         {
-          sourceId: 'nyc2050',
-          layerId: 'nyc2050',
+          sourceId: 'nyc_2050_flooding',
+          layerId: 'nyc_2050_flooding',
           layerType: 'fill',
           layoutProperties: [],
           paintProperties: [
@@ -333,6 +209,95 @@ export function useSourceLayerConfigs(
                 ['==', ['get', 'CLASS'], 'Low Lying'],
                 `#ff8e52`,
                 `#ffc7a9`,
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'Philadelphia Current FEMA Flood Layer': [
+        {
+          sourceId: 'phi_processed_fema',
+          layerId: 'phi_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /**
+                 * "1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL"
+                    "FLOODWAY"
+                    "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                    "AREA OF MINIMAL FLOOD HAZARD"
+                    "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                    "1 PCT DEPTH LESS THAN 1 FOOT"
+                 */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'New Orleans Current FEMA Flood Layer': [
+        {
+          sourceId: 'nola_processed_fema',
+          layerId: 'nola_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /**
+                 * "FLOODWAY"
+                    "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                    "AREA OF MINIMAL FLOOD HAZARD"
+                    "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                 */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE'],
+                `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'Pittsburgh Current FEMA Flood Layer': [
+        {
+          sourceId: 'pitt_processed_fema',
+          layerId: 'pitt_processed_fema',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /*
+                  "FLOODWAY"
+                  "AREA OF MINIMAL FLOOD HAZARD"
+                  "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                  "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE'],
+                `#ffc7a9`,
+                `transparent`
               ],
             },
           ],
