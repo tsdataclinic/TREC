@@ -78,7 +78,7 @@ st_write(tract_boundaries, paste0(path, tract_2010_path),append=FALSE)
 ## Save 2020 Block groups
 block_group_boundaries <- get_acs(geography = "block group", 
                                   state = selected_msa_states, 
-                                  year = 2019, 
+                                  year = 2020, 
                                   cb = TRUE, 
                                   geometry = T,
                                   variables = "B19013_001") %>% 
