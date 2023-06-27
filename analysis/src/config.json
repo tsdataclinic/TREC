@@ -1,5 +1,5 @@
 {   "base_path": "/home/data/test",
-
+    "transit_land_api_key": "<enter_key_here>",
     "national":
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
@@ -14,13 +14,13 @@
         "msa_code": "C3562",
         "state":"NY",
         "transit_feeds": {
-            "mta_subway": "http://web.mta.info/developers/data/nyct/subway/google_transit.zip",
-            "mta_bus_company": "http://web.mta.info/developers/data/busco/google_transit.zip",
-            "bus_bronx": "http://web.mta.info/developers/data/nyct/bus/google_transit_bronx.zip",
-            "bus_brooklyn": "http://web.mta.info/developers/data/nyct/bus/google_transit_brooklyn.zip",
-            "bus_manhattan": "http://web.mta.info/developers/data/nyct/bus/google_transit_manhattan.zip",
-            "bus_queens": "http://web.mta.info/developers/data/nyct/bus/google_transit_queens.zip",
-            "bus_staten_island": "http://web.mta.info/developers/data/nyct/bus/google_transit_staten_island.zip"
+            "mta_subway": "f-dr5r-nyctsubway",
+            "mta_bus_company": "f-dr5r-mtabc",
+            "bus_bronx": "f-dr72-mtanyctbusbronx",
+            "bus_brooklyn": "f-dr5r-mtanyctbusbrooklyn",
+            "bus_manhattan": "f-dr5r-mtanyctbusmanhattan",
+            "bus_queens": "f-dr5x-mtanyctbusqueens",
+            "bus_staten_island": "f-dr5r-mtanyctbusstatenisland"
         }
     },
     "hr": 
@@ -30,8 +30,68 @@
         "msa_code": "C4726",
         "state":"VA",
         "transit_feeds": {
-            "hrt": "https://gtfs.gohrt.com/gtfs/google_transit.zip",
-            "williamsburg": "https://gowata.org/DocumentCenter/View/500/Static-GTFS"
+            "hrt": "f-dq9-hrt",
+            "williamsburg": "f-dq9k-wata"
         }
-    }
+    },
+    "chi": 
+    {
+        "city_name": "Chicago",
+        "city_code": "chi",
+        "msa_code": "C1698",
+        "state":"IL",
+        "transit_feeds": {
+            "cta": "f-dp3-cta",
+            "pace": "f-dp3-pace"
+        }
+    },
+    "phi": 
+    {
+        "city_name": "Philadelphia",
+        "city_code": "phi",
+        "msa_code": "C3798",
+        "state":"PA",
+        "transit_feeds": {
+            "septa": "f-dr4-septa~bus"
+        },
+        "FEMA_file_name": "NFHL_42_20230410"
+    },
+    "nola": 
+    {
+        "city_name": "New Orleans",
+        "city_code": "nola",
+        "msa_code": "C3538",
+        "state":"LA",
+        "transit_feeds": {
+            "norta": "f-9vrf-neworleansrta",  
+            "jet" : "f-jefferson~parish"
+        },
+	  "FEMA_file_name": "NFHL_22_20230223"
+    },
+    "sf": 
+    {
+        "city_name": "San Francisco",
+        "city_code": "sf",
+        "msa_code": "C4186",
+        "state":"CA",
+        "transit_feeds": {
+            "sf_mta": "f-sf~bay~area~rg"        
+        }
+    },
+ "pitt":
+ {
+        "city_name": "Pittsburgh",
+        "city_code": "pitt",
+        "msa_code":"C3830",
+        "state":"PA",
+        "transit_feeds": {
+            "prt": "f-dppn-portauthorityofalleghenycounty",
+            "mmvt": "f-mid~mon~valley~transit~authority~pa",
+            "bta": "f-butler~transit~authority~pa",
+            "mlta": "f-dpp-mountainlinetransitauthority~wvuprt",
+            "bcta": "f-dpnz-bcta"
+            },
+        "FEMA_file_name": "NFHL_42_20230410"
+ }
+ 
 }

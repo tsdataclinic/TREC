@@ -73,7 +73,9 @@ All data other than floodplain polygons and hospital locations were processed in
 
 - Stops: The GTFS feed data (refer Data Sources) was processed into a file containing the stop IDs, transit type (e.g. bus, light rail), name, the list of routes servicing the stop, and a latitude/longitude point geometry. 
 
-- Flood risk: First Street Foundation’s aggregated flood risk data categorizes census tracts according to the number of buildings at minor, moderate, major, severe, and extreme flood risk. Transit stops inside tracts where no buildings were above minor risk were labeled ‘low’ risk, stops inside tracts with under 15% of buildings above minor risk were labeled  ‘medium’ risk, and stops inside tracts with more than 15% of buildings above minor risk were labeled as ‘high’ risk.
+- Flood risk: First Street Foundation’s aggregated flood risk data categorizes census tracts according to the number of buildings at minor, moderate, major, severe, and extreme flood risk. First Street Foundation's risk categories were quantized from 1-10, and an aggregated risk score calculated for each census tract. For a city, risk scores were cut into tertiles and stops within these tracts categorized as High, Medium, and Low flood risk respectively. 
+
+**Note**: Flood risk at Transit stops within a city are relative to other locations within that city. For example: While overall flood risk is higher in New Orleans compared to New York City, there are transit locations categorized a "Low" flood risk in New Orleans as they have lower chance of flooding compared to other areas of New Orleans. 
 
 - Hospital Access: We calculated 10 and 20 minute walk sheds (using walk graphs from OSM and assumptions on average walking pace) centered on each hospital in the GNIS Database and intersected these polygons with the transit stop points. We considered stops within a 10 minute walking distance as providing high access and between 10-20 minutes as providing medium access. All stops not within a walkshed were categorized as providing low access to hospitals.
 
@@ -106,6 +108,7 @@ Directory Structure:
     │   │   ├── process_stops.py         
     │   │   ├── process_hospitals.py    
     │   │   ├── process_walksheds.py
+    │   │   ├── process_FEMA_floodmaps.py
     │   │   └── process_fsf.py          <- Contains a function to process Flood Risk data from FSF
     │   │
     │   ├── features                    <- Scripts to turn raw and processed data into features for the web app

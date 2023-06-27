@@ -18,11 +18,13 @@ def get_transit_feeds(config, city_key):
     base_path = f"{config['base_path']}/cities/{city_key}/transit_feeds/"
     feeds = config[city_key]['transit_feeds']
     feed_names = list(feeds.keys())
-    feed_urls = list(feeds.values())
+    transit_land_feed_keys = list(feeds.values())
     
-    for i in range(0,len(feed_urls)):
-        with urlopen(feed_urls[i]) as zipresp:
-            print("Downloading from: " + feed_urls[i] + " as " + feed_names[i])
+    for i in range(0,len(transit_land_feed_keys)):
+        feed_url = f"https://transit.land/api/v2/rest/feeds/{transit_land_feed_keys[i]}/download_latest_feed_version?api_key={config['transit_land_api_key']}"
+        print(feed_url)
+        with urlopen(feed_url) as zipresp:
+            print("Downloading from: " + feed_url + " as " + feed_names[i])
             with ZipFile(BytesIO(zipresp.read())) as zfile:
                 zfile.extractall(base_path + feed_names[i])
 

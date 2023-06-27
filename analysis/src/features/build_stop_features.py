@@ -16,9 +16,12 @@ COLUMNS_TO_KEEP = ["stop_id",
         "city",
         "route_type",
         "routes_serviced",
-        "flood_risk_category", 
-        "job_access_category", 
-        "worker_vulnerability_category", 
+        "flood_risk_category",
+        "flood_risk_score",
+        "job_access_category",
+        "jobs_access_count",
+        "worker_vulnerability_category",
+        "worker_vulnerability_score",
         "access_to_hospital_category",
         "geometry"]
 
@@ -38,9 +41,10 @@ def add_fs_flood_risk(stops, config):
     """
     fsf_feature = process_fsf(config)
     
-    stops = stops.merge(fsf_feature[['GEOID','risk_score','pct_moderate_plus','risk_category']],how='left',
+    stops = stops.merge(fsf_feature[['GEOID','risk_score','pct_moderate_plus']],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
-    stops = stops.rename(columns={'risk_category':'flood_risk_category'})
+    stops['flood_risk_category'] = pd.qcut(stops['risk_score'],3,labels=False,duplicates='drop')
+    stops = stops.rename(columns={'risk_score':'flood_risk_score'})
     return stops
 
 
@@ -104,12 +108,13 @@ def get_job_counts(config, city_key):
     """
     TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed.geojson"
     BLOCK_GROUPS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/block_groups.geojson"
-    LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2019.csv"
+    LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2020.csv"
 
 
     walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
-    lodes = pd.read_csv(LODES_PATH)
+    lodes = pd.read_csv(LODES_PATH,dtype={'w_geocode':str,'h_geocode':str})
     block_groups = gpd.read_file(BLOCK_GROUPS_PATH)
+    block_groups = block_groups.drop_duplicates()
     
     
     print("Getting jobs")
@@ -118,9 +123,9 @@ def get_job_counts(config, city_key):
 
     
     jobs['job_access_category'] = pd.qcut(jobs['jobs'], 3, labels=False, duplicates='drop')
-
+    jobs = jobs.rename(columns={'jobs':'jobs_access_count'})
     # print(jobs.shape)
-    return jobs[['stop_id','jobs','job_access_category']]
+    return jobs[['stop_id','jobs_access_count','job_access_category']]
 
 def add_jobs_feature(stops, config, city_key):
     """
@@ -145,21 +150,24 @@ def add_jobs_feature(stops, config, city_key):
 def get_svi(config, city_key):
     
     TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{city_key}/osm/walksheds/transit_walkshed.geojson"
-    TRACTS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/tracts_2010.geojson"
-    LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2019.csv"
+    TRACTS_PATH = f"{config['base_path']}/cities/{city_key}/census/geo/tracts.geojson"
+    LODES_PATH = f"{config['base_path']}/cities/{city_key}/census/LODES/{config[city_key]['state']}_od_main_JT01_2020.csv"
     SVI_PATH = f"{config['base_path']}/national/SVI2020_US.csv"
 
     walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
-    lodes = pd.read_csv(LODES_PATH)
+    lodes = pd.read_csv(LODES_PATH,dtype={'w_geocode':str,'h_geocode':str})
     tracts = gpd.read_file(TRACTS_PATH)
-    svi = pd.read_csv(SVI_PATH)
+    tracts = tracts.drop_duplicates()
+    svi = pd.read_csv(SVI_PATH,dtype={'FIPS':str})
 
     print("Getting SVI")
     vulnerable_workers = get_worker_svi(lodes=lodes, svi=svi, census_geo=tracts, polygons=walksheds, polygon_id_col='stop_id', crs='epsg:2263')
         
     vulnerable_workers['worker_vulnerability_category'] = pd.qcut(vulnerable_workers['SVI_total'], 3, labels=False, duplicates='drop')
-        
-    return vulnerable_workers[['stop_id','SVI_total', 'SVI_SES', 'SVI_household', 'SVI_race','SVI_housing_transport','worker_vulnerability_category']]
+    vulnerable_workers = vulnerable_workers.rename(columns={'SVI_total':'worker_vulnerability_score'})
+    
+    
+    return vulnerable_workers[['stop_id','worker_vulnerability_score', 'SVI_SES', 'SVI_household', 'SVI_race','SVI_housing_transport','worker_vulnerability_category']]
 
 
 def add_vulnerable_workers_feature(stops, config, city_key):
