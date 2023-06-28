@@ -53,7 +53,7 @@ To discuss tailored adaptations of TREC to your team/city, please email us at da
 
 ### Data Sources
 
-All data accessed as of Febuary 21st, 2023.
+All data accessed as of June 26th, 2023.
 
 - Census tract, block geographies retrieved using [TidyCensus](https://walker-data.com/tidycensus/) with data by [US Census Bureau](https://www.census.gov/) 
 - Flood risk data from [First Street Climate-Adjusted Flood Risk - US Aggregate Data](https://aws.amazon.com/marketplace/pp/prodview-r36lzzzjacd32?sr=0-1&ref_=beagle&applicationId=AWSMPContessa#overview) by [First Street Foundation](https://firststreet.org/), [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
@@ -61,10 +61,12 @@ All data accessed as of Febuary 21st, 2023.
 - Social vulnerability data from [CDC/ATSDR Social Vulnerability Index](https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html) by [Centers for Disease Control and Prevention Agency for Toxic Substances and Disease Registry](https://www.atsdr.cdc.gov/) 
 - Street networks retrieved using [OSMnx](https://github.com/gboeing/osmnx) with data by [OpenStreetMap](https://www.openstreetmap.org/about),  [Open Database License, "ODbL" 1.0](http://www.opendatacommons.org/licenses/odbl/) 
 - Hospital location data from [here](https://geonames.usgs.gov/docs/stategaz/NationalFile.zip) (direct download link) by [United States Geological Survey](https://www.usgs.gov/) 
-- New York City transit stops data was downloaded from [Metropolitan Transportation Authority](http://web.mta.info/developers/developer-data-terms.html#data) 
-- Hampton Roads transit stops were downloaded from [Hampton Roads Transit](https://gtfs.gohrt.com/)
+- FEMA Flood Maps from [Flood Map service](https://www.fema.gov/flood-maps)
 - New York City stormwater flood map data was downloaded from [NYC Department of Environmental Protection](http://nyc.gov/stormwater-map)
 - Hampton Roads sea-level rise planning scenarios were downloaded from [Hampton Roads Geographic Exchange Online](https://www.hrgeo.org/search?q=SLR)
+- Static Transit Feeds accessed via [Transitland](https://www.transit.land/), [API Terms](https://www.transit.land/terms)
+- New York City transit stops data was downloaded from [Metropolitan Transportation Authority](http://web.mta.info/developers/developer-data-terms.html#data) 
+- Hampton Roads transit stops were downloaded from [Hampton Roads Transit](https://gtfs.gohrt.com/)
 
 ### Data Clinic
 [Data Clinic](https://www.twosigma.com/data-clinic/) is the data and tech-for-good arm of [Two Sigma](https://twosigma.com), a financial sciences company headquartered in NYC. Since Data Clinic was founded in 2014, we have provided pro bono data science and engineering support to mission-driven organizations around the world via close partnerships that pair Two Sigma's talent and way of thinking with our partner's rich content-area expertise. To scale the solutions and insights Data Clinic has gathered over the years, and to contribute to the democratization of data, we also engage in the development of open source tooling and data products.
