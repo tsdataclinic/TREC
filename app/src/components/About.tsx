@@ -631,6 +631,7 @@ const About = () => {
                   >
                     License
                   </a>
+                  <br />
                   Reproduced with permission granted by Port Authority of Allegheny County (PAAC). The information has been provided by means of a nonexclusive, limited, and revocable license granted by PAAC. PAAC does not guarantee the accuracy, adequacy, completeness, or usefulness of any information. PAAC provides this information "as is" without warranty of any kind, express or implied, including, but not limited to, warranties of merchantability or fitness for a particular purpose and assumes no responsibility for anyone's use of the information.
                 </li>
               </div>
