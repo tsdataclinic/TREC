@@ -358,70 +358,6 @@ const About = () => {
               </div>
               <div className="blockLink">
                 <li>
-                  New York City transit stops data was downloaded from{' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://new.mta.info/developers"
-                  >
-                    MTA Developer Resources
-                  </a>
-                  ,{' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://new.mta.info/"
-                  >
-                    New York City Metropolitan Transportation Authority
-                  </a>
-                  ,{' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="http://web.mta.info/developers/developer-data-terms.html#data"
-                  >
-                    Terms of Use
-                  </a>
-                </li>
-              </div>
-              <div className="blockLink">
-                <li>
-                  Hampton Roads transit stops from{' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://gtfs.gohrt.com/"
-                  >
-                    Hampton Roads Transit
-                  </a>
-                  ,{' '}
-                  <a target="_blank" rel="noreferrer" href="https://gohrt.com/">
-                    Hampton Roads Transit
-                  </a>
-                  ,{' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://gtfs.gohrt.com/terms.php"
-                  >
-                    Terms of Use
-                  </a>
-                </li>
-              </div>
-              <div className="blockLink">
-                <li>
-                  Williamsburg transit stops from retrieved from{' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="http://www.gowata.org/"
-                  >
-                    Williamsburg Area Transit Authority
-                  </a>
-                </li>
-              </div>
-              <div className="blockLink">
-                <li>
                   New York City stormwater flood map data was downloaded from{' '}
                   <a
                     target="_blank"
@@ -470,13 +406,279 @@ const About = () => {
               </div>
               <div className="blockLink">
                 <li>
-                  Station locations from{' '}
+                  FEMA Flood Maps from{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.fema.gov/flood-maps"
+                  >
+                    FEMA Flood Map service
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.fema.gov/about/website-information"
+                  >
+                    Web policies
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Static transit feed data from{' '}
                   <a
                     target="_blank"
                     rel="noreferrer"
                     href="https://www.transit.land/terms"
                   >
-                    Transitland
+                    Transitland.
+                  </a>
+                      Indiviual agency links and licenses below:
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  New York City: 
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://new.mta.info/developers"
+                  >
+                    MTA Developer Resources
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://new.mta.info/"
+                  >
+                    New York City Metropolitan Transportation Authority
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://web.mta.info/developers/developer-data-terms.html#data"
+                  >
+                    Terms of Use
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Hampton Roads: 
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://gtfs.gohrt.com/"
+                  >
+                    Hampton Roads Transit
+                  </a>
+                  ,{' '}
+                  <a target="_blank" rel="noreferrer" href="https://gohrt.com/">
+                    Hampton Roads Transit
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://gtfs.gohrt.com/terms.php"
+                  >
+                    Terms of Use
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Williamsburg: 
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://www.gowata.org/"
+                  >
+                    Williamsburg Area Transit Authority
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Chicago:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.transitchicago.com/"
+                  >
+                    Chicago Transit Authority
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://www.transitchicago.com/downloads/sch_data/developers_license_agreement.htm"
+                  >
+                    Terms of Use
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Chicago:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.pacebus.com/"
+                  >
+                    PACE Suburban Bus
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://www.pacebus.com/sub/about/data_services.asp"
+                  >
+                    License
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Philadelphia:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://www.septa.org"
+                  >
+                    Southeastern Pennsylvania Transportation Authority (SEPTA)
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://www3.septa.org/developer/"
+                  >
+                    License
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  New Orleans:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.norta.com/OpnesourceData/Download"
+                  >
+                    New Orleans Regional Transit Authority (NORTA)
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.norta.com/help-and-contacts/business-information/open-transit-data-(otd)"
+                  >
+                    License
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  New Orleans:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://Jeffersontransit.org/"
+                  >
+                    Jefferson Parish Transit (The JeT)
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                San Francisco:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://api.511.org/transit/datafeeds?operator_id=RG"
+                  >
+                    San Francisco MTA (SFMTA)
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://assets.511.org/pdf/nextgen/developers/511_Data_Agreement_Final.pdf"
+                  >
+                    License
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                Pittsburgh:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.rideprt.org"
+                  >
+                    Port Authority of Allegheny County
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.rideprt.org/business-center/developer-resources/developer-license-agreement/"
+                  >
+                    License
+                  </a>
+                  Reproduced with permission granted by Port Authority of Allegheny County (PAAC). The information has been provided by means of a nonexclusive, limited, and revocable license granted by PAAC. PAAC does not guarantee the accuracy, adequacy, completeness, or usefulness of any information. PAAC provides this information "as is" without warranty of any kind, express or implied, including, but not limited to, warranties of merchantability or fitness for a particular purpose and assumes no responsibility for anyone's use of the information.
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                Pittsburgh:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.mmvta.com/"
+                  >
+                    Mid Mon Valley Transit Authority (MMVTA)
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                Pittsburgh:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://www.butlertransitauthority.com/"
+                  >
+                    Butler Transit Authority (BTA)
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                Pittsburgh:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://mountaineertech.com"
+                  >
+                    Mountain Line Transit Authority (MLTA), West Virginia University Personal Rapid Transit (WVU PRT)
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                Pittsburgh:
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://bcta.com/"
+                  >
+                    Beaver County Transit Authority (BCTA)
                   </a>
                 </li>
               </div>
