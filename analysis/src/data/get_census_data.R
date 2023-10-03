@@ -29,14 +29,14 @@ old_geo_files <- list.files(path, include.dirs = F, full.names = T, recursive = 
 # remove the files
 file.remove(old_geo_files)
 
-msa_path = paste0(base_path,"/cities/national/qcew-county-msa-csa-crosswalk-csv.csv")
+msa_path = paste0(base_path,"/national/qcew-county-msa-csa-crosswalk-csv.csv")
 tract_path = "tracts.geojson"
 tract_2010_path = "tracts_2010.geojson"
 block_group_path = "block_groups.geojson"
 # block_path = "geo/blocks.geojson"
 # acs_path =  "acs/acs_wide.csv"
 print(path)
-dir.create(path)
+dir.create(path, recursive = TRUE)
 
 all_msa <- read_csv(msa_path, locale = locale(encoding = "ISO-8859-1")) # National MSA to county crosswalk
 selected_msa <- all_msa %>% filter(`MSA Code` == msa_code)
@@ -78,7 +78,7 @@ st_write(tract_boundaries, paste0(path, tract_2010_path),append=FALSE)
 ## Save 2020 Block groups
 block_group_boundaries <- get_acs(geography = "block group", 
                                   state = selected_msa_states, 
-                                  year = 2019, 
+                                  year = 2020, 
                                   cb = TRUE, 
                                   geometry = T,
                                   variables = "B19013_001") %>% 
