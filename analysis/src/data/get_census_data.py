@@ -63,7 +63,7 @@ def get_census(config, city_key):
     gdf_tract_2010.to_file(f'{path}{tract_2010_path}')
 
 def main():
-    parser = argparse.ArgumentParser("Get LODES")
+    parser = argparse.ArgumentParser("Get Census")
     parser.add_argument("--config", required=True)
     parser.add_argument("--city", required=True)
     
@@ -73,7 +73,7 @@ def main():
         config = json.load(f)
 
     get_census(config, opts.city)
-    print("LODES data written and unzipped") 
+    print("Census geographies written") 
     
 if __name__ == "__main__":
     main()
