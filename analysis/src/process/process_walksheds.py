@@ -11,6 +11,7 @@ import numpy as np
 import os
 ox.config(log_console=True)
 ox.__version__
+import pickle
 import json
 
 
@@ -43,7 +44,7 @@ def fix_walkshed(graph, polygons):
     walksheds['osmid'] = unique_nodes
     walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds,on='osmid').set_geometry(col='geometry')
     poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
-    poly_fixed = poly_a.append(walkshed_lines_fixed)
+    poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True)
     
     return poly_fixed
 
@@ -126,7 +127,8 @@ def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
 def process_walksheds(config, city_key):
 
     graph_path = f"{config['base_path']}/cities/{city_key}/osm/walk_graph.gpickle"
-    graph = nx.read_gpickle(graph_path)
+    with open(graph_path, 'rb') as f:
+        graph = pickle.load(f)    
     out_path = f"{config['base_path']}/cities/{city_key}/osm/walksheds/"
     
     if not os.path.isdir(out_path):
