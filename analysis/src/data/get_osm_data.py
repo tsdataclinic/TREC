@@ -7,6 +7,7 @@ from shapely.geometry import Point, LineString, Polygon, MultiPolygon
 from utils.geo import create_extent
 import argparse
 import sys
+import pickle
 import os
 import json
 ox.config(log_console=True)
@@ -44,7 +45,8 @@ def get_osm_data(config, city_key):
     G = get_walk_graph(extent_path)
     graph = ox.project_graph(G, to_crs='epsg:4326')
     print("Graph created. Writing it") 
-    nx.write_gpickle(G, out_path+"walk_graph.gpickle")
+    with open(out_path + "walk_graph.gpickle", 'wb') as f:
+        pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
 
 def main():
     parser = argparse.ArgumentParser("OSM Graph builder")
