@@ -4,7 +4,7 @@ from data.get_transit_data import get_transit_feeds
 from data.get_LODES import get_LODES
 from data.get_POI_data import get_poi_data
 from data.get_osm_data import get_osm_data
-import subprocess
+from data.get_census_data import get_census
 import argparse
 import os
 import json
@@ -21,7 +21,7 @@ def get_raw_data(config, city_key):
     print("Getting Transit feeds") 
     get_transit_feeds(config_file, city_key)
     print("Getting Census geographies") 
-    subprocess.run(["Rscript", f"{CWD}/src/data/get_census_data.R","--config",config,"--city",city_key])
+    get_census(config_file, city_key)
     print("Getting LODES data") 
     get_LODES(config_file, city_key)
     print("Getting OSM data") 

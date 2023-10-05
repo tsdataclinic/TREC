@@ -11,7 +11,7 @@
     {
         "city_name": "New York City",
         "city_code": "nyc",
-        "msa_code": "C3562",
+        "msa_code": ["C3562"],
         "state":"NY",
         "transit_feeds": {
             "mta_subway": "f-dr5r-nyctsubway",
@@ -27,7 +27,7 @@
     {
         "city_name": "Hampton Roads",
         "city_code": "hr",
-        "msa_code": "C4726",
+        "msa_code": ["C4726"],
         "state":"VA",
         "transit_feeds": {
             "hrt": "f-dq9-hrt",
@@ -38,7 +38,7 @@
     {
         "city_name": "Chicago",
         "city_code": "chi",
-        "msa_code": "C1698",
+        "msa_code": ["C1698"],
         "state":"IL",
         "transit_feeds": {
             "cta": "f-dp3-cta",
@@ -49,7 +49,7 @@
     {
         "city_name": "Philadelphia",
         "city_code": "phi",
-        "msa_code": "C3798",
+        "msa_code": ["C3798"],
         "state":"PA",
         "transit_feeds": {
             "septa": "f-dr4-septa~bus"
@@ -60,7 +60,7 @@
     {
         "city_name": "New Orleans",
         "city_code": "nola",
-        "msa_code": "C3538",
+        "msa_code": ["C3538"],
         "state":"LA",
         "transit_feeds": {
             "norta": "f-9vrf-neworleansrta",  
@@ -72,17 +72,18 @@
     {
         "city_name": "San Francisco",
         "city_code": "sf",
-        "msa_code": "C4186",
+        "msa_code": ["C4186", "C4194"],
         "state":"CA",
         "transit_feeds": {
             "sf_mta": "f-sf~bay~area~rg"        
-        }
+        },
+        "FEMA_file_name": "NFHL_06_20230608"
     },
  "pitt":
  {
         "city_name": "Pittsburgh",
         "city_code": "pitt",
-        "msa_code":"C3830",
+        "msa_code":["C3830"],
         "state":"PA",
         "transit_feeds": {
             "prt": "f-dppn-portauthorityofalleghenycounty",
