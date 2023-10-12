@@ -1,9 +1,5 @@
 import geopandas as geopd
 import json
-import subprocess 
-import os 
-import pandas as pd
-import requests 
 import os
 import zipfile
 import argparse
@@ -26,20 +22,10 @@ def find_largest_file(directory):
 
     return largest_file
 
-def main():
-    parser = argparse.ArgumentParser("Process FEMA floodmaps")
-    parser.add_argument("--config", required=True)
-    parser.add_argument("--city", required=True)
-
-    opts = parser.parse_args()
-    
-    with open(opts.config) as f:
-        config = json.load(f)
-    city = opts.city
-
+def process_floodmap(config, city_key):
     base_path = config["base_path"]
-    FEMA_file_prefix = config[city]["FEMA_file_name"]
-    city_path = f"{base_path}/cities/{city}"
+    FEMA_file_prefix = config[city_key]["FEMA_file_name"]
+    city_path = f"{base_path}/cities/{city_key}"
     zip_path = f"{base_path}/national/floodmaps/{FEMA_file_prefix}.zip"
     extracted_folder_path = f"{city_path}/floodmaps/{FEMA_file_prefix}"
     gdb_folder_path = f"{extracted_folder_path}/{FEMA_file_prefix}.gdb"
@@ -52,13 +38,33 @@ def main():
 
     FEMA_flood = geopd.read_file(gdb_table_to_read)
     FEMA_flood = FEMA_flood.to_crs(4326)
-    FEMA_flood["geometry"] = FEMA_flood.simplify(0.0001)
+    FEMA_flood["geometry"] = FEMA_flood.simplify(0.0001).buffer(0)
 
-    tracts_combined = geopd.GeoDataFrame({'geometry' : geopd.read_file(tract_path).unary_union}, index=[0]).set_crs(4326)
+    tracts_combined = geopd.GeoDataFrame({'geometry' : [geopd.read_file(tract_path).unary_union]}, index=[0]).set_crs(4326)
 
     out = FEMA_flood.overlay(tracts_combined)
     out.to_file(f"{city_path}/floodmaps/processed_fema.geojson")
     print(f"Processed FEMA floodmap data written to: {city_path}/floodmaps/processed_fema.geojson") 
+
+def process_fema(config, city_key):
+    if "FEMA_file_name" in config.get(city_key, {}):
+        process_floodmap(config, city_key)
+    else:
+        print(f"Skipping {city_key}: 'FEMA_file_name' not found in config.")
+
+
+def main():
+    parser = argparse.ArgumentParser("Process FEMA floodmaps")
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--city", required=True)
+
+    opts = parser.parse_args()
+
+    with open(opts.config) as f:
+        config = json.load(f)
+    city_key = opts.city
+
+    process_fema(config, city_key)
 
     
 if __name__ == "__main__":
