@@ -9,7 +9,7 @@ import sys
 from shapely.ops import unary_union
 import numpy as np
 import os
-ox.config(log_console=True)
+ox.settings.log_console=True
 ox.__version__
 import pickle
 import json
@@ -31,22 +31,33 @@ def fix_walkshed(graph, polygons):
     GeoDataFrame
         Walkshed polygon with lines and points replaced by polygons
     """
-    nodes = ox.graph_to_gdfs(graph,nodes=True,edges=False).reset_index()
-    walkshed_lines = polygons.loc[polygons.geometry.geometry.type!='Polygon']
+    projected_crs = "EPSG:3857"  # Choose an appropriate projected CRS for your data
+    original_crs = polygons.crs
+    nodes = ox.graph_to_gdfs(graph, nodes=True, edges=False).reset_index().set_crs(original_crs).to_crs(projected_crs)
+    polygons = polygons.to_crs(projected_crs)
+
+    walkshed_lines = polygons.loc[polygons.geometry.geometry.type != 'Polygon']
     unique_nodes = walkshed_lines.osmid.unique()
     isochrone_polys = []
+
+    # The buffer distance should be set according to the unit of the projected CRS
+    buffer_distance = 1250  # Example value; set according to your needs
+    
     for n in unique_nodes:
-        buffer = nodes[nodes.osmid==n].geometry.buffer(.01125)
-        node_points = nodes.sjoin(gpd.GeoDataFrame(geometry=buffer),how='inner',predicate='intersects').geometry
+        buffer = nodes[nodes.osmid == n].geometry.buffer(buffer_distance)
+        node_points = nodes.sjoin(gpd.GeoDataFrame(geometry=buffer, crs=projected_crs), how='inner', predicate='intersects').geometry
         bounding_poly = gpd.GeoSeries(node_points).unary_union.convex_hull
         isochrone_polys.append(bounding_poly)
-    walksheds = gpd.GeoDataFrame(geometry=isochrone_polys)
+
+    walksheds = gpd.GeoDataFrame(geometry=isochrone_polys, crs=projected_crs)
     walksheds['osmid'] = unique_nodes
-    walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds,on='osmid').set_geometry(col='geometry')
+
+    walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds, on='osmid').set_geometry(col='geometry')
     poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
-    poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True)
-    
-    return poly_fixed
+    poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True).to_crs(original_crs)
+
+    return poly_fixed.to_crs(original_crs)
+
 
 
 def points_to_nodes(points,graph):
@@ -68,10 +79,18 @@ def points_to_nodes(points,graph):
         points = points.drop(columns=['index_left'])
     if 'index_right' in points.columns:
         points = points.drop(columns=['index_right'])
-        
+    
     nodes = ox.graph_to_gdfs(graph,nodes=True,edges=False).reset_index()
-    nearest_nodes = points.sjoin_nearest(nodes,how='left')
-    return nearest_nodes
+
+    original_crs = nodes.crs
+    projected_crs = "EPSG:3857"  # Temporary planar CRS
+
+    nodes = nodes.to_crs(projected_crs)
+    points = points.to_crs(projected_crs)
+
+    nearest_nodes = points.sjoin_nearest(nodes, how='left')    
+    
+    return nearest_nodes.to_crs(original_crs)
 
 
 def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
@@ -122,6 +141,7 @@ def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
         nearest_nodes = nearest_nodes.drop(columns=['geometry'])
         point_walkshed = nearest_nodes.merge(walksheds,how='left', on='osmid')
         point_walkshed = point_walkshed.set_geometry(col='geometry')
+        point_walkshed = point_walkshed.set_crs(points.crs)
         return point_walkshed
     
 def process_walksheds(config, city_key):
