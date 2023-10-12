@@ -39,7 +39,7 @@ def subset_hospital_points(points, extent, county_list=[]):
     ## Excluding histaorical locations
     hospitals_gdf = hospitals_gdf[~hospitals_gdf.FEATURE_NAME.str.contains('historical')]
 
-    hospitals_gdf_extent = hospitals_gdf.sjoin(extent, how='inner')
+    hospitals_gdf_extent = hospitals_gdf.sjoin(extent.to_crs(hospitals_gdf.crs), how='inner')
     if len(county_list) > 0:
         hospitals_gdf_extent = hospitals_gdf_extent[hospitals_gdf_extent.COUNTY_NUMERIC.isin(county_list)]
 
