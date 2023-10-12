@@ -3,6 +3,7 @@ sys.path.append('../')
 from process.process_stops import process_stops
 from process.process_hospitals import process_hospitals
 from process.process_walksheds import process_walksheds
+from process.process_FEMA_floodmaps import process_fema
 import json
 import argparse
 
@@ -13,7 +14,9 @@ def process_data(config, city_key):
     process_hospitals(config, city_key,out=True)
     print("Processing Walksheds") 
     process_walksheds(config, city_key)
-
+    print("Processing FEMA floodmaps")
+    process_fema(config, city_key)
+    
 
 def main():
     parser = argparse.ArgumentParser("Process all data")
