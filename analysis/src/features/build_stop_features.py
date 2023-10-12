@@ -13,6 +13,8 @@ import json
 
 COLUMNS_TO_KEEP = ["stop_id", 
         "stop_name",
+        "agency_ids_serviced",
+        "agencies_serviced",
         "city",
         "route_type",
         "routes_serviced",
