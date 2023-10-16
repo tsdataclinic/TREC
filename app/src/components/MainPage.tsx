@@ -108,6 +108,15 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     hideToggle: false,
     city: Cities.Pittsburgh,
   },
+  '8': {
+    id: 8,
+    layerName: 'SF Current FEMA Flood Layer',
+    layerURL: 'mapbox://indraneel-tsdataclinic.3c847icg',
+    isVisible: false,
+    sourceLayer: 'sf_processed_fema-125s1o',
+    hideToggle: false,
+    city: Cities.SanFrancisco,
+  },
 };
 
 

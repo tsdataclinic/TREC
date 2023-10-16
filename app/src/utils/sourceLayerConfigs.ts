@@ -304,6 +304,35 @@ export function useSourceLayerConfigs(
           markers: [],
         },
       ],
+      'SF Current FEMA Flood Layer': [
+        {
+          sourceId: 'sf_processed_fema-125s1o',
+          layerId: 'sf_processed_fema-125s1o',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /*
+                  "FLOODWAY"
+                  "AREA OF MINIMAL FLOOD HAZARD"
+                  "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                  "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA OF MINIMAL FLOOD HAZARD'],
+                `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
     };
     return output;
   }, [filters, selectedProperties]);
