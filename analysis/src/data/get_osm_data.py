@@ -10,8 +10,7 @@ import sys
 import pickle
 import os
 import json
-ox.config(log_console=True)
-
+ox.settings.log_console=True
 
 def get_walk_graph(geo_file_path, network_type='walk'):
     """

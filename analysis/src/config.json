@@ -1,9 +1,13 @@
 {   "base_path": "/home/data/test",
-    "transit_land_api_key": "<enter_key_here>",
+    "transit_land_api_key": "",
     "national":
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
-        "flood_risk_path":"/home/data/test/national/fsf_flood_tract_summary.csv",
+        "fsf_climate_risk" : {
+            "flood":"/home/data/test/national/fsf_flood_tract_summary.csv",
+            "fire":"/home/data/test/national/fsf_fire_tract_summary.csv",
+            "heat":"/home/data/test/national/fsf_heat_tract_summary.csv"
+        },
         "svi_path":"/home/data/test/national/SVI2020_US.csv"
     },
     

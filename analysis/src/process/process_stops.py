@@ -37,9 +37,16 @@ def make_stops(folder_path):
     trips = pd.read_csv(folder_path + "/trips.txt", dtype = "str")
     stop_times = pd.read_csv(folder_path + "/stop_times.txt", dtype = "str")
 
+    if 'agency_id' in routes.columns:
+        agencies = pd.read_csv(folder_path + "/agency.txt", dtype = "str")
+        routes = routes.merge(agencies[["agency_id", "agency_name"]])
+    else:
+        routes["agency_id"] = feed_name.upper()
+        routes["agency_name"] = feed_name.upper()
+
     # Get route types
     routes["route_id"] = routes["route_id"].astype(str)
-    routes_types = routes[["route_id", "route_type"]].drop_duplicates()
+    routes_types = routes[["route_id", "route_type", "agency_id", "agency_name"]].drop_duplicates()
     routes_types = routes_types.replace({"route_type" : ROUTE_DICT})
     
     # Get most common services for each line
@@ -50,7 +57,7 @@ def make_stops(folder_path):
     
     # Final df
     trips_with_stops = trips_to_include.merge(stop_times)
-    stops_with_trips = trips_with_stops.merge(stops).merge(routes_types)[["route_id", "stop_id", "route_type", "stop_name", "stop_lat", "stop_lon"]].drop_duplicates().reset_index(drop = True)
+    stops_with_trips = trips_with_stops.merge(stops).merge(routes_types)[["route_id", "stop_id", "route_type", "stop_name", "stop_lat", "stop_lon", "agency_id", "agency_name"]].drop_duplicates().reset_index(drop = True)
 
     # Add geometry
     stops_with_trips["geometry"] = geopd.points_from_xy(stops_with_trips.stop_lon, stops_with_trips.stop_lat, crs="EPSG:4326")
@@ -79,7 +86,7 @@ def tag_with_tracts(stops, tracts_path):
     tracts_2010 = geopd.read_file(tracts_path + "tracts_2010.geojson")[["GEOID", "geometry"]].rename({"GEOID" : "GEOID_2010"}, axis = 1)
     tracts_2020 = geopd.read_file(tracts_path + "tracts.geojson")[["GEOID", "geometry"]].rename({"GEOID" : "GEOID_2020"}, axis = 1)
     
-    return stops.overlay(tracts_2010).overlay(tracts_2020)
+    return stops.overlay(tracts_2010.to_crs(stops.crs)).overlay(tracts_2020.to_crs(stops.crs))
         
 
 def process_stops(config, city_key, out=False):
@@ -114,11 +121,18 @@ def process_stops(config, city_key, out=False):
     
     # Routes as list
     routes_list = stops_out.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
-    
-    
+    agencies_list = stops_out.groupby('stop_id')['agency_id'].apply(list).reset_index().rename(columns={'agency_id':'agency_ids_serviced'})
+    agencies_name_list = stops_out.groupby('stop_id')['agency_name'].apply(list).reset_index().rename(columns={'agency_name' : 'agencies_serviced'})
+
     stops_out = stops_out.merge(routes_list,how='left',on='stop_id')
+    stops_out = stops_out.merge(agencies_list,how='left',on='stop_id')
+    stops_out = stops_out.merge(agencies_name_list,how='left',on='stop_id')
+
     stops_out['routes_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['routes_serviced']]
-    stops_out = stops_out.drop("route_id", axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
+    stops_out['agency_ids_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['agency_ids_serviced']]
+    stops_out['agencies_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['agencies_serviced']]
+
+    stops_out = stops_out.drop(["route_id", "agency_id", "agency_name"], axis = 1).drop_duplicates(subset=['stop_id']).reset_index().drop("index", axis = 1)
 
 
     stops_out = stops_out.merge(feed_city_mapping, how='left', on='feed_name')

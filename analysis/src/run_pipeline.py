@@ -24,8 +24,8 @@ def concat_results(config, city_keys):
     with open(f"{config['base_path']}/stop_features.geojson", 'w') as file:
         file.write(stop_features.to_json())
 
-    
-    
+    stop_features.drop("geometry", axis = 1).to_csv(f"{config['base_path']}/stop_features.csv")
+
 
 def main():
     parser = argparse.ArgumentParser("Run data pipeline")

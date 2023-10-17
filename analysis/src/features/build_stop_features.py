@@ -13,11 +13,17 @@ import json
 
 COLUMNS_TO_KEEP = ["stop_id", 
         "stop_name",
+        "agency_ids_serviced",
+        "agencies_serviced",
         "city",
         "route_type",
         "routes_serviced",
         "flood_risk_category",
         "flood_risk_score",
+        "heat_risk_category",
+        "heat_risk_score",
+        "fire_risk_category",
+        "fire_risk_score",
         "job_access_category",
         "jobs_access_count",
         "worker_vulnerability_category",
@@ -41,10 +47,11 @@ def add_fs_flood_risk(stops, config):
     """
     fsf_feature = process_fsf(config)
     
-    stops = stops.merge(fsf_feature[['GEOID','risk_score','pct_moderate_plus']],how='left',
+    stops = stops.merge(fsf_feature[['GEOID','flood_risk_score','flood_pct_moderate_plus','flood_risk_category',
+                                     'heat_risk_score','heat_pct_moderate_plus','heat_risk_category',
+                                     'fire_risk_score','fire_pct_moderate_plus','fire_risk_category',
+                                     ]],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
-    stops['flood_risk_category'] = pd.qcut(stops['risk_score'],3,labels=False,duplicates='drop')
-    stops = stops.rename(columns={'risk_score':'flood_risk_score'})
     return stops
 
 
