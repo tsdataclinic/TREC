@@ -249,6 +249,48 @@ const About = () => {
               </div>
               <div className="blockLink">
                 <li>
+                  Heat risk data from{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://aws.amazon.com/marketplace/pp/prodview-juylajmn3mixo?sr=0-1&ref_=beagle&applicationId=AWSMPContessa#overview"
+                  >
+                    First Street Climate-Adjusted Heat Risk - US Aggregate Data
+                    by First Street Foundation
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                  >
+                    CC BY-NC-SA 4.0
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
+                  Fire risk data from{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://aws.amazon.com/marketplace/pp/prodview-crz65ioiwanoc?sr=0-1&ref_=beagle&applicationId=AWSMPContessa#overview"
+                  >
+                    First Street Climate-Adjusted Wildfire Risk - US Aggregate Data
+                    by First Street Foundation
+                  </a>
+                  ,{' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                  >
+                    CC BY-NC-SA 4.0
+                  </a>
+                </li>
+              </div>
+              <div className="blockLink">
+                <li>
                   <a
                     target="_blank"
                     rel="noreferrer"
