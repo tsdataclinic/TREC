@@ -36,7 +36,7 @@ function RouteSummaryPane({
     return (
         <div
             id="SummaryPane"
-            className="bg-white min-w-fit h-full shadow flex flex-col"
+            className="bg-white min-w-fit h-full shadow flex flex-col overflow-y-scroll"
         >
             {/* min-w-max max-w-sm */}
             
