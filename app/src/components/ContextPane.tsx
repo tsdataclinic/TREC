@@ -92,14 +92,14 @@ function ContextPane({
               <b>Climate Risk:</b>
             </div>
             <Dropdown
-              disabled={true}
+              disabled={false}
               className="!w-full"
               onChange={value =>
                 setSelectedProperties([value, selectedProperties[1]])
               }
               placeholder="Select a field..."
               defaultValue={selectedProperties[0]}
-              options={Array.from(availableProperties)
+              options={Array.from(availableProperties).slice(0, 3)
                 .filter(p => p !== selectedProperties[1])
                 .map(p => ({
                   value: p,
@@ -130,7 +130,7 @@ function ContextPane({
               }}
               placeholder="Select a field..."
               defaultValue={selectedProperties[1]}
-              options={Array.from(availableProperties)
+              options={Array.from(availableProperties).slice(3, 6)
                 .filter(p => p !== selectedProperties[0])
                 .map(p => ({
                   value: p,

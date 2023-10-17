@@ -82,7 +82,11 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
       : 
       <>
       <h3 className="font-bold text-base pb-2">{properties['stop_name']}</h3>
-      <dl className="space-y-2">
+      <div className="w-full flex text-sm">
+        {properties.agencies_serviced}
+      </div>
+      
+      <dl className="space-y-1">
         <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
                      city={properties.city} route_type={properties.route_type}
                      routes_serviced={properties.routes_serviced}></DataRowLink>
@@ -91,6 +95,20 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
             color="blue"
             maxRisk={2}
             riskLevel={properties['flood_risk_category']}
+          />
+        </DataRow>
+        <DataRow label={PROPERTY_LABELS['heat_risk_category']}>
+          <RiskSquares
+            color="blue"
+            maxRisk={2}
+            riskLevel={properties['heat_risk_category']}
+          />
+        </DataRow>
+        <DataRow label={PROPERTY_LABELS['fire_risk_category']}>
+          <RiskSquares
+            color="blue"
+            maxRisk={2}
+            riskLevel={properties['fire_risk_category']}
           />
         </DataRow>
         <DataRow label={PROPERTY_LABELS['access_to_hospital_category']}>

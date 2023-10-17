@@ -4,6 +4,13 @@ import * as IconType from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import BarChart from './ui/Chart'
 
+function mode(arr:Array<String>){
+    return arr.sort((a,b) =>
+          arr.filter(v => v===a).length
+        - arr.filter(v => v===b).length
+    ).pop();
+}
+
 function LineLabel(props: {
     children: React.ReactNode;
     label: string;
@@ -40,8 +47,12 @@ function RouteSummaryPane({
                     className="text-base font-xl hover:bg-slate-200 cursor-pointer transition-colors pt-3"/>
                 <b className="pl-4 pt-2">{detailedRoutes.routeServiced}</b>
                 <div className="flex flex-col pl-7 space-y-2">
+                    {mode(routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['agency'].split(','))} 
+                </div>
+                <div className="flex flex-col pl-7 space-y-2">
                     {detailedRoutes.routeType} Route
                 </div>
+                
             </div>
             
 
@@ -52,6 +63,10 @@ function RouteSummaryPane({
             </div>
 
             <BarChart label='Flood Risk' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['flood_risk']}></BarChart>
+            
+            <BarChart label='Heat Risk' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['heat_risk']}></BarChart>
+            
+            <BarChart label='Fire Risk' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['fire_risk']}></BarChart>
 
             <BarChart label='Access to Hospitals' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['hospital_access']}></BarChart>
             
