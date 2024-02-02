@@ -18,7 +18,7 @@ function ColorBar(props: {
 }
 
 export default function BarChart(props: {
-    data: Array<number>;
+    data: [number, number, number];
     label: string;
   }): JSX.Element {
     const { data, label } = props;

@@ -27,7 +27,7 @@ function DataRowLink(props: {
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 }): JSX.Element {
   const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
-  let routes = JSON.parse(routes_serviced)
+  let routes = routes_serviced.split(',');
   let r_len = routes.length
   
   return (
