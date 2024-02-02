@@ -224,26 +224,26 @@ function MapComponent({
         const features = map.current
           .queryRenderedFeatures(e.point)
           .filter(f => layerNames.includes(f.source));
-        if (features.length > 0) {
-          const feature = features[0];
-          const tooltipNode = document.createElement('div');
-          const root = createRoot(tooltipNode);
+          if (features.length > 0) {
+            const feature = features[0];
+            const tooltipNode = document.createElement('div');
+            const root = createRoot(tooltipNode);
+            
+            root.render(
+              <Tooltip
+                feature={feature}
+                onDismiss={() => {
+                  tooltipRef.current.remove();
+                }}
+                setDetailedRoutes={setDetailedRoutes}
+              />,
+            );
 
-          root.render(
-            <Tooltip
-              feature={feature}
-              onDismiss={() => {
-                tooltipRef.current.remove();
-              }}
-              setDetailedRoutes={setDetailedRoutes}
-            />,
-          );
-
-          tooltipRef.current
-            .setLngLat(e.lngLat)
-            .setDOMContent(tooltipNode)
-            .addTo(map.current);
-        }
+            tooltipRef.current
+              .setLngLat(e.lngLat)
+              .setDOMContent(tooltipNode)
+              .addTo(map.current);
+          }
       });
     }
   }, [layers, paintLayer, previousSelectedCity, remoteLayers, selectedCity, setDetailedRoutes]);
