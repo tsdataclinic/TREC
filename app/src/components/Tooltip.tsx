@@ -73,9 +73,9 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
   return (
     <div id={`tooltip-${id}`} className="relative w-72 px-4 py-2">
       {/* show hospital or flooding details if there's a FEATURE_CLASS, Flooding_Category, Class property in the data */}
-      {properties['FEATURE_CLASS'] || properties['Flooding_Category'] || properties['CLASS'] ? 
+      {properties['feature_class'] || properties['Flooding_Category'] || properties['CLASS'] ? 
         <div>
-          {properties['FEATURE_NAME'] && <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3> }
+          {properties['feature_name'] && <h3 className="font-bold text-base pb-2">{properties['feature_name']}</h3> }
           {properties['Flooding_Category'] && <h3 className="font-bold text-base pb-2">{properties['Flooding_Category']}</h3> }
           {properties['CLASS'] && <h3 className="font-bold text-base pb-2">{properties['CLASS']}</h3> }
         </div>
