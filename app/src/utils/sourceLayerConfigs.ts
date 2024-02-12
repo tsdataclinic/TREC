@@ -38,31 +38,8 @@ export function useSourceLayerConfigs(
       'Transit Stops': [
         {
           sourceId: 'stop_features',
-          layerId: 'stop_features-icon',
-          layerType: 'symbol',
-          layoutProperties: [
-            {
-              name: 'icon-image',
-              value: [
-                'match',
-                ['get', 'route_type'],
-                'Bus',
-                'bus-11',
-                'Subway',
-                'rail-11',
-                'bus-11',
-              ],
-              options: { sdf: true },
-            },
-          ],
-          paintProperties: [
-            // { name: 'icon-color', value: 'red'},
-            // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
-          ],
-        },
-        {
-          sourceId: 'stop_features',
-          layerId: 'stop_features-risk_category',
+          sourceLayer: 'stop_features',
+          layerId: 'stop_features',
           layerType: 'circle',
           layoutProperties: [],
           paintProperties: [
@@ -145,7 +122,8 @@ export function useSourceLayerConfigs(
       Hospitals: [
         {
           sourceId: 'hospitals',
-          layerId: 'hospital-icon',
+          sourceLayer: 'hospitals',
+          layerId: 'hospitals',
           layerType: 'symbol',
           layoutProperties: [
             {

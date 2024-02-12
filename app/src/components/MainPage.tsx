@@ -13,14 +13,17 @@ import { Cities } from '../libs/cities';
 import { useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import usePrevious from '../hooks/usePrevious';
+import { useRemoteRouteSummary } from '../hooks/useRemoteRouteSummary';
 
 const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_APP_DEV_BACKEND_URI;
+const BACKEND_TILESERVER_URI = process.env.REACT_APP_PROD_TILESERVER_URI ?? process.env.REACT_APP_DEV_TILESERVER_URI;
 
 export type Layer = {
   id: number;
   layerName: string;
   sourceLayer?: string;
-  layerURL: string;
+  layerURL?: string;
+  tileURL?: string;
   isVisible: boolean;
   hideToggle: boolean;
   city?: Cities;
@@ -54,7 +57,8 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   '1': {
     id: 1,
     layerName: 'Transit Stops',
-    layerURL: `${BACKEND_URI}/stop_features.geojson`,
+    tileURL: `${BACKEND_TILESERVER_URI}/stop_features`,
+    sourceLayer: 'stop_features',
     isVisible: true,
     hideToggle: true,
   },
@@ -62,6 +66,8 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     id: 2,
     layerName: 'Hospitals',
     layerURL: `${BACKEND_URI}/hospitals.geojson`,
+    tileURL: `${BACKEND_TILESERVER_URI}/hospitals`,
+    sourceLayer: 'hospitals',
     isVisible: true,
     hideToggle: false,
   },
@@ -161,7 +167,7 @@ export default function MainPage(): JSX.Element {
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers, selectedCity);
-  let routeSummary = useRouteSummary(remoteLayers, detailedRoutes);
+  let {data: routeSummaryNew, status} = useRemoteRouteSummary(detailedRoutes.city, detailedRoutes.routeServiced);
 
   let sourceLayerConfigs = useSourceLayerConfigs(
     selectedProperties,
@@ -255,9 +261,10 @@ export default function MainPage(): JSX.Element {
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
       />
-      {detailedRoutes.city != '' && (
+      {detailedRoutes.city !== '' && (
         <RouteSummaryPane
-          routeSummary={routeSummary}
+          status={status}
+          routeSummary={routeSummaryNew}
           detailedRoutes={detailedRoutes}
           setDetailedRoutes={setDetailedRoutes}
         />
