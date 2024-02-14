@@ -23,6 +23,8 @@ function ModalLink(props: {
           isOpen={isModalOpen}
           onDismiss={() => setIsModalOpen(false)}
           title={children}
+          onDissmissText='Close'
+          isCentered={true}
         >
           {modalContents}
         </Modal>

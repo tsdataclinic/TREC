@@ -14,6 +14,7 @@ import { useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import usePrevious from '../hooks/usePrevious';
 import { useRemoteRouteSummary } from '../hooks/useRemoteRouteSummary';
+import Modal from './ui/Modal';
 
 const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_APP_DEV_BACKEND_URI;
 const BACKEND_TILESERVER_URI = process.env.REACT_APP_PROD_TILESERVER_URI ?? process.env.REACT_APP_DEV_TILESERVER_URI;
@@ -65,7 +66,6 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   '2': {
     id: 2,
     layerName: 'Hospitals',
-    layerURL: `${BACKEND_URI}/hospitals.geojson`,
     tileURL: `${BACKEND_TILESERVER_URI}/hospitals`,
     sourceLayer: 'hospitals',
     isVisible: true,
@@ -131,6 +131,8 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
 export default function MainPage(): JSX.Element {
   const availableRoutes = useAvailableRoutes();
   const availableCities = useAvailableCities();
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
+  const [isInstructionalModalOpen, setIsInstructionalModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
   const previousSelectedCity = usePrevious(selectedCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
@@ -236,6 +238,7 @@ export default function MainPage(): JSX.Element {
   }, [])
 
   return (
+    <>
     <main className="flex flex-col-reverse overflow-scroll sm:overflow-hidden sm:flex-row sm:h-full">
       <Filter
         filters={filters}
@@ -260,6 +263,8 @@ export default function MainPage(): JSX.Element {
         routes={availableRoutes}
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
+        setIsInstructionalModalOpen={setIsInstructionalModalOpen}
+        
       />
       {detailedRoutes.city !== '' && (
         <RouteSummaryPane
@@ -279,7 +284,68 @@ export default function MainPage(): JSX.Element {
         selectedCity={selectedCity}
         previousSelectedCity={previousSelectedCity}
       />
-
     </main>
+    { isWelcomeModalOpen && 
+      <Modal
+        isOpen={isWelcomeModalOpen}
+        onDismiss={() => setIsWelcomeModalOpen(false)}
+        title='Transit Resilience for Essential Commuting (TREC)'
+        onDissmissText='Explore!'
+        isCentered={true}
+      >
+        <p className="text-cyan-500 text-l font-extrabold">
+        Where do climate risks likely impact commuters’ abilities to access essential services?
+        </p>
+        <br />
+        <p>
+        TREC seeks to answer this question by intersecting climate risk data with the human experience in transit systems across the US.
+        </p>
+        <br />
+        <p>
+        You can explore whether a bus station is not only at risk of experiencing a climate threat,
+        but also vital for providing access to essential services. Can essential workers make it to job
+        centers amidst extreme rainfall? Can an ill commuter arrive at a hospital amidst a wildfire?
+        </p>
+        <br />
+        <p>
+        See where climate risks impact the experience of commuters to help prioritize
+        infrastructure for improvements or advocate for local community needs.
+        </p>
+      </Modal>
+    }
+    { isInstructionalModalOpen && 
+      <Modal
+        isOpen={isInstructionalModalOpen}
+        onDismiss={() => setIsInstructionalModalOpen(false)}
+        title=''
+        onDissmissText='Dismiss'
+        isCentered={false}
+      >
+        <p className="text-cyan-500 text-l font-extrabold">
+        How to use TREC
+        </p>
+        <br />
+        <p>
+        <b>1. Where</b>
+        </p>
+        <p>
+        Choose a US city to explore
+        </p>
+        <p>
+        <b>2. What</b>
+        </p>
+        <p>
+        Select a climate risk and a transit destination to focus on
+        </p>
+        <p>
+        <b>3. Prioritize</b>
+        </p>
+        <p>
+        Adjust the filter to hone in on stations with low, medium, or high risk and access
+        </p>
+        <br />
+      </Modal>
+    }
+    </>
   );
 }
