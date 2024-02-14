@@ -9,6 +9,8 @@ type Props = {
   isOpen: boolean;
   onDismiss: () => void;
   title: string;
+  onDissmissText: string;
+  isCentered: boolean;
 };
 
 const overlayShow = keyframes`
@@ -42,16 +44,12 @@ const StyledOverlay = styled(Dialog.Overlay)`
 `;
 
 const StyledModalContent = styled(Dialog.Content)`
-  overflow-y:  scroll;
   background: white;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
-  left: 50%;
   max-height: 85vh;
-  width: 80vw;
-  max-width: 90vw;
+  border-radius: 25px;
   position: fixed;
-  top: 50%;
   transform: translate(-50%, -50%);
 
   &:focus {
@@ -83,6 +81,8 @@ export default function Modal({
   onDismiss,
   title,
   className,
+  onDissmissText,
+  isCentered
 }: Props): JSX.Element {
   const onOpenChange = React.useCallback(
     (open: boolean) => {
@@ -97,14 +97,18 @@ export default function Modal({
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <StyledOverlay />
-        <StyledModalContent className="p-4 space-y-4">
+        <StyledModalContent className={`w-3/4 md:w-1/4 top-1/2 left-1/2 ${isCentered ? `md:top-1/2 md:left-1/2` : `md:top-3/4 md:left-96`}`}>
+          <div className="p-6 space-y-4">
           <StyledModalTitle className="text-xl text-slate-800">
             {title}
           </StyledModalTitle>
-          <div className={className}>{children}</div>
-          <Dialog.Close asChild>
-            <Button>Close</Button>
-          </Dialog.Close>
+          <div className={`${className} overflow-y-scroll`}>{children}</div>
+          </div>
+          <div >
+            <Dialog.Close asChild>
+              <Button className="w-full p-4 bg-cyan-500 text-white rounded-b-3xl">{onDissmissText}</Button>
+            </Dialog.Close>
+          </div>
         </StyledModalContent>
       </Dialog.Portal>
     </Dialog.Root>

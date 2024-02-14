@@ -1,6 +1,6 @@
 import { Layer, PROPERTY_LABELS, SelectedRoute } from './MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
 import { Cities } from '../libs/cities';
 import { RouteRecord } from '../hooks/useAvailableRoutes';
@@ -22,6 +22,7 @@ type Props = {
   routes: RouteRecord[];
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
+  setIsInstructionalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function ContextPane({
@@ -36,6 +37,7 @@ function ContextPane({
   routes,
   selectedRoutes,
   setSelectedRoutes,
+  setIsInstructionalModalOpen
 }: Props): JSX.Element {
   return (
     <div
@@ -218,6 +220,15 @@ function ContextPane({
               })
             }
           </ul>
+        </div>
+        <div>
+          <FontAwesomeIcon
+              onClick={() => setIsInstructionalModalOpen(true)}
+              size="2x"
+              cursor={'pointer'}
+              icon={faCircleInfo}
+              title={'Help'}
+            />
         </div>
       </div>
     </div>
