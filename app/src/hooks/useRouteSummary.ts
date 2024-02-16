@@ -3,8 +3,11 @@ import { useMemo } from 'react';
 
 export type RouteSummary = {
   route: String;
+  agency: String;
   count: Number;
   flood_risk: Array<number>;
+  heat_risk: Array<number>;
+  fire_risk: Array<number>;
   hospital_access: Array<number>;
   job_access: Array<number>;
   worker_vulnerability: Array<number>;
@@ -21,8 +24,17 @@ export const useRouteSummary = (
         routes: remoteLayers[0].data.features.map(
           (a: any) => a.properties.routes_serviced,
         ),
+        agencies: remoteLayers[0].data.features.map(
+          (a: any) => a.properties.agencies_serviced,
+        ),
         flood_risk: remoteLayers[0].data.features.map(
           (a: any) => a.properties.flood_risk_category,
+        ),
+        heat_risk: remoteLayers[0].data.features.map(
+          (a: any) => a.properties.heat_risk_category,
+        ),
+        fire_risk: remoteLayers[0].data.features.map(
+          (a: any) => a.properties.fire_risk_category,
         ),
         hospital_access: remoteLayers[0].data.features.map(
           (a: any) => a.properties.access_to_hospital_category,
@@ -40,7 +52,10 @@ export const useRouteSummary = (
         return r.map((route: any) => {
           return {
             route,
+            agency: route_data.agencies[index],
             flood_risk: route_data.flood_risk[index],
+            heat_risk: route_data.heat_risk[index],
+            fire_risk: route_data.fire_risk[index],
             hospital_access: route_data.hospital_access[index],
             job_access: route_data.job_access[index],
             worker_vulnerability:
@@ -59,14 +74,20 @@ export const useRouteSummary = (
           if (!summary[item.route])
             summary[item.route] = {
               count: 0,
+              agency: '',
               flood_risk: [0, 0, 0],
+              heat_risk: [0, 0, 0],
+              fire_risk: [0, 0, 0],
               hospital_access: [0, 0, 0],
               job_access: [0, 0, 0],
               worker_vulnerability: [0, 0, 0],
             };
           summary[item.route]['route'] = item.route;
+          summary[item.route]['agency'] = summary[item.route]['agency'] + item.agency + ',';
           summary[item.route]['count'] += 1;
           summary[item.route]['flood_risk'][Math.max(0, item.flood_risk)] += 1;
+          summary[item.route]['heat_risk'][Math.max(0, item.heat_risk)] += 1;
+          summary[item.route]['fire_risk'][Math.max(0, item.fire_risk)] += 1;
           summary[item.route]['hospital_access'][
             Math.max(0, item.hospital_access)
           ] += 1;
@@ -79,8 +100,11 @@ export const useRouteSummary = (
         {
           key: {
             route: '',
+            agency: '',
             count: 0,
             flood_risk: [0, 0, 0],
+            heat_risk: [0, 0, 0],
+            fire_risk: [0, 0, 0],
             hospital_access: [0, 0, 0],
             job_access: [0, 0, 0],
             worker_vulnerability: [0, 0, 0],

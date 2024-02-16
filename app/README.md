@@ -50,6 +50,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 You'll need to create an `.env` file based on `.env.sample` for the app to run.
 
+
+
 ## Datasets
 
 For Flood risk data, the data is converted to tileset data via the [tippecanoe](https://github.com/felt/tippecanoe) tool and then hosted on Mapbox.
@@ -65,3 +67,18 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=trec user=postgres" "/data/public/hospitals.g
 ogr2ogr -f "PostgreSQL" PG:"dbname=trec user=postgres" "/data/public/stop_features.geojson" -nln stop_features
 
 ```
+
+## Initializing the tileserver
+
+TREC makes use of Martin, a web tileserver. It should start in the previous step by running `docker-compose up` but ensure it is running by visiting `localhost:3002/catalog` and looking for the `stop_features` and `hospitals` tables.
+
+## Starting the API locally
+
+- `cd app/` and make sure all Python requirements are installed `pip install -r requirements.txt`
+
+- `cd` into `backend/`
+
+- run `uvicorn main:app --reload`
+
+- examine `localhost:8000/docs` to see if the FastAPI Swagger docs are loaded
+

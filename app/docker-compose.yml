@@ -16,10 +16,21 @@ services:
       # - ./11-create_tables.sql:/docker-entrypoint-initdb.d/11-create_tables.sql
       # - ./12-insert_initial_data.sql:/docker-entrypoint-initdb.d/12-insert_initial_data.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d trec"]
       interval: 5s
       timeout: 5s
       retries: 5
+  martin:
+    image: ghcr.io/maplibre/martin:v0.11.6
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_DB}/${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
+
 
 volumes:
   postgis_data: 

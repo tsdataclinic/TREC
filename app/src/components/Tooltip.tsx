@@ -27,7 +27,7 @@ function DataRowLink(props: {
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 }): JSX.Element {
   const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
-  let routes = JSON.parse(routes_serviced)
+  let routes = routes_serviced.split(',');
   let r_len = routes.length
   
   return (
@@ -73,16 +73,20 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
   return (
     <div id={`tooltip-${id}`} className="relative w-72 px-4 py-2">
       {/* show hospital or flooding details if there's a FEATURE_CLASS, Flooding_Category, Class property in the data */}
-      {properties['FEATURE_CLASS'] || properties['Flooding_Category'] || properties['CLASS'] ? 
+      {properties['feature_class'] || properties['Flooding_Category'] || properties['CLASS'] ? 
         <div>
-          {properties['FEATURE_NAME'] && <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3> }
+          {properties['feature_name'] && <h3 className="font-bold text-base pb-2">{properties['feature_name']}</h3> }
           {properties['Flooding_Category'] && <h3 className="font-bold text-base pb-2">{properties['Flooding_Category']}</h3> }
           {properties['CLASS'] && <h3 className="font-bold text-base pb-2">{properties['CLASS']}</h3> }
         </div>
       : 
       <>
       <h3 className="font-bold text-base pb-2">{properties['stop_name']}</h3>
-      <dl className="space-y-2">
+      <div className="w-full flex text-sm">
+        {properties.agencies_serviced}
+      </div>
+      
+      <dl className="space-y-1">
         <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
                      city={properties.city} route_type={properties.route_type}
                      routes_serviced={properties.routes_serviced}></DataRowLink>
@@ -91,6 +95,20 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
             color="blue"
             maxRisk={2}
             riskLevel={properties['flood_risk_category']}
+          />
+        </DataRow>
+        <DataRow label={PROPERTY_LABELS['heat_risk_category']}>
+          <RiskSquares
+            color="blue"
+            maxRisk={2}
+            riskLevel={properties['heat_risk_category']}
+          />
+        </DataRow>
+        <DataRow label={PROPERTY_LABELS['fire_risk_category']}>
+          <RiskSquares
+            color="blue"
+            maxRisk={2}
+            riskLevel={properties['fire_risk_category']}
           />
         </DataRow>
         <DataRow label={PROPERTY_LABELS['access_to_hospital_category']}>

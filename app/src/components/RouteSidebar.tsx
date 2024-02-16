@@ -1,27 +1,19 @@
 import {SelectedRoute } from './MainPage';
-import {RouteSummary} from '../hooks/useRouteSummary';
 import * as IconType from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import BarChart from './ui/Chart'
+import { RouteSummaryResponse } from '../hooks/useRemoteRouteSummary';
 
-function LineLabel(props: {
-    children: React.ReactNode;
-    label: string;
-  }): JSX.Element {
-    const { children, label } = props;
-    return (
-        <div className="flex flex-col pl-4 space-y-2">{label} "Line"</div>        
-    );
-  }
 
 type RouteProps = {
-    routeSummary: Array<RouteSummary>;
-    // routes: Array<Record<string, RouteRecord>>;
+    status: string;
+    routeSummary: RouteSummaryResponse;
     detailedRoutes: SelectedRoute;
     setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
   };
 
 function RouteSummaryPane({
+    status,
     routeSummary,
     detailedRoutes,
     setDetailedRoutes,
@@ -29,37 +21,36 @@ function RouteSummaryPane({
     return (
         <div
             id="SummaryPane"
-            className="bg-white min-w-fit h-full shadow flex flex-col"
+            className="bg-white min-w-fit h-full shadow flex flex-col overflow-y-scroll"
         >
-            {/* min-w-max max-w-sm */}
-            
             <div className="p-2 border-b border-b-slate-400">
                 <FontAwesomeIcon 
                     icon={IconType.faArrowLeft} 
                     onClick={()=>{setDetailedRoutes({city:'',routeType:'',routeServiced:''})}}
                     className="text-base font-xl hover:bg-slate-200 cursor-pointer transition-colors pt-3"/>
-                <b className="pl-4 pt-2">{detailedRoutes.routeServiced}</b>
+                <b className="pl-4 pt-2">
+                    {status === 'loading' ? 'Loading...' : detailedRoutes.routeServiced}
+                </b>
                 <div className="flex flex-col pl-7 space-y-2">
-                    {detailedRoutes.routeType} Route
+                    {status === 'loading' ? 'Loading...' : detailedRoutes.routeType}
+                </div>
+                <div className="flex flex-col pl-7 space-y-2">
+                    {status === 'loading' ? 'Loading...' : routeSummary.agency }
                 </div>
             </div>
-            
-
-            <div className="flex flex-col pt-4 pl-4 space-y-2"><b>Total Stops</b></div>
-
+            <div className="flex flex-col pt-4 pl-4 space-y-2">
+                <b>Total Stops</b></div>
             <div className="flex flex-col pt-2 pl-4 space-y-2">
-                <b className="text-xl">{JSON.stringify(routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['count'])}</b>
+                <b className="text-xl">
+                    {routeSummary?.count}
+                </b>
             </div>
-
-            <BarChart label='Flood Risk' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['flood_risk']}></BarChart>
-
-            <BarChart label='Access to Hospitals' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['hospital_access']}></BarChart>
-            
-            <BarChart label='Access to Jobs' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['job_access']}></BarChart>
-
-            <BarChart label='Vulnerable workers' data={routeSummary.filter(function(e:any) {return e.route == detailedRoutes.routeServiced})[0]['worker_vulnerability']}></BarChart>
-
-            
+            <BarChart label='Flood Risk' data={status === 'success' ? routeSummary.flood_risk_category : [0,0,0]}></BarChart>
+            <BarChart label='Heat Risk' data={status === 'success' ? routeSummary.heat_risk_category : [0,0,0]}></BarChart>
+            <BarChart label='Fire Risk' data={status === 'success' ? routeSummary.fire_risk_category : [0,0,0]}></BarChart>
+            <BarChart label='Access to Hospitals' data={status === 'success' ? routeSummary.access_to_hospital_category : [0,0,0]}></BarChart>
+            <BarChart label='Access to Jobs' data={status === 'success' ? routeSummary.job_access_category : [0,0,0]}></BarChart>
+            <BarChart label='Vulnerable workers' data={status === 'success' ? routeSummary.worker_vulnerability_category : [0,0,0]}></BarChart>
         </div>
         );
 

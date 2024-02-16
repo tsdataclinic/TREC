@@ -44,7 +44,7 @@ function Filter({
   return (
     <div
       id="Filter"
-      className="bg-white w-60 h-60 flex flex-col mt-5 mx-auto sm:bottom-16 sm:fixed sm:z-5 sm:right-4 sm:z-10"
+      className="bg-white w-60 h-60 flex flex-col mt-5 mx-auto sm:bottom-16 sm:fixed sm:z-10 sm:right-4"
     >
       <div className="grid grid-cols-4 grid-rows-4 h-full p-3 pb-0">
         <div className="row-span-3">

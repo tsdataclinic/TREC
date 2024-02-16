@@ -38,31 +38,8 @@ export function useSourceLayerConfigs(
       'Transit Stops': [
         {
           sourceId: 'stop_features',
-          layerId: 'stop_features-icon',
-          layerType: 'symbol',
-          layoutProperties: [
-            {
-              name: 'icon-image',
-              value: [
-                'match',
-                ['get', 'route_type'],
-                'Bus',
-                'bus-11',
-                'Subway',
-                'rail-11',
-                'bus-11',
-              ],
-              options: { sdf: true },
-            },
-          ],
-          paintProperties: [
-            // { name: 'icon-color', value: 'red'},
-            // { name: 'icon-opacity', value: ['match', ['get', 'risk_category'], 1, 1, .25] },
-          ],
-        },
-        {
-          sourceId: 'stop_features',
-          layerId: 'stop_features-risk_category',
+          sourceLayer: 'stop_features',
+          layerId: 'stop_features',
           layerType: 'circle',
           layoutProperties: [],
           paintProperties: [
@@ -145,7 +122,8 @@ export function useSourceLayerConfigs(
       Hospitals: [
         {
           sourceId: 'hospitals',
-          layerId: 'hospital-icon',
+          sourceLayer: 'hospitals',
+          layerId: 'hospitals',
           layerType: 'symbol',
           layoutProperties: [
             {
@@ -296,6 +274,35 @@ export function useSourceLayerConfigs(
                 ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
                 `#ff8e52`,
                 ['==', ['get', 'ZONE_SUBTY'], 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE'],
+                `#ffc7a9`,
+                `transparent`
+              ],
+            },
+          ],
+          markers: [],
+        },
+      ],
+      'SF Current FEMA Flood Layer': [
+        {
+          sourceId: 'sf_processed_fema-125s1o',
+          layerId: 'sf_processed_fema-125s1o',
+          layerType: 'fill',
+          layoutProperties: [],
+          paintProperties: [
+            { name: 'fill-opacity', value: 0.65 },
+            {
+              name: 'fill-color',
+              value: [
+                /*
+                  "FLOODWAY"
+                  "AREA OF MINIMAL FLOOD HAZARD"
+                  "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"
+                  "AREA WITH REDUCED FLOOD RISK DUE TO LEVEE"
+                */
+                'case',
+                ['==', ['get', 'ZONE_SUBTY'], '0.2 PCT ANNUAL CHANCE FLOOD HAZARD'],
+                `#ff8e52`,
+                ['==', ['get', 'ZONE_SUBTY'], 'AREA OF MINIMAL FLOOD HAZARD'],
                 `#ffc7a9`,
                 `transparent`
               ],

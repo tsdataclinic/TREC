@@ -5,5 +5,5 @@ export enum Cities {
   NewYorkCity = 'New York City',
   Philadelphia = 'Philadelphia',
   Pittsburgh = 'Pittsburgh',
-  SanFrancisco = 'Pittsburgh',
+  SanFrancisco = 'San Francisco',
 };

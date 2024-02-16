@@ -1,6 +1,6 @@
 import { Layer, PROPERTY_LABELS, SelectedRoute } from './MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
 import { Cities } from '../libs/cities';
 import { RouteRecord } from '../hooks/useAvailableRoutes';
@@ -22,6 +22,7 @@ type Props = {
   routes: RouteRecord[];
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
+  setIsInstructionalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function ContextPane({
@@ -36,6 +37,7 @@ function ContextPane({
   routes,
   selectedRoutes,
   setSelectedRoutes,
+  setIsInstructionalModalOpen
 }: Props): JSX.Element {
   return (
     <div
@@ -92,14 +94,14 @@ function ContextPane({
               <b>Climate Risk:</b>
             </div>
             <Dropdown
-              disabled={true}
+              disabled={false}
               className="!w-full"
               onChange={value =>
                 setSelectedProperties([value, selectedProperties[1]])
               }
               placeholder="Select a field..."
               defaultValue={selectedProperties[0]}
-              options={Array.from(availableProperties)
+              options={Array.from(availableProperties).slice(0, 3)
                 .filter(p => p !== selectedProperties[1])
                 .map(p => ({
                   value: p,
@@ -130,7 +132,7 @@ function ContextPane({
               }}
               placeholder="Select a field..."
               defaultValue={selectedProperties[1]}
-              options={Array.from(availableProperties)
+              options={Array.from(availableProperties).slice(3, 6)
                 .filter(p => p !== selectedProperties[0])
                 .map(p => ({
                   value: p,
@@ -141,8 +143,8 @@ function ContextPane({
         </div>
         <hr />
         <div className="text-lg flex justify-between">
-          <b>Filter by Transit Line</b>
-          <button onClick={() => setSelectedRoutes([])}>Reset</button>
+          <b>Transit Lines</b>
+          {/* <button onClick={() => setSelectedRoutes([])}>Reset</button> */}
         </div>
         {selectedRoutes.length > 0 ? (
           <div className="grid grid-cols-4 px-3 gap-1">
@@ -197,6 +199,7 @@ function ContextPane({
                                       }
                                       setSelectedRoutes(newRoutes);
                                     }}
+                                    disabled={true}
                                     checked={selectedRoutes
                                       .map(r => r.routeServiced)
                                       .includes(route_serviced)}
@@ -217,6 +220,15 @@ function ContextPane({
               })
             }
           </ul>
+        </div>
+        <div>
+          <FontAwesomeIcon
+              onClick={() => setIsInstructionalModalOpen(true)}
+              size="2x"
+              cursor={'pointer'}
+              icon={faCircleInfo}
+              title={'Help'}
+            />
         </div>
       </div>
     </div>

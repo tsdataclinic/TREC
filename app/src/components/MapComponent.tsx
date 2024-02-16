@@ -39,7 +39,6 @@ function MapComponent({
   const paintLayer = useCallback(
     (layer: Layer, remoteLayer: RemoteLayer,
       selectedCity: string, previousSelectedCity: string) => {
-      
       if (!map.current) {
         return;
       }
@@ -58,15 +57,21 @@ function MapComponent({
           map.current.removeSource(layer.layerName);
         }
       } else {
+        
         // if a layer is visible, add back the source if it
         // doesn't exist already
         if (!map.current?.getSource(layer.layerName)) {
-          if (layer.layerURL.includes('geojson')) {
+          if (layer.tileURL) {
             map.current.addSource(layer.layerName, {
-              type: 'geojson',
-              data: remoteLayer.data,
+              type: 'vector',
+              url: layer.tileURL
             });
-          } else if (layer.layerURL.includes('mapbox://')) {
+          }
+          else if (layer.layerURL && layer.layerURL.includes('geojson')) {
+            // map.current.addSource(layer.layerName, {
+            //   type: 'geojson',
+            // });
+          } else if (layer.layerURL && layer.layerURL.includes('mapbox://')) {
             map.current.addSource(layer.layerName, {
               type: 'vector',
               url: layer.layerURL,
@@ -74,7 +79,7 @@ function MapComponent({
           } else {
             map.current.addSource(layer.layerName, {
               type: 'vector',
-              tiles: [layer.layerURL],
+              tiles: [layer.tileURL!]
             });
           }
         }
@@ -88,7 +93,15 @@ function MapComponent({
 
             // add back the layer if it's not already in the map
             if (!map.current.getLayer(slConfig.layerId)) {
-              if (layer.layerURL.includes('geojson')) {
+              if (layer.tileURL) {
+                map.current.addLayer({
+                  id: slConfig.layerId,
+                  type: slConfig.layerType,
+                  source: layer.layerName,
+                  'source-layer': layer.sourceLayer,
+                }, 'z-index-1');
+              }
+              else if (layer.layerURL && layer.layerURL.includes('geojson')) {
                 if (layer.layerName === 'Hospitals') {
                   map.current.addLayer({
                     id: slConfig.layerId,
@@ -108,7 +121,7 @@ function MapComponent({
                   type: slConfig.layerType,
                   source: layer.layerName,
                   'source-layer': layer.sourceLayer,
-                }, 'z-index-2');
+                }, 'z-index-1');
               }
             }
 
@@ -211,26 +224,26 @@ function MapComponent({
         const features = map.current
           .queryRenderedFeatures(e.point)
           .filter(f => layerNames.includes(f.source));
-        if (features.length > 0) {
-          const feature = features[0];
-          const tooltipNode = document.createElement('div');
-          const root = createRoot(tooltipNode);
+          if (features.length > 0) {
+            const feature = features[0];
+            const tooltipNode = document.createElement('div');
+            const root = createRoot(tooltipNode);
+            
+            root.render(
+              <Tooltip
+                feature={feature}
+                onDismiss={() => {
+                  tooltipRef.current.remove();
+                }}
+                setDetailedRoutes={setDetailedRoutes}
+              />,
+            );
 
-          root.render(
-            <Tooltip
-              feature={feature}
-              onDismiss={() => {
-                tooltipRef.current.remove();
-              }}
-              setDetailedRoutes={setDetailedRoutes}
-            />,
-          );
-
-          tooltipRef.current
-            .setLngLat(e.lngLat)
-            .setDOMContent(tooltipNode)
-            .addTo(map.current);
-        }
+            tooltipRef.current
+              .setLngLat(e.lngLat)
+              .setDOMContent(tooltipNode)
+              .addTo(map.current);
+          }
       });
     }
   }, [layers, paintLayer, previousSelectedCity, remoteLayers, selectedCity, setDetailedRoutes]);

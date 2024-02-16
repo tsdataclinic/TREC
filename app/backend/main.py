@@ -49,6 +49,65 @@ async def shutdown():
 async def ping():
   return {"message": "pong"}
 
+@app.get("/route-summary/{city}/{route}")
+async def get_route_summary(city: str, route: str):
+  col_names = [
+    "flood_risk_category",
+    "heat_risk_category",
+    "fire_risk_category",
+    "access_to_hospital_category",
+    "job_access_category",
+    "worker_vulnerability_category",
+  ]
+
+  output = {
+    "count": 0,
+    "agency": "",
+    "route": route,
+    "flood_risk_category": [0, 0, 0],
+    "heat_risk_category": [0, 0, 0],
+    "fire_risk_category": [0, 0, 0],
+    "access_to_hospital_category": [0, 0, 0],
+    "job_access_category": [0, 0, 0],
+    "worker_vulnerability_category": [0, 0, 0],
+  }
+
+  connection = app.state.db_pool.getconn()
+  cursor = connection.cursor()
+
+  agency_query = f"""
+      SELECT
+        agencies_serviced
+      FROM public.stop_features
+      WHERE '{route}' = any(string_to_array(routes_serviced, ','))
+      AND city = '{city}'
+    """
+  cursor.execute(agency_query)
+  agency = cursor.fetchone()[0]
+  if agency:
+    output["agency"] = agency
+
+  for col in col_names:
+    stops_on_route_query = f"""
+      SELECT
+        {col}, count({col})
+      FROM public.stop_features
+      WHERE '{route}' = any(string_to_array(routes_serviced, ','))
+      AND city = '{city}'
+      GROUP BY {col}
+    """
+    cursor.execute(stops_on_route_query)
+    stops_on_route_result = cursor.fetchall()
+    summary_values = [0,0,0]
+    for s in stops_on_route_result:
+      summary_values[s[0]] = s[1]
+    output[col] = summary_values
+
+  cursor.close()
+  app.state.db_pool.putconn(connection)
+  output["count"] = sum(output["flood_risk_category"])
+  return output
+
 @app.get("/available-routes")
 async def get_all_available_routes():
   connection = app.state.db_pool.getconn()
@@ -158,6 +217,9 @@ async def stop_features(city: str = ''):
           access_to_hospital_category,
           city,
           flood_risk_category,
+          heat_risk_category,
+          fire_risk_category,
+          agencies_serviced,
           id,
           job_access_category,
           string_to_array(routes_serviced, ',') as routes_serviced,
