@@ -7,7 +7,7 @@ import json
 import glob
 import pandas as pd
 
-us_state_codes = [
+US_STATE_CODES = [
     "AL", "AK", "AZ", "AR", "CA",
     "CO", "CT", "DE", "FL", "GA",
     "HI", "ID", "IL", "IN", "IA",
@@ -21,9 +21,9 @@ us_state_codes = [
     "PR", "DC"
 ]
 
-def get_LODES(config, state_code):
+def get_LODES_state(config, state_code):
     """
-    Downloads LODES data for specified city
+    Downloads LODES (main and aux) data for specified state
     
     Returns
     ----------
@@ -45,20 +45,37 @@ def get_LODES(config, state_code):
 
             with gzip.open(path + file_names[i], 'r') as f_in, open(path + file_names[i][:-3], 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
+            
+            if i == 0:
+                print(f"Downloaded and extracted LODES data for {state_code}")
         except:
+            print(f"No LODES data available for {state_code}")
             continue
+
+def get_LODES(config, state_codes):
+    for state_code in state_codes:
+        get_LODES_state(config, state_code)
+
+def concatenate_LODES(config, state_codes):
+    dfs = []
+    for state_code in state_codes:
+        path = f"{config['base_path']}/national//LODES/{state_code}/*.csv"
+        dataframes = [pd.read_csv(file) for file in glob.glob(path)]
+        combined_dataframe = pd.concat(dataframes, ignore_index=True)
+        dfs.append(combined_dataframe)
+
+    return pd.concat(dfs)
 
 def main():
     parser = argparse.ArgumentParser("Get LODES")
     parser.add_argument("--config", required=True)
-    parser.add_argument("--city", required=True)
     
     opts = parser.parse_args()
     
     with open(opts.config) as f:
         config = json.load(f)
 
-    get_LODES(config, opts.city)
+    get_LODES(config, US_STATE_CODES)
     print("LODES data written and unzipped") 
     
 if __name__ == "__main__":
