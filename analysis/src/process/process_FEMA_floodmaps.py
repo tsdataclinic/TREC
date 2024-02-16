@@ -22,6 +22,23 @@ def find_largest_file(directory):
 
     return largest_file
 
+def read_fema_file(config, city_key):
+    base_path = config["base_path"]
+    FEMA_file_prefix = config[city_key]["FEMA_file_name"]
+    city_path = f"{base_path}/cities/{city_key}"
+    zip_path = f"{base_path}/national/floodmaps/{FEMA_file_prefix}.zip"
+    extracted_folder_path = f"{city_path}/floodmaps/{FEMA_file_prefix}"
+    gdb_folder_path = f"{extracted_folder_path}/{FEMA_file_prefix}.gdb"
+
+    if not os.path.exists(extracted_folder_path):
+        extract_zip_file(zip_path, extracted_folder_path)
+
+    gdb_table_to_read = find_largest_file(gdb_folder_path)
+    FEMA_flood = geopd.read_file(gdb_table_to_read)
+
+    return FEMA_flood
+
+
 def process_floodmap(config, city_key):
     base_path = config["base_path"]
     FEMA_file_prefix = config[city_key]["FEMA_file_name"]
