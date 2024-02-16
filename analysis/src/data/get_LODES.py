@@ -4,34 +4,49 @@ import shutil
 import argparse
 import os
 import json
+import glob
+import pandas as pd
 
+us_state_codes = [
+    "AL", "AK", "AZ", "AR", "CA",
+    "CO", "CT", "DE", "FL", "GA",
+    "HI", "ID", "IL", "IN", "IA",
+    "KS", "KY", "LA", "ME", "MD",
+    "MA", "MI", "MN", "MS", "MO",
+    "MT", "NE", "NV", "NH", "NJ",
+    "NM", "NY", "NC", "ND", "OH",
+    "OK", "OR", "PA", "RI", "SC",
+    "SD", "TN", "TX", "UT", "VT",
+    "VA", "WA", "WV", "WI", "WY",
+    "PR", "DC"
+]
 
-def get_LODES(config, city_key):
+def get_LODES(config, state_code):
     """
-    Computes areally interpolated sums total number of people working inside supplied polygons
+    Downloads LODES data for specified city
     
-    Parameters
-    ----------
-    area_folder_name: str
-        Name of folder to save in e.g. 'nyc', 'hamptom_roads' 
-    state: str
-        Lowercase two letter state code e.g.
     Returns
     ----------
     Writes and unzips LODES file for speicified state
     """
-    path = f"{config['base_path']}/cities/{city_key}/census/LODES/"
-    state = config[city_key]['state']
-    file_name = state + "_od_main_JT01_2020.csv.gz"
-    url = "https://lehd.ces.census.gov/data/lodes/LODES8/" + state.lower() + "/od/" + state.lower() + "_od_main_JT01_2020.csv.gz"
+    path = f"{config['base_path']}/national//LODES/{state_code}/"
+
+    file_names =  [state_code + "_od_main_JT00_2021.csv.gz", state_code + "_od_aux_JT00_2021.csv.gz"]
+
+    urls = ["https://lehd.ces.census.gov/data/lodes/LODES8/" + state_code.lower() + "/od/" + state_code.lower() + "_od_main_JT00_2021.csv.gz",
+            "https://lehd.ces.census.gov/data/lodes/LODES8/" + state_code.lower() + "/od/" + state_code.lower() + "_od_aux_JT00_2021.csv.gz"]
 
     if not os.path.isdir(path):
         os.makedirs(path)
-    
-    urllib.request.urlretrieve(url, path + file_name)
 
-    with gzip.open(path + file_name, 'r') as f_in, open(path + file_name[:-3], 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
+    for i in [0,1]:
+        try:
+            urllib.request.urlretrieve(urls[i], path + file_names[i])
+
+            with gzip.open(path + file_names[i], 'r') as f_in, open(path + file_names[i][:-3], 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        except:
+            continue
 
 def main():
     parser = argparse.ArgumentParser("Get LODES")
