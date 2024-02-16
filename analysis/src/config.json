@@ -4,11 +4,12 @@
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
         "fsf_climate_risk" : {
-            "flood":"/home/data/test/national/fsf_flood_tract_summary.csv",
-            "fire":"/home/data/test/national/fsf_fire_tract_summary.csv",
-            "heat":"/home/data/test/national/fsf_heat_tract_summary.csv"
+            "flood":"fsf_flood_tract_summary.csv",
+            "fire":"fsf_fire_tract_summary.csv",
+            "heat":"fsf_heat_tract_summary.csv"
         },
-        "svi_path":"/home/data/test/national/SVI2020_US.csv"
+        "svi_path":"SVI2020_US.csv",
+        "msa_csa_crosswalk": "qcew-county-msa-csa-crosswalk-csv.csv"
     },
     
     "nyc": 
