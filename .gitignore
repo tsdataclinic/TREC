@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 .DS_Store
+config_local.json
 ###### create react-app 
 
 # dependencies
