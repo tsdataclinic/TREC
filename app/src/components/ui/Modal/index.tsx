@@ -97,7 +97,7 @@ export default function Modal({
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <StyledOverlay />
-        <StyledModalContent className={`w-3/4 md:w-1/4 top-1/2 left-1/2 ${isCentered ? `md:top-1/2 md:left-1/2` : `md:top-3/4 md:left-96`}`}>
+        <StyledModalContent className={`w-3/4 md:w-4/12 top-1/2 left-1/2 ${isCentered ? `md:top-1/2 md:left-1/2` : `md:top-3/4 md:left-1/4`}`}>
           <div className="p-6 space-y-4">
           <StyledModalTitle className="text-xl text-slate-800">
             {title}
