@@ -14,15 +14,15 @@ def get_raw_data(config, msa_id):
 
 
     print("Getting points of interest data") 
-    # get_poi_data(config)
+    get_poi_data(config)
     print("Getting Census geographies") 
     # get_census(config, msa_id)
     print("Getting Transit feeds") 
     # get_transit_feeds(config, msa_id)
-    print("Getting LODES data") 
+    # print("Getting LODES data") 
     # get_LODES(config, msa_id)
     print("Getting OSM data") 
-    get_osm_data(config, msa_id)
+    # get_osm_data(config, msa_id)
 
 def main():
     parser = argparse.ArgumentParser("Get all raw data")

@@ -132,7 +132,7 @@ def get_job_counts(config, msa_id):
 
     walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
     # lodes = pd.read_csv(LODES_PATH,dtype={'w_geocode':str,'h_geocode':str})
-    lodes = concatenate_LODES(config,state_codes=get_states_in_msa(msa_id))
+    lodes = concatenate_LODES(config,state_codes=get_states_in_msa(config,msa_id))
     block_groups = gpd.read_file(BLOCK_GROUPS_PATH)
     block_groups = block_groups.drop_duplicates()
     
@@ -176,7 +176,7 @@ def get_svi(config, msa_id):
 
     walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
     # lodes = pd.read_csv(LODES_PATH,dtype={'w_geocode':str,'h_geocode':str})
-    lodes = concatenate_LODES(config,state_codes=get_states_in_msa(msa_id))
+    lodes = concatenate_LODES(config,state_codes=get_states_in_msa(config,msa_id))
     tracts = gpd.read_file(TRACTS_PATH)
     tracts = tracts.drop_duplicates()
     svi = pd.read_csv(SVI_PATH,dtype={'FIPS':str})

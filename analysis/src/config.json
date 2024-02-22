@@ -2,7 +2,7 @@
     "transit_land_api_key": "",
     "national":
     {
-        "poi_url":"https://prd-tnm.s3.amazonaws.com/StagedProducts/GeographicNames/DomesticNames/DomesticNames_AllStates_Text.zip",
+        "poi_url":"https://prd-tnm.s3.amazonaws.com/StagedProducts/GeographicNames/Archive/MainDomestic/NationalFile.zip",
         "fsf_climate_risk" : {
             "flood":"fsf_flood_tract_summary.csv",
             "fire":"fsf_fire_tract_summary.csv",

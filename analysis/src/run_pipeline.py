@@ -45,8 +45,8 @@ def main():
     for msa_id in msa_ids:
         print(f"Running Data pipeline for: {msa_id}")
         # get_raw_data(config, msa_id)
-        process_data(config, msa_id)
-        # get_stops_features(config, msa_id, out=True)
+        # process_data(config, msa_id)
+        get_stops_features(config, msa_id, out=True)
     
     print(f"Combining the results")
     # concat_results(config, msa_ids)
