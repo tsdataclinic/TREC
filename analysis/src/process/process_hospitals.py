@@ -15,7 +15,7 @@ COLUMNS_TO_KEEP = ['FEATURE_NAME', 'FEATURE_CLASS',
                    'geometry']
 
 
-def subset_hospital_points(points, extent, county_list=[]):
+def subset_hospital_points(points, extent):
     """
     Subsets GNIS data for Hospital locations within given extent
     
@@ -40,28 +40,22 @@ def subset_hospital_points(points, extent, county_list=[]):
     hospitals_gdf = hospitals_gdf[~hospitals_gdf.FEATURE_NAME.str.contains('historical')]
 
     hospitals_gdf_extent = hospitals_gdf.sjoin(extent.to_crs(hospitals_gdf.crs), how='inner')
-    if len(county_list) > 0:
-        hospitals_gdf_extent = hospitals_gdf_extent[hospitals_gdf_extent.COUNTY_NUMERIC.isin(county_list)]
 
     return hospitals_gdf_extent
 
-def process_hospitals(config, city_key, out=False):
+def process_hospitals(config, msa_id, out=False):
     poi_path = f"{config['base_path']}/national/"
     poi_file = os.listdir(poi_path)[0]
     poi_data = pd.read_csv(poi_path+poi_file,sep='|')
 
-    geo_path = f"{config['base_path']}/cities/{city_key}/census/geo/tracts.geojson"
+    geo_path = f"{config['base_path']}/cities/{msa_id}/census/geo/tracts.geojson"
     extent = create_extent(geo_path)
-    if city_key == 'nyc':
-        county_list = NYC_COUNTY_CODES
-    else:
-        county_list = []
 
-    hospitals = subset_hospital_points(poi_data, extent,county_list)
+    hospitals = subset_hospital_points(poi_data, extent)
     hospitals = hospitals[COLUMNS_TO_KEEP]
-    hospitals['city'] = city_key
+    hospitals['city'] = msa_id
     if out == True:
-        out_path = f"{config['base_path']}/cities/{city_key}/results/"
+        out_path = f"{config['base_path']}/cities/{msa_id}/results/"
         if not os.path.isdir(out_path):
             os.makedirs(out_path)
 
@@ -82,7 +76,7 @@ def main():
         config = json.load(f)
 
     hospitals = process_hospitals(config, opts.city)
-    out_path = f"{config['base_path']}/cities/{city_key}/results/"
+    out_path = f"{config['base_path']}/cities/{msa_id}/results/"
     if not os.path.isdir(out_path):
         os.makedirs(out_path)
 

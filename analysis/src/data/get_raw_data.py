@@ -10,31 +10,36 @@ import os
 import json
 
 
-def get_raw_data(config, city_key):
+def get_raw_data(config, msa_id):
 
-    CWD = os.getcwd()
-    with open(config) as f:
-        config_file = json.load(f)
 
     print("Getting points of interest data") 
-    get_poi_data(config_file)
-    print("Getting Transit feeds") 
-    get_transit_feeds(config_file, city_key)
+    # get_poi_data(config)
     print("Getting Census geographies") 
-    get_census(config_file, city_key)
+    # get_census(config, msa_id)
+    print("Getting Transit feeds") 
+    # get_transit_feeds(config, msa_id)
     print("Getting LODES data") 
-    get_LODES(config_file, city_key)
+    # get_LODES(config, msa_id)
     print("Getting OSM data") 
-    get_osm_data(config_file, city_key)
+    get_osm_data(config, msa_id)
 
 def main():
     parser = argparse.ArgumentParser("Get all raw data")
     parser.add_argument("--config", required=True)
-    parser.add_argument("--city", required=True)
+    parser.add_argument("--city", default=False, required=False)
     
     opts = parser.parse_args()
+    with open(opts.config) as f:
+        config = json.load(f)
 
-    get_raw_data(opts.config, opts.city)
+    if opts.city:
+        msa_ids = str.split(opts.city,",")
+    else: 
+        msa_ids = config["MSA"]
+    
+    for msa_id in msa_ids:
+        get_raw_data(config, msa_id)
     
     
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ def get_LODES_state(config, state_code):
     ----------
     Writes and unzips LODES file for speicified state
     """
-    path = f"{config['base_path']}/national//LODES/{state_code}/"
+    path = f"{config['base_path']}/national/LODES/{state_code}/"
 
     file_names =  [state_code + "_od_main_JT00_2021.csv.gz", state_code + "_od_aux_JT00_2021.csv.gz"]
 
@@ -59,7 +59,7 @@ def get_LODES(config, state_codes):
 def concatenate_LODES(config, state_codes):
     dfs = []
     for state_code in state_codes:
-        path = f"{config['base_path']}/national//LODES/{state_code}/*.csv"
+        path = f"{config['base_path']}/national/LODES/{state_code}/*.csv"
         dataframes = [pd.read_csv(file) for file in glob.glob(path)]
         combined_dataframe = pd.concat(dataframes, ignore_index=True)
         dfs.append(combined_dataframe)

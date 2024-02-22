@@ -1,5 +1,5 @@
 {   "base_path": "/home/data/test",
-    "transit_land_api_key": "",
+    "transit_land_api_key": "gQXW5VMAZXBevcrQLvkiSvGTiTf4ONQr",
     "national":
     {
         "poi_url":"https://geonames.usgs.gov/docs/stategaz/NationalFile.zip",
@@ -11,6 +11,9 @@
         "svi_path":"SVI2020_US.csv",
         "msa_csa_crosswalk": "qcew-county-msa-csa-crosswalk-csv.csv"
     },
+    "MSA":["C1382"],
+
+    "db_string":"postgresql://postgres:mypassword@ec2-54-204-255-78.compute-1.amazonaws.com:5438/trec",
     
     "nyc": 
     {

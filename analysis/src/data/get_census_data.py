@@ -8,18 +8,18 @@ import censusdis.data as ced
 from pandas import json_normalize
 import argparse
 
-def get_census(config, city_key):
+def get_census(config, msa_id):
     """
     Retreives census shapefiles for city based on msa codes supplied in config
     """
 
     base_path = config['base_path']
-    city_config = json_normalize(config[city_key])
-    msa_codes = city_config[city_config['city_code'] == city_key]['msa_code'].iloc[0]
+    # city_config = json_normalize(config[msa_id])
+    # msa_codes = city_config[city_config['city_code'] == msa_id]['msa_code'].iloc[0]
 
     # File Paths
-    path = f"{base_path}/cities/{city_key}/census/geo/"
-    msa_path = f"{base_path}/national/qcew-county-msa-csa-crosswalk-csv.csv"
+    path = f"{base_path}/cities/{msa_id}/census/geo/"
+    msa_path = f"{base_path}/national/{config['national']['msa_csa_crosswalk']}"
     tract_path = "tracts.geojson"
     tract_2010_path = "tracts_2010.geojson"
     block_group_path = "block_groups.geojson"    
@@ -28,7 +28,7 @@ def get_census(config, city_key):
         os.makedirs(path)
     
     all_msa = pd.read_csv(msa_path, encoding="ISO-8859-1")
-    selected_msa = all_msa[all_msa['MSA Code'].isin(msa_codes)]
+    selected_msa = all_msa[all_msa['MSA Code'] == msa_id]
     selected_msa_counties_five_digits = selected_msa['County Code'].astype(str).str.zfill(5)
     selected_msa_states = list(set(state[:2] for state in selected_msa_counties_five_digits))    
 

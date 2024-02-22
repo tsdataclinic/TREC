@@ -58,6 +58,7 @@ def make_stops(folder_path):
     # Final df
     trips_with_stops = trips_to_include.merge(stop_times)
     stops_with_trips = trips_with_stops.merge(stops).merge(routes_types)[["route_id", "stop_id", "route_type", "stop_name", "stop_lat", "stop_lon", "agency_id", "agency_name"]].drop_duplicates().reset_index(drop = True)
+    stops_with_trips = stops_with_trips[stops_with_trips.route_type=='Bus']
 
     # Add geometry
     stops_with_trips["geometry"] = geopd.points_from_xy(stops_with_trips.stop_lon, stops_with_trips.stop_lat, crs="EPSG:4326")
@@ -89,7 +90,7 @@ def tag_with_tracts(stops, tracts_path):
     return stops.overlay(tracts_2010.to_crs(stops.crs)).overlay(tracts_2020.to_crs(stops.crs))
         
 
-def process_stops(config, city_key, out=False):
+def process_stops(config, msa_id, out=False):
     """
     Takes list of paths containing (potentially) multiple GTFS feed folders and, for each such folder, applies make_stops() and concatenates the result into full table
     
@@ -102,17 +103,17 @@ def process_stops(config, city_key, out=False):
     DataFrame combining stops from all feeds
     """
     
-    base_path = f"{config['base_path']}/cities/{city_key}/transit_feeds/"
+    base_path = f"{config['base_path']}/cities/{msa_id}/transit_feeds/"
     feeds = [base_path + feed for feed in os.listdir(base_path) if os.path.isdir(base_path + feed)]
     
     feed_names = [f.split('/')[-1] for f in feeds]
-    feed_city_mapping = pd.DataFrame({'feed_name':feed_names,'city':city_key})
+    feed_city_mapping = pd.DataFrame({'feed_name':feed_names,'city':msa_id})
     stops_out = geopd.GeoDataFrame()
     
     for feed in feeds:
         print("Processing feed: " + feed)
         stops = make_stops(feed)
-        tract_path = f"{config['base_path']}/cities/{city_key}/census/geo/"
+        tract_path = f"{config['base_path']}/cities/{msa_id}/census/geo/"
         stops = tag_with_tracts(stops, tract_path)
         
         stops_out = pd.concat([stops_out, stops])
@@ -128,7 +129,7 @@ def process_stops(config, city_key, out=False):
     stops_out = stops_out.merge(agencies_list,how='left',on='stop_id')
     stops_out = stops_out.merge(agencies_name_list,how='left',on='stop_id')
 
-    stops_out['routes_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['routes_serviced']]
+    stops_out['routes_serviced_str'] = [','.join(map(str, list(set(l)))) for l in stops_out['routes_serviced']]
     stops_out['agency_ids_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['agency_ids_serviced']]
     stops_out['agencies_serviced'] = [','.join(map(str, list(set(l)))) for l in stops_out['agencies_serviced']]
 
@@ -138,7 +139,7 @@ def process_stops(config, city_key, out=False):
     stops_out = stops_out.merge(feed_city_mapping, how='left', on='feed_name')
 
     if out==True:
-        stops_path = f"{config['base_path']}/cities/{city_key}/stops.geojson"
+        stops_path = f"{config['base_path']}/cities/{msa_id}/stops.geojson"
 
         with open(stops_path, 'w') as file:
             file.write(stops_out.to_json())

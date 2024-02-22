@@ -22,10 +22,10 @@ def find_largest_file(directory):
 
     return largest_file
 
-def read_fema_file(config, city_key):
+def read_fema_file(config, msa_id):
     base_path = config["base_path"]
-    FEMA_file_prefix = config[city_key]["FEMA_file_name"]
-    city_path = f"{base_path}/cities/{city_key}"
+    FEMA_file_prefix = config[msa_id]["FEMA_file_name"]
+    city_path = f"{base_path}/cities/{msa_id}"
     zip_path = f"{base_path}/national/floodmaps/{FEMA_file_prefix}.zip"
     extracted_folder_path = f"{city_path}/floodmaps/{FEMA_file_prefix}"
     gdb_folder_path = f"{extracted_folder_path}/{FEMA_file_prefix}.gdb"
@@ -39,10 +39,10 @@ def read_fema_file(config, city_key):
     return FEMA_flood
 
 
-def process_floodmap(config, city_key):
+def process_floodmap(config, msa_id):
     base_path = config["base_path"]
-    FEMA_file_prefix = config[city_key]["FEMA_file_name"]
-    city_path = f"{base_path}/cities/{city_key}"
+    FEMA_file_prefix = config[msa_id]["FEMA_file_name"]
+    city_path = f"{base_path}/cities/{msa_id}"
     zip_path = f"{base_path}/national/floodmaps/{FEMA_file_prefix}.zip"
     extracted_folder_path = f"{city_path}/floodmaps/{FEMA_file_prefix}"
     gdb_folder_path = f"{extracted_folder_path}/{FEMA_file_prefix}.gdb"
@@ -63,11 +63,11 @@ def process_floodmap(config, city_key):
     out.to_file(f"{city_path}/floodmaps/processed_fema.geojson")
     print(f"Processed FEMA floodmap data written to: {city_path}/floodmaps/processed_fema.geojson") 
 
-def process_fema(config, city_key):
-    if "FEMA_file_name" in config.get(city_key, {}):
-        process_floodmap(config, city_key)
+def process_fema(config, msa_id):
+    if "FEMA_file_name" in config.get(msa_id, {}):
+        process_floodmap(config, msa_id)
     else:
-        print(f"Skipping {city_key}: 'FEMA_file_name' not found in config.")
+        print(f"Skipping {msa_id}: 'FEMA_file_name' not found in config.")
 
 
 def main():
@@ -79,9 +79,9 @@ def main():
 
     with open(opts.config) as f:
         config = json.load(f)
-    city_key = opts.city
+    msa_id = opts.city
 
-    process_fema(config, city_key)
+    process_fema(config, msa_id)
 
     
 if __name__ == "__main__":

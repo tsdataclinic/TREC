@@ -33,14 +33,13 @@ def get_walk_graph(geo_file_path, network_type='walk'):
     G = ox.graph_from_polygon(extent['geometry'].iloc[0], network_type=network_type, retain_all=True)
     return G
 
-def get_osm_data(config, city_key):
-    extent_path = f"{config['base_path']}/cities/{city_key}/census/geo/tracts.geojson"
-    out_path = f"{config['base_path']}/cities/{city_key}/osm/"
+def get_osm_data(config, msa_id):
+    extent_path = f"{config['base_path']}/cities/{msa_id}/census/geo/tracts.geojson"
+    out_path = f"{config['base_path']}/cities/{msa_id}/osm/"
     
     if not os.path.isdir(out_path):
         os.makedirs(out_path)
 
-    
     G = get_walk_graph(extent_path)
     graph = ox.project_graph(G, to_crs='epsg:4326')
     print("Graph created. Writing it") 
