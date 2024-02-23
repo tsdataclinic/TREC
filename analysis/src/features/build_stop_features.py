@@ -171,7 +171,7 @@ def get_svi(config, msa_id):
     
     TRANSIT_WALKSHED_PATH =  f"{config['base_path']}/cities/{msa_id}/osm/walksheds/transit_walkshed.geojson"
     TRACTS_PATH = f"{config['base_path']}/cities/{msa_id}/census/geo/tracts.geojson"
-    LODES_PATH = f"{config['base_path']}/cities/{msa_id}/census/LODES/{config[msa_id]['state']}_od_main_JT01_2020.csv"
+    # LODES_PATH = f"{config['base_path']}/cities/{msa_id}/census/LODES/{config[msa_id]['state']}_od_main_JT01_2020.csv"
     SVI_PATH = f"{config['base_path']}/national/SVI2020_US.csv"
 
     walksheds = gpd.read_file(TRANSIT_WALKSHED_PATH)
