@@ -18,7 +18,7 @@ def get_msa_file(config):
     msa_file = config['national']['msa_csa_crosswalk']
     msa_path = f"{base_path}/national/{msa_file}"
     msa_crosswalk = pd.read_csv(msa_path, encoding="ISO-8859-1")
-    msa_crosswalk = msa_crosswalk['County Code'].astype(str).str.zfill(5)
+    msa_crosswalk['County Code'] = msa_crosswalk['County Code'].astype(str).str.zfill(5)
     return msa_crosswalk
 
 
