@@ -64,7 +64,11 @@ def concatenate_LODES(config, state_codes):
         combined_dataframe = pd.concat(dataframes, ignore_index=True)
         dfs.append(combined_dataframe)
 
-    return pd.concat(dfs)
+    lodes = pd.concat(dfs)
+    lodes['h_geocode'] = lodes['h_geocode'].astype(str).str.zfill(15)
+    lodes['w_geocode'] = lodes['w_geocode'].astype(str).str.zfill(15)
+    
+    return lodes
 
 def main():
     parser = argparse.ArgumentParser("Get LODES")
