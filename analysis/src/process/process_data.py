@@ -9,7 +9,7 @@ import argparse
 
 def process_data(config, msa_id):
     print("Processing Stops") 
-    # process_stops(config,msa_id,out=True)
+    process_stops(config,msa_id,out=True)
     print("Processing Hospitals") 
     process_hospitals(config, msa_id,out=True)
     print("Processing Walksheds") 
