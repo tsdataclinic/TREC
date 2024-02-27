@@ -143,8 +143,8 @@ function ContextPane({
         </div>
         <hr />
         <div className="text-lg flex justify-between">
-          <b>Transit Lines</b>
-          {/* <button onClick={() => setSelectedRoutes([])}>Reset</button> */}
+          <b>Filter Transit Lines</b>
+          <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
         {selectedRoutes.length > 0 ? (
           <div className="grid grid-cols-4 px-3 gap-1">
@@ -199,7 +199,9 @@ function ContextPane({
                                       }
                                       setSelectedRoutes(newRoutes);
                                     }}
-                                    disabled={true}
+                                    disabled={selectedRoutes.length > 1 && !selectedRoutes
+                                      .map(r => r.routeServiced)
+                                      .includes(route_serviced)}
                                     checked={selectedRoutes
                                       .map(r => r.routeServiced)
                                       .includes(route_serviced)}

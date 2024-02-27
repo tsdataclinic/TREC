@@ -12,6 +12,7 @@ import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
 import { useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
+import { useRemoteRouteFilter } from '../hooks/useRemoteRouteFilter';
 import usePrevious from '../hooks/usePrevious';
 import { useRemoteRouteSummary } from '../hooks/useRemoteRouteSummary';
 import Modal from './ui/Modal';
@@ -169,6 +170,7 @@ export default function MainPage(): JSX.Element {
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
   let remoteLayers = useRemoteLayers(layers, selectedCity);
+  let {data: remoteSelectedRoutes, status: remoteRouteFilterStatus } = useRemoteRouteFilter(selectedRoutes);
   let {data: routeSummaryNew, status} = useRemoteRouteSummary(detailedRoutes.city, detailedRoutes.routeServiced);
 
   let sourceLayerConfigs = useSourceLayerConfigs(
@@ -196,23 +198,13 @@ export default function MainPage(): JSX.Element {
             ]
           ]),
 
-        ...(selectedRoutes.length > 0
+        ...(selectedRoutes.length > 0 && remoteRouteFilterStatus === 'success'
           ? [
               [
-                'any',
-                ...selectedRoutes.map(selectedRoute => [
-                  'all',
-                  ['==', ['get', 'city'], selectedRoute.city],
-                  ['==', ['get', 'route_type'], selectedRoute.routeType],
-                  // ['in'] expression doesn't work properly in a comma-separated list, so used 'index-of' instead
-                  [
-                    'in',
-                    selectedRoute.routeServiced,
-                    ['get', 'routes_serviced'],
-                  ],
-                  // ['>=', ['index-of', selectedRoute.routeServiced, ['get', 'routes_serviced']], 0],
-                ]),
-              ],
+                "in",
+                ["get", "stop_id"],
+                ["literal", remoteSelectedRoutes]
+              ]
             ]
           : []),
       ],
