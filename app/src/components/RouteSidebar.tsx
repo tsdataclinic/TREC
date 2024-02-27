@@ -45,9 +45,9 @@ function RouteSummaryPane({
                     {routeSummary?.count}
                 </b>
             </div>
-            <BarChart label='Flood Risk' data={status === 'success' ? routeSummary.flood_risk_category : [0,0,0]}></BarChart>
-            <BarChart label='Heat Risk' data={status === 'success' ? routeSummary.heat_risk_category : [0,0,0]}></BarChart>
-            <BarChart label='Fire Risk' data={status === 'success' ? routeSummary.fire_risk_category : [0,0,0]}></BarChart>
+            <BarChart label='Flood Risk' data={status === 'success' ? routeSummary.flood_risk_category_local : [0,0,0]}></BarChart>
+            <BarChart label='Heat Risk' data={status === 'success' ? routeSummary.heat_risk_category_local : [0,0,0]}></BarChart>
+            <BarChart label='Fire Risk' data={status === 'success' ? routeSummary.fire_risk_category_national : [0,0,0]}></BarChart>
             <BarChart label='Access to Hospitals' data={status === 'success' ? routeSummary.access_to_hospital_category : [0,0,0]}></BarChart>
             <BarChart label='Access to Jobs' data={status === 'success' ? routeSummary.job_access_category : [0,0,0]}></BarChart>
             <BarChart label='Vulnerable workers' data={status === 'success' ? routeSummary.worker_vulnerability_category : [0,0,0]}></BarChart>

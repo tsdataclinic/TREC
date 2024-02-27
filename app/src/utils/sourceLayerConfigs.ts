@@ -37,9 +37,9 @@ export function useSourceLayerConfigs(
     output = {
       'Transit Stops': [
         {
-          sourceId: 'stop_features',
-          sourceLayer: 'stop_features',
-          layerId: 'stop_features',
+          sourceId: 'stop_features_new',
+          sourceLayer: 'stop_features_new',
+          layerId: 'stop_features_new',
           layerType: 'circle',
           layoutProperties: [],
           paintProperties: [
@@ -121,9 +121,9 @@ export function useSourceLayerConfigs(
       ],
       Hospitals: [
         {
-          sourceId: 'hospitals',
-          sourceLayer: 'hospitals',
-          layerId: 'hospitals',
+          sourceId: 'hospitals_new',
+          sourceLayer: 'hospitals_new',
+          layerId: 'hospitals_new',
           layerType: 'symbol',
           layoutProperties: [
             {

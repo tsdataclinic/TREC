@@ -51,7 +51,7 @@ function ContextPane({
             setSelectedCity(e.value as Cities);
           }}
           className="text-2xl"
-          defaultValue={'New York City'}
+          defaultValue={'San Francisco'}
           options={cities ? cities.map(r => ({value: r.display_name, label: r.display_name})) : []}
         />
       </div>
