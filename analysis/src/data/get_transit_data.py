@@ -34,7 +34,7 @@ def get_feeds_in_msa(minx,miny,maxx,maxy,config):
         w = maxy-miny
         fa = get_feeds_in_msa(minx, miny, maxx-l/2, maxy-w/2,config)
         fb = get_feeds_in_msa(minx+l/2, miny, maxx, maxy-w/2,config)
-        fc = get_feeds_in_msa(minx, miny+w/2, maxx-l/2, maxy-w/2,config)
+        fc = get_feeds_in_msa(minx, miny+w/2, maxx-l/2, maxy,config)
         fd = get_feeds_in_msa(minx+l/2, miny+w/2, maxx, maxy,config)
         feeds_df = pd.concat([fa,fb,fc,fd])
     else:
