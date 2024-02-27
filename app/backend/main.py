@@ -199,8 +199,6 @@ async def get_all_cities():
     GROUP BY city
   """
 
-        SELECT
-            city,
   cursor.execute(city_query)
   cities = [{
     'city': r[0],
