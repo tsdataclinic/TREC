@@ -49,9 +49,9 @@ export const PROPERTY_LABELS: Record<string, string> = {
   access_to_hospital_category: 'Access to Hospital',
   job_access_category: 'Access to Jobs',
   worker_vulnerability_category: 'Vulnerable workers',
-  flood_risk_category: 'Flood Risk',
-  heat_risk_category: 'Heat Risk',
-  fire_risk_category: 'Fire Risk',
+  flood_risk_category_local: 'Flood Risk',
+  heat_risk_category_local: 'Heat Risk',
+  fire_risk_category_national: 'Fire Risk',
 };
 
 // TODO - use reducer
@@ -59,16 +59,16 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
   '1': {
     id: 1,
     layerName: 'Transit Stops',
-    tileURL: `${BACKEND_TILESERVER_URI}/stop_features`,
-    sourceLayer: 'stop_features',
+    tileURL: `${BACKEND_TILESERVER_URI}/stop_features_new`,
+    sourceLayer: 'stop_features_new',
     isVisible: true,
     hideToggle: true,
   },
   '2': {
     id: 2,
     layerName: 'Hospitals',
-    tileURL: `${BACKEND_TILESERVER_URI}/hospitals`,
-    sourceLayer: 'hospitals',
+    tileURL: `${BACKEND_TILESERVER_URI}/hospitals_new`,
+    sourceLayer: 'hospitals_new',
     isVisible: true,
     hideToggle: false,
   },
@@ -139,21 +139,22 @@ export default function MainPage(): JSX.Element {
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       'flood_risk_category',
-      'fire_risk_category',
-      'heat_risk_category',
+      'flood_risk_category_local',
+      'fire_risk_category_national',
+      'heat_risk_category_local',
       'access_to_hospital_category',
       'job_access_category',
       'worker_vulnerability_category',
     ]),
   );
   const [selectedProperties, setSelectedProperties] = useState<Array<string>>([
-    'flood_risk_category',
+    'flood_risk_category_local',
     'access_to_hospital_category',
   ]);
   const [filters, setFilters] = useState<Record<string, any>>({
-    flood_risk_category: [0, 2],
-    fire_risk_category: [0, 2],
-    heat_risk_category: [0, 2],
+    flood_risk_category_local: [0, 2],
+    fire_risk_category_national: [0, 2],
+    heat_risk_category_local: [0, 2],
     access_to_hospital_category: [0, 2],
     job_access_category: [0, 2],
     worker_vulnerability_category: [0, 2],
@@ -176,6 +177,7 @@ export default function MainPage(): JSX.Element {
   let sourceLayerConfigs = useSourceLayerConfigs(
     selectedProperties,
     // TODO - generate mapbox expressions inside hook body or in another function
+
     [
       [
         'all',

@@ -89,26 +89,26 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
       <dl className="space-y-1">
         <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
                      city={properties.city} route_type={properties.route_type}
-                     routes_serviced={properties.routes_serviced}></DataRowLink>
-        <DataRow label={PROPERTY_LABELS['flood_risk_category']}>
+                     routes_serviced={properties.routes_serviced_str}></DataRowLink>
+        <DataRow label={PROPERTY_LABELS['flood_risk_category_local']}>
           <RiskSquares
             color="blue"
             maxRisk={2}
-            riskLevel={properties['flood_risk_category']}
+            riskLevel={properties['flood_risk_category_local']}
           />
         </DataRow>
-        <DataRow label={PROPERTY_LABELS['heat_risk_category']}>
+        <DataRow label={PROPERTY_LABELS['heat_risk_category_local']}>
           <RiskSquares
             color="blue"
             maxRisk={2}
-            riskLevel={properties['heat_risk_category']}
+            riskLevel={properties['heat_risk_category_local']}
           />
         </DataRow>
-        <DataRow label={PROPERTY_LABELS['fire_risk_category']}>
+        <DataRow label={PROPERTY_LABELS['fire_risk_category_national']}>
           <RiskSquares
             color="blue"
             maxRisk={2}
-            riskLevel={properties['fire_risk_category']}
+            riskLevel={properties['fire_risk_category_national']}
           />
         </DataRow>
         <DataRow label={PROPERTY_LABELS['access_to_hospital_category']}>
