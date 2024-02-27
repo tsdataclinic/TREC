@@ -192,7 +192,7 @@ function ContextPane({
                                       }
                                       setSelectedRoutes(newRoutes);
                                     }}
-                                    disabled={selectedRoutes.length > 1 && !selectedRoutes
+                                    disabled={selectedRoutes.length > 2 && !selectedRoutes
                                       .map(r => r.routeServiced)
                                       .includes(route_serviced)}
                                     checked={selectedRoutes
