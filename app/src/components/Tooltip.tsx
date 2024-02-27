@@ -31,7 +31,7 @@ function DataRowLink(props: {
   let r_len = routes.length
   
   return (
-    <div className="w-full flex text-sm">
+    <div className="w-full flex text-sm flex-wrap">
       <dt className="flex-1 pr-2">{label}</dt>
       {routes.map((r:string, i:number) => (<dd className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs" key={i} onClick={()=>setDetailedRoutes({city:city,routeType:route_type,routeServiced:r})}>{i< r_len-1 ? r+',' : r}</dd>)
       )}
