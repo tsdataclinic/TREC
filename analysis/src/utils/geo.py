@@ -21,7 +21,6 @@ def create_extent(geo_file_path):
     gdf['to_merge'] = 1
     
     gdf_extent = gdf.dissolve(by='to_merge')
-    gdf_extent = gdf_extent.to_crs(epgs=4326)
     
     return gdf_extent
 
