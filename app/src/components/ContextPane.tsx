@@ -4,6 +4,7 @@ import { faEye, faEyeSlash, faCircleInfo } from '@fortawesome/free-solid-svg-ico
 import Dropdown from './ui/Dropdown';
 import { Cities } from '../libs/cities';
 import { RouteRecord } from '../hooks/useAvailableRoutes';
+import Select from './ui/Select';
 
 type Props = {
   availableProperties: Set<string>;
@@ -45,22 +46,14 @@ function ContextPane({
       className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:overflow-y-hidden sm:h-full sm:max-w-sm sm:w-1/5"
     >
       <div className="p-5 border-b border-b-slate-400">
-        <select
+        <Select
           onChange={e => {
-            setSelectedCity(e.target.value as Cities);
+            setSelectedCity(e.value as Cities);
           }}
           className="text-2xl"
           defaultValue={'New York City'}
-        >
-          {cities && cities.map(r => (
-            <option
-              key={r.city}
-              value={r.display_name}
-              selected={r.city === 'nyc'}>
-                {r.display_name}
-            </option>
-          ))}
-        </select>
+          options={cities ? cities.map(r => ({value: r.display_name, label: r.display_name})) : []}
+        />
       </div>
 
       <div className="px-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
