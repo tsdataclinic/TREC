@@ -176,6 +176,7 @@ function MapComponent({
         style: 'mapbox://styles/mapbox/light-v11',
         center: [-73.95, 40.72],
         zoom: 10,
+        // minZoom: 9.5,
         bearing: 0,
         pitch: 0,
         pitchWithRotate: false,
@@ -249,10 +250,16 @@ function MapComponent({
   }, [layers, paintLayer, previousSelectedCity, remoteLayers, selectedCity, setDetailedRoutes]);
 
   useEffect(() => {
-    if (map.current && center) {
-      map.current.setCenter(center);
+    if (map.current) {
+      // map.current.setZoom(7);
+      if (center) { 
+        map.current.setCenter(center);
+      }
+      // if (bounds) {
+      //   map.current.fitBounds(bounds);
+      // }
     }
-  }, [center]);
+  }, [center, bounds]);
 
   useEffect(() => {
     if (isMapLoaded && previousSelectedCity) {
