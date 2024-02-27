@@ -1,7 +1,8 @@
 from enum import Enum
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
 from psycopg2 import pool
+from typing import Union, List
 from dotenv import load_dotenv
 import os
 
@@ -108,6 +109,36 @@ async def get_route_summary(city: str, route: str):
   output["count"] = sum(output["flood_risk_category"])
   return output
 
+@app.get("/stops-on-route")
+async def stops_on_route(cities: Union[List[str], None] = Query(default=None), routes: Union[List[str], None] = Query(default=None)):
+  connection = app.state.db_pool.getconn()
+  cursor = connection.cursor()
+
+  stops_query = f"""
+    SELECT
+      stop_id,
+      routes_serviced
+    FROM public.stop_features 
+    WHERE
+      '{routes[0]}'::text = ANY(string_to_array(routes_serviced, ','))
+      AND 
+      '{cities[0]}' = city
+  """
+
+  for i in range(1, len(cities)):
+    stops_query += f"""
+      OR ('{routes[i]}'::text = ANY(string_to_array(routes_serviced, ',')) AND '{cities[i]}' = city)
+    """
+  
+  cursor.execute(stops_query)
+  routes_result = cursor.fetchall()
+  stops_result = [row[0] for row in routes_result]
+
+
+  cursor.close()
+  app.state.db_pool.putconn(connection)
+  return stops_result
+
 @app.get("/available-routes")
 async def get_all_available_routes():
   connection = app.state.db_pool.getconn()
@@ -168,6 +199,8 @@ async def get_all_cities():
     GROUP BY city
   """
 
+        SELECT
+            city,
   cursor.execute(city_query)
   cities = [{
     'city': r[0],
