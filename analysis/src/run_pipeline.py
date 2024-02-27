@@ -1,14 +1,15 @@
 import sys 
 sys.path.append('../')
-from data.get_raw_data import get_raw_data
+from data.get_raw_data import get_raw_data, get_national_data
 from process.process_data import process_data
 from features.build_stop_features import get_stops_features
-from data.get_raw_data import get_national_data
+from utils.db import drop_table
 import os
 import json
 import argparse
 import pandas as pd
 import geopandas as gpd
+
 
 def concat_results(config, msa_ids):
     hospitals = []
@@ -46,18 +47,27 @@ def main():
 
     if opts.get_national:
         get_national_data(config)
+
+    if opts.overwrite:
+        print("Dropping tables")
+        drop_table(config['db_string'],'stop_features_new')
+        drop_table(config['db_string'],'hospitals_new')
+        drop_table(config['db_string'],'cities')
         
     for msa_id in msa_ids:
-        output_path = f"{config['base_path']}/cities/{msa_id}/results/stop_features.geojson"
-        if os.path.exists(output_path) and opts.overwrite:
-            print(f"Running Data pipeline for: {msa_id}")
-            get_raw_data(config, msa_id)
-            process_data(config, msa_id)
-            get_stops_features(config, msa_id, out=True)
-        else:
-            print(f"Skipping {msa_id}: stop_features already exists")
+        try:
+            output_path = f"{config['base_path']}/cities/{msa_id}/results/stop_features.geojson"
+            if not os.path.exists(output_path) or opts.overwrite:
+                print(f"Running Data pipeline for: {msa_id}")
+                get_raw_data(config, msa_id)
+                process_data(config, msa_id)
+                get_stops_features(config, msa_id, out=True)
+            else:
+                print(f"Skipping {msa_id}: stop_features already exists")
+        except Exception as e:
+            print(e)
     
-    print(f"Combining the results")
+    # print(f"Combining the results")
     # concat_results(config, msa_ids)
 
 

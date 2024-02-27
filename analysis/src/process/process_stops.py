@@ -111,12 +111,15 @@ def process_stops(config, msa_id, out=False):
     stops_out = geopd.GeoDataFrame()
     
     for feed in feeds:
-        print("Processing feed: " + feed)
-        stops = make_stops(feed)
-        tract_path = f"{config['base_path']}/cities/{msa_id}/census/geo/"
-        stops = tag_with_tracts(stops, tract_path)
-        
-        stops_out = pd.concat([stops_out, stops])
+        try:
+            print("Processing feed: " + feed)
+            stops = make_stops(feed)
+            tract_path = f"{config['base_path']}/cities/{msa_id}/census/geo/"
+            stops = tag_with_tracts(stops, tract_path)
+            
+            stops_out = pd.concat([stops_out, stops])
+        except:
+            pass
     
     stops_out = stops_out.reset_index(drop=True)
     

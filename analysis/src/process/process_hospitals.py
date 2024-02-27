@@ -7,6 +7,7 @@ from shapely.geometry import Point, LineString, Polygon, MultiLineString
 import sys
 sys.path.append('../')
 from utils.geo import create_extent
+from utils.db import write_table_to_db
 import os
 import json
 
@@ -61,6 +62,9 @@ def process_hospitals(config, msa_id, out=False):
 
         hospitals.to_file(out_path+"hospitals.geojson", driver='GeoJSON')
         print("Hospitals data written to: " + out_path) 
+
+        if config["db_string"] != "":
+            write_table_to_db(config["db_string"],hospitals,'hospitals_new')
     else:
         return hospitals
 
@@ -76,7 +80,7 @@ def main():
         config = json.load(f)
 
     hospitals = process_hospitals(config, opts.city)
-    out_path = f"{config['base_path']}/cities/{msa_id}/results/"
+    out_path = f"{config['base_path']}/cities/{opts.city}/results/"
     if not os.path.isdir(out_path):
         os.makedirs(out_path)
 

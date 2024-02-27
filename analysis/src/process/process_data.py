@@ -4,10 +4,13 @@ from process.process_stops import process_stops
 from process.process_hospitals import process_hospitals
 from process.process_walksheds import process_walksheds
 from process.process_FEMA_floodmaps import process_fema
+from process.process_cities import create_cities_metadata
 import json
 import argparse
 
 def process_data(config, msa_id):
+    print("Processing City metadata")
+    create_cities_metadata(config, msa_id)
     print("Processing Stops") 
     process_stops(config,msa_id,out=True)
     print("Processing Hospitals") 

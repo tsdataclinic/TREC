@@ -11,6 +11,7 @@ from process.process_fsf import process_fsf
 from features.count_jobs import count_jobs
 from features.jobs_vulnerability import get_worker_svi
 from utils.crosswalks import get_states_in_msa
+from utils.db import write_table_to_db
 import json
 
 COLUMNS_TO_KEEP = ["stop_id", 
@@ -243,6 +244,10 @@ def get_stops_features(config, msa_id, out=False):
         print(f"Writing feature file to {out_path}")
         with open(out_path, 'w') as file:
             file.write(stops.to_json())
+
+        if config["db_string"] != "":
+            write_table_to_db(config["db_string"],stops,'stop_features_new')
+
     else:
         return stops
 

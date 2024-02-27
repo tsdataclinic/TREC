@@ -81,10 +81,14 @@ def get_transit_feeds(config, msa_id):
     feeds = feeds.dropna(subset=['onestop_id'])
     feeds = feeds[~feeds.onestop_id.isin(['f-9-flixbus','f-megabus~us','f-dr-peterpanbuslines',
                                                   'f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle',
-                                                  'f-d-groometransportation~us','f-dr-coachcompany~ma~us'
+                                                  'f-d-groometransportation~us','f-dr-coachcompany~ma~us',
                                                   'f-f-viarail~traindecharlevoix','f-brightline~trails',
-                                                  'f-drk-seastreak',
+                                                  'f-drk-seastreak','f-dr5x-wwwnicebuscom','f-drk-wwwshorelineeastcom',
+                                                  'f-academy~express~staten~island','f-fullington~trailways~ny',
+                                                  'f-trailways~nyp~ny','f-trailways~adp~ny','f-adirondack~trailways~adu',
+                                                  'f-adirondack~trailways~fab','f-catalina~express'
                                                   ])]
+    feeds = feeds.drop_duplicates()
     
     for i,row in feeds.iterrows():
         feed_url = f"https://transit.land/api/v2/rest/feeds/{row.onestop_id}/download_latest_feed_version?api_key={config['transit_land_api_key']}"
