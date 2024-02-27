@@ -92,7 +92,7 @@ def get_transit_feeds(config, msa_id):
     
     for i,row in feeds.iterrows():
         feed_url = f"https://transit.land/api/v2/rest/feeds/{row.onestop_id}/download_latest_feed_version?api_key={config['transit_land_api_key']}"
-        print(feed_url)
+        # print(feed_url)
         with urlopen(feed_url) as zipresp:
             print("Downloading from: " + feed_url + " as " + row.onestop_id)
             with ZipFile(BytesIO(zipresp.read())) as zfile:

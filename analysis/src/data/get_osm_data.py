@@ -40,11 +40,14 @@ def get_osm_data(config, msa_id):
     if not os.path.isdir(out_path):
         os.makedirs(out_path)
 
-    G = get_walk_graph(extent_path)
-    graph = ox.project_graph(G, to_crs='epsg:4326')
-    print("Graph created. Writing it") 
-    with open(out_path + "walk_graph.gpickle", 'wb') as f:
-        pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
+    if os.path.exists(out_path + "walk_graph.gpickle"):
+        pass
+    else:
+        G = get_walk_graph(extent_path)
+        graph = ox.project_graph(G, to_crs='epsg:4326')
+        print("Graph created. Writing it") 
+        with open(out_path + "walk_graph.gpickle", 'wb') as f:
+            pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
 
 def main():
     parser = argparse.ArgumentParser("OSM Graph builder")
