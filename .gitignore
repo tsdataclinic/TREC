@@ -166,3 +166,4 @@ analysis/notebooks/
 build.tar.gz
 
 *.csv
+*.sql
