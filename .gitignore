@@ -165,3 +165,4 @@ analysis/notebooks/
 /app/public/results/*/*
 build.tar.gz
 
+*.csv
