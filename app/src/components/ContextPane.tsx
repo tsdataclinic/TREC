@@ -44,7 +44,6 @@ function ContextPane({
       id="ContextPane"
       className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:overflow-y-hidden sm:h-full sm:max-w-sm sm:w-1/5"
     >
-      <div className="p-5 border-b border-b-slate-400">
       <div className="p-5 border-b border-b-slate-400 w-full flex flex-col items-center justify-between">
         <Select
           selectedCity={selectedCity}
