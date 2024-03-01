@@ -21,19 +21,31 @@ function DataRow(props: {
 
 function DataRowLink(props: {
   city: string;
+  msa_id: string;
   route_type:string;
   routes_serviced:string;
   label: string;
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 }): JSX.Element {
-  const { city, route_type, routes_serviced, label, setDetailedRoutes } = props;
+  const { msa_id, city, route_type, routes_serviced, label, setDetailedRoutes } = props;
   let routes = routes_serviced.split(',');
   let r_len = routes.length
   
   return (
     <div className="w-full flex text-sm flex-wrap">
       <dt className="flex-1 pr-2">{label}</dt>
-      {routes.map((r:string, i:number) => (<dd className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs" key={i} onClick={()=>setDetailedRoutes({city:city,routeType:route_type,routeServiced:r})}>{i< r_len-1 ? r+',' : r}</dd>)
+      {routes.map((r:string, i:number) => (
+        <dd
+          className="flex underline text-blue-600 hover:text-blue-800 visited:text-purple-600 text-xs"
+          key={i}
+          onClick={()=>setDetailedRoutes({
+            msa_id,
+            city,
+            routeType:route_type,
+            routeServiced:r
+          })}>
+            {i< r_len-1 ? r+',' : r}
+        </dd>)
       )}
       
     </div>
@@ -69,15 +81,22 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
     // render empty div if there are no properties
     return <div />;
   }
+  // debugger;
 
   return (
     <div id={`tooltip-${id}`} className="relative w-72 px-4 py-2">
       {/* show hospital or flooding details if there's a FEATURE_CLASS, Flooding_Category, Class property in the data */}
-      {properties['feature_class'] || properties['Flooding_Category'] || properties['CLASS'] ? 
+      {properties['FEATURE_CLASS'] || properties['FEATURE_NAME'] || properties['Flooding_Category'] || properties['CLASS'] ? 
         <div>
-          {properties['feature_name'] && <h3 className="font-bold text-base pb-2">{properties['feature_name']}</h3> }
+          {properties['FEATURE_NAME'] && <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3> }
           {properties['Flooding_Category'] && <h3 className="font-bold text-base pb-2">{properties['Flooding_Category']}</h3> }
           {properties['CLASS'] && <h3 className="font-bold text-base pb-2">{properties['CLASS']}</h3> }
+          <button
+            onClick={onDismiss}
+            className="absolute text-base font-xl -top-2.5 -right-2.5 hover:bg-slate-200 w-6 cursor-pointer transition-colors pb-0.5"
+          >
+            x
+      </button>
         </div>
       : 
       <>
@@ -87,9 +106,13 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
       </div>
       
       <dl className="space-y-1">
-        <DataRowLink label="Routes" setDetailedRoutes={setDetailedRoutes} 
-                     city={properties.city} route_type={properties.route_type}
-                     routes_serviced={properties.routes_serviced_str}></DataRowLink>
+        <DataRowLink
+          label="Routes"
+          setDetailedRoutes={setDetailedRoutes} 
+          city={properties.city}
+          msa_id={properties.msa_id}
+          route_type={properties.route_type}
+          routes_serviced={properties.routes_serviced_str} />
         <DataRow label={PROPERTY_LABELS['flood_risk_category_local']}>
           <RiskSquares
             color="blue"

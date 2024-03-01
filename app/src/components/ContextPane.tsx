@@ -1,10 +1,12 @@
 import { Layer, PROPERTY_LABELS, SelectedRoute } from './MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faCircleInfo, faArrowRotateLeft, faShuffle } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
 import { Cities } from '../libs/cities';
 import { RouteRecord } from '../hooks/useAvailableRoutes';
 import Select from './ui/Select';
+import { CityRecord } from '../hooks/useAvailableCities';
+import Button from './ui/Button';
 
 type Props = {
   availableProperties: Set<string>;
@@ -12,14 +14,10 @@ type Props = {
   selectedProperties: Array<string>;
   layers: Record<string, Layer>;
   updateLayer: (layer: Layer) => void;
-  cities: Array<{
-    "city": string,
-    "display_name": string,
-    "bbox": [[number, number], [number, number]],
-    "center": [number, number]
-  }> | undefined;
-  selectedCity: Cities;
-  setSelectedCity: React.Dispatch<React.SetStateAction<Cities>>;
+  cities: Array<CityRecord> | undefined;
+  availableCitiesLoadingStatus: string;
+  selectedCity: CityRecord;
+  setSelectedCity: React.Dispatch<React.SetStateAction<CityRecord>>;
   routes: RouteRecord[];
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
@@ -33,6 +31,7 @@ function ContextPane({
   selectedProperties,
   setSelectedProperties,
   cities,
+  availableCitiesLoadingStatus,
   selectedCity,
   setSelectedCity,
   routes,
@@ -46,20 +45,53 @@ function ContextPane({
       className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:overflow-y-hidden sm:h-full sm:max-w-sm sm:w-1/5"
     >
       <div className="p-5 border-b border-b-slate-400">
+      <div className="p-5 border-b border-b-slate-400 w-full flex flex-col items-center justify-between">
         <Select
+          selectedCity={selectedCity}
           onChange={e => {
-            setSelectedCity(e.value as Cities);
+            setSelectedCity(e);
           }}
-          className="text-2xl"
-          defaultValue={'San Francisco'}
-          options={cities ? cities.map(r => ({value: r.display_name, label: r.display_name})) : []}
+          className="text-xl w-full max-w-full block  whitespace-nowrap text-ellipsis"
+          defaultValue={'Jump to a city...'}
+          options={cities ?? []}
+          isLoading={availableCitiesLoadingStatus}
         />
+        <div className='flex flex-row w-full justify-evenly'>
+          <Button
+            onClick={() => {
+              if (cities) {
+                setSelectedCity(cities[Math.floor(Math.random()*cities.length)]);
+              }
+            }}
+            className="flex items-center px-5">
+            <FontAwesomeIcon
+              className=""
+              size="1x"
+              cursor={'pointer'}
+              icon={faShuffle}
+            />
+            <label>Random city</label>
+          </Button>
+          {/* <Button
+            onClick={() => {
+              // setSelectedCity(selectedCity);
+            }}
+            className="flex items-center px-5">
+            <FontAwesomeIcon
+              className=""
+              size="1x"
+              cursor={'pointer'}
+              icon={faArrowRotateLeft}
+            />
+            <label>Recenter city</label>
+          </Button> */}
+        </div>
       </div>
 
       <div className="px-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers)
-            .filter(layer => !layer.hideToggle && (layer.city === undefined || layer.city === selectedCity))
+            // .filter(layer => !layer.hideToggle && (layer.city === undefined || layer.city === selectedCity))
             .map(layer => {
               return (
                 <div className="space-x-2">
@@ -156,7 +188,7 @@ function ContextPane({
           <ul>
             {routes && 
               routes.map(route => {
-                if (route.display_name === selectedCity) {
+                if (route.msa_id === selectedCity?.msa_id) {
                   return <details key={route.city} className="pb-2">
                     <summary className="pb-1">{route.display_name} lines</summary>
                     {
@@ -178,6 +210,7 @@ function ContextPane({
                                       if (e.target.checked) {
                                         newRoutes.push({
                                           city: route.city,
+                                          msa_id: route.msa_id,
                                           routeType: route_type_obj.route_type,
                                           routeServiced: route_serviced,
                                         });

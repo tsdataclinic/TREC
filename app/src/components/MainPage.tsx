@@ -10,7 +10,7 @@ import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
 import { useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
-import { useAvailableCities } from '../hooks/useAvailableCities';
+import { CityRecord, useAvailableCities } from '../hooks/useAvailableCities';
 import { useAvailableRoutes } from '../hooks/useAvailableRoutes';
 import { useRemoteRouteFilter } from '../hooks/useRemoteRouteFilter';
 import usePrevious from '../hooks/usePrevious';
@@ -26,6 +26,7 @@ export type Layer = {
   sourceLayer?: string;
   layerURL?: string;
   tileURL?: string;
+  rasterURL?: string;
   isVisible: boolean;
   hideToggle: boolean;
   city?: Cities;
@@ -40,10 +41,18 @@ export type RemoteLayer = {
 };
 
 export type SelectedRoute = {
+  msa_id: string;
   city: string;
   routeType: string;
   routeServiced: string;
 };
+
+export const EMPTY_SELECTED_ROUTE = {
+  msa_id: '',
+  city: '',
+  routeType: '',
+  routeServiced: '',
+}
 
 export const PROPERTY_LABELS: Record<string, string> = {
   access_to_hospital_category: 'Access to Hospital',
@@ -51,7 +60,7 @@ export const PROPERTY_LABELS: Record<string, string> = {
   worker_vulnerability_category: 'Vulnerable workers',
   flood_risk_category_local: 'Flood Risk',
   heat_risk_category_local: 'Heat Risk',
-  fire_risk_category_national: 'Fire Risk',
+  fire_risk_category_national: 'Wildfire Risk',
 };
 
 // TODO - use reducer
@@ -71,74 +80,23 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     sourceLayer: 'hospitals_new',
     isVisible: true,
     hideToggle: false,
-  },
-  '3': {
-    id: 3,
-    layerName: '2050 Hampton Roads Floods (Projected)',
-    layerURL: 'mapbox://indraneel-tsdataclinic.9hi3xl8q',
-    isVisible: false,
-    sourceLayer: 'hr_2050_flood_zones',
-    hideToggle: false,
-    city: Cities.HamptonRoads,
-  },
-  '4': {
-    id: 4,
-    layerName: '2050 NYC Floods (Projected)',
-    layerURL: 'mapbox://indraneel-tsdataclinic.1ku89xc7',
-    isVisible: false,
-    sourceLayer: 'nyc_2050_flooding',
-    hideToggle: false,
-    city: Cities.NewYorkCity,
-  },
-  '5': {
-    id: 5,
-    layerName: 'Philadelphia Current FEMA Flood Layer',
-    layerURL: 'mapbox://indraneel-tsdataclinic.5b5bn5hs',
-    isVisible: false,
-    sourceLayer: 'phi_processed_fema',
-    hideToggle: false,
-    city: Cities.Philadelphia,
-  },
-  '6': {
-    id: 6,
-    layerName: 'New Orleans Current FEMA Flood Layer',
-    layerURL: 'mapbox://indraneel-tsdataclinic.6hr9lz8d',
-    isVisible: false,
-    sourceLayer: 'nola_processed_fema',
-    hideToggle: false,
-    city: Cities.NewOrleans,
-  },
-  '7': {
-    id: 7,
-    layerName: 'Pittsburgh Current FEMA Flood Layer',
-    layerURL: 'mapbox://indraneel-tsdataclinic.5pmuaism',
-    isVisible: false,
-    sourceLayer: 'pitt_processed_fema',
-    hideToggle: false,
-    city: Cities.Pittsburgh,
-  },
-  '8': {
-    id: 8,
-    layerName: 'SF Current FEMA Flood Layer',
-    layerURL: 'mapbox://indraneel-tsdataclinic.3c847icg',
-    isVisible: false,
-    sourceLayer: 'sf_processed_fema-125s1o',
-    hideToggle: false,
-    city: Cities.SanFrancisco,
-  },
+  }
 };
 
 
 export default function MainPage(): JSX.Element {
   const availableRoutes = useAvailableRoutes();
-  const availableCities = useAvailableCities();
-  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
+  const {data: availableCities, status: availableCitiesLoadingStatus} = useAvailableCities();
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
   const [isInstructionalModalOpen, setIsInstructionalModalOpen] = useState(false);
-  const [selectedCity, setSelectedCity] = useState<Cities>(Cities.NewYorkCity);
+  const [selectedCity, setSelectedCity] = useState<CityRecord>({
+    msa_id: '',
+    msa_name: '',
+    center: [0, 0]
+  });
   const previousSelectedCity = usePrevious(selectedCity);
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
-      'flood_risk_category',
       'flood_risk_category_local',
       'fire_risk_category_national',
       'heat_risk_category_local',
@@ -163,14 +121,9 @@ export default function MainPage(): JSX.Element {
   const [selectedRoutes, setSelectedRoutes] = useState<Array<SelectedRoute>>(
     [],
   );
-  const [detailedRoutes, setDetailedRoutes] = useState<SelectedRoute>({
-    city: '',
-    routeType: '',
-    routeServiced: '',
-  });
+  const [detailedRoutes, setDetailedRoutes] = useState<SelectedRoute>(EMPTY_SELECTED_ROUTE);
 
   const [layers, setLayers] = useState(AVAILABLE_LAYERS);
-  let remoteLayers = useRemoteLayers(layers, selectedCity);
   let {data: remoteSelectedRoutes, status: remoteRouteFilterStatus } = useRemoteRouteFilter(selectedRoutes);
   let {data: routeSummaryNew, status} = useRemoteRouteSummary(detailedRoutes.city, detailedRoutes.routeServiced);
 
@@ -247,6 +200,7 @@ export default function MainPage(): JSX.Element {
       />
       <ContextPane
         cities={availableCities}
+        availableCitiesLoadingStatus={availableCitiesLoadingStatus}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
         layers={layers}
@@ -269,10 +223,9 @@ export default function MainPage(): JSX.Element {
         />
       )}
       <MapComponent
-        center={availableCities && availableCities.find((region) => region.display_name === selectedCity)?.center}
-        bounds={availableCities && availableCities.find((region) => region.display_name === selectedCity)?.bbox}
+        center={availableCities && availableCities.find((region) => region.msa_id === selectedCity?.msa_id)?.center}
         layers={layers}
-        remoteLayers={remoteLayers}
+        // remoteLayers={remoteLayers}
         sourceLayerConfigs={sourceLayerConfigs}
         setDetailedRoutes={setDetailedRoutes}
         selectedCity={selectedCity}

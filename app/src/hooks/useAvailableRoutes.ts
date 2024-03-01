@@ -6,6 +6,7 @@ const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_
 export type RouteRecord = {
     city: string;
     display_name: string;
+    msa_id: string;
     route_types: Record<string, {
         route_type: string
         routes_serviced: Array<string>

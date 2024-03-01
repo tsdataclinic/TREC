@@ -1,4 +1,4 @@
-import {SelectedRoute } from './MainPage';
+import {EMPTY_SELECTED_ROUTE, SelectedRoute } from './MainPage';
 import * as IconType from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import BarChart from './ui/Chart'
@@ -26,7 +26,7 @@ function RouteSummaryPane({
             <div className="p-2 border-b border-b-slate-400">
                 <FontAwesomeIcon 
                     icon={IconType.faArrowLeft} 
-                    onClick={()=>{setDetailedRoutes({city:'',routeType:'',routeServiced:''})}}
+                    onClick={()=>{setDetailedRoutes(EMPTY_SELECTED_ROUTE)}}
                     className="text-base font-xl hover:bg-slate-200 cursor-pointer transition-colors pt-3"/>
                 <b className="pl-4 pt-2">
                     {status === 'loading' ? 'Loading...' : detailedRoutes.routeServiced}
@@ -47,7 +47,7 @@ function RouteSummaryPane({
             </div>
             <BarChart label='Flood Risk' data={status === 'success' ? routeSummary.flood_risk_category_local : [0,0,0]}></BarChart>
             <BarChart label='Heat Risk' data={status === 'success' ? routeSummary.heat_risk_category_local : [0,0,0]}></BarChart>
-            <BarChart label='Fire Risk' data={status === 'success' ? routeSummary.fire_risk_category_national : [0,0,0]}></BarChart>
+            <BarChart label='Wildfire Risk' data={status === 'success' ? routeSummary.fire_risk_category_national : [0,0,0]}></BarChart>
             <BarChart label='Access to Hospitals' data={status === 'success' ? routeSummary.access_to_hospital_category : [0,0,0]}></BarChart>
             <BarChart label='Access to Jobs' data={status === 'success' ? routeSummary.job_access_category : [0,0,0]}></BarChart>
             <BarChart label='Vulnerable workers' data={status === 'success' ? routeSummary.worker_vulnerability_category : [0,0,0]}></BarChart>

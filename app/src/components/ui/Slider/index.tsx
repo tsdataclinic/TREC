@@ -61,6 +61,7 @@ const StyledSliderTrack = styled(RadixSlider.Track)`
   &[data-orientation='vertical'] {
     height: 100%;
     width: 3px;
+    font-size: 12px;
 
     &:before {
       border-left: ${SLIDER_HEAD_SIZE}px solid transparent;
@@ -103,7 +104,7 @@ export default function Slider({
     'flex-col items-center': orientation === 'horizontal',
     'flex-row-reverse h-full items-center': orientation === 'vertical',
   });
-  const labelClassName = classNames('text-sm', {
+  const labelClassName = classNames('text-xs', {
     'transform -ml-12 -rotate-90 relative left-4': orientation === 'vertical',
   });
 

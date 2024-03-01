@@ -12,7 +12,7 @@ export const useRemoteRouteFilter = (selectedRoutes: Array<SelectedRoute>) : { d
 
             const params = new URLSearchParams();
             selectedRoutes.forEach((route) => {
-                params.append('cities', route.city); 
+                params.append('cities', route.msa_id); 
                 params.append('routes', route.routeServiced);
             });
 

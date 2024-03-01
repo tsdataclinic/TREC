@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
 import ReactSelect from 'react-select';
+import { CityRecord } from "../../../hooks/useAvailableCities";
 
 type Props = {
   children?: ReactNode;
   className?: string;
   onChange?: (e: any) => void;
   defaultValue: string,
-  options: Array<any>
+  options: Array<CityRecord>,
+  isLoading: string,
+  selectedCity: CityRecord
 };
 
 export default function Select({
@@ -14,18 +17,21 @@ export default function Select({
   className,
   onChange,
   defaultValue,
-  options
+  options,
+  isLoading,
+  selectedCity
 }: Props): JSX.Element {
 
   return (
     <ReactSelect
+        tabSelectsValue
         className={className}
         onChange={onChange}
-        isLoading={options.length === 0}
-        defaultValue={defaultValue}
-        defaultInputValue={defaultValue}
+        isLoading={isLoading === 'loading'}
         placeholder={defaultValue}
         options={options}
+        getOptionValue={(option) => option.msa_id}
+        getOptionLabel={(option) => option.msa_name}
      />
   );
 }
