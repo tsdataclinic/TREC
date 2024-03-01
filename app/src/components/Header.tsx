@@ -409,6 +409,7 @@ function Header(props: { isMobile: boolean; }) {
         isDropdownMenuOpen ?
         <div>
           <ButtonLink url="/about">About</ButtonLink>
+          <ButtonLink url="/methods">Methods</ButtonLink>
           <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
         </div>
         :
@@ -422,6 +423,7 @@ function Header(props: { isMobile: boolean; }) {
       <div className="flex">
         <div className='hidden sm:block'>
           <ButtonLink url="/about">About</ButtonLink>
+          <ButtonLink url="/methods">Methods</ButtonLink>
           <ModalLink modalContents={<LegalContents />}>Legal</ModalLink>
         </div>
         <div className='block sm:hidden'>
