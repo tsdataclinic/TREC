@@ -6,22 +6,22 @@ import { Layer, RemoteLayer, SelectedRoute } from './MainPage';
 import Tooltip from './Tooltip';
 import { SLConfigType } from '../utils/sourceLayerConfigs';
 import { Cities } from '../libs/cities';
+import { CityRecord } from '../hooks/useAvailableCities';
 
 const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_API_KEY ?? '';
 
 type MapProps = {
   layers: Record<string, Layer>;
-  remoteLayers: Array<RemoteLayer>;
+  remoteLayers?: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
-  selectedCity: Cities;
-  previousSelectedCity?: Cities;
+  selectedCity: CityRecord;
+  previousSelectedCity?: CityRecord;
   center?: [number, number];
   bounds?: [[number, number], [number, number]]
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
 
 function MapComponent({
-  remoteLayers,
   layers,
   sourceLayerConfigs,
   selectedCity,
@@ -37,13 +37,12 @@ function MapComponent({
   let [isMapLoaded, setIsMapLoaded] = useState(false);
 
   const paintLayer = useCallback(
-    (layer: Layer, remoteLayer: RemoteLayer,
-      selectedCity: string, previousSelectedCity: string) => {
+    (layer: Layer, selectedCity: CityRecord, previousSelectedCity: CityRecord) => {
       if (!map.current) {
         return;
       }
       // if a layer isn't visible, remove it
-      if (!layer.isVisible || remoteLayer.isLoading === true || previousSelectedCity !== selectedCity) {
+      if (!layer.isVisible ||  previousSelectedCity !== selectedCity) {
         // remove layers
         sourceLayerConfigs[layer.layerName].forEach(
           (slConfig: SLConfigType) => {
@@ -64,7 +63,14 @@ function MapComponent({
           if (layer.tileURL) {
             map.current.addSource(layer.layerName, {
               type: 'vector',
-              url: layer.tileURL
+              url: layer.tileURL,
+            });
+          }
+          else if (layer.rasterURL) {
+            map.current.addSource(layer.layerName, {
+              type: 'raster',
+              url: layer.rasterURL,
+              tileSize: 256
             });
           }
           else if (layer.layerURL && layer.layerURL.includes('geojson')) {
@@ -94,6 +100,14 @@ function MapComponent({
             // add back the layer if it's not already in the map
             if (!map.current.getLayer(slConfig.layerId)) {
               if (layer.tileURL) {
+                map.current.addLayer({
+                  id: slConfig.layerId,
+                  type: slConfig.layerType,
+                  source: layer.layerName,
+                  'source-layer': layer.sourceLayer,
+                }, 'z-index-1');
+              }
+              else if (layer.rasterURL) {
                 map.current.addLayer({
                   id: slConfig.layerId,
                   type: slConfig.layerType,
@@ -174,8 +188,8 @@ function MapComponent({
         accessToken: MAPBOX_KEY,
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
-        center: [-73.95, 40.72],
-        zoom: 10,
+        center: [-95.99, 41.29],
+        zoom: 4,
         // minZoom: 9.5,
         bearing: 0,
         pitch: 0,
@@ -197,7 +211,7 @@ function MapComponent({
             map.current?.addImage('hospital-icon', image);
         });
         if (previousSelectedCity) {
-          Object.values(layers).forEach((layer, index) => paintLayer(layer, remoteLayers[index], selectedCity, previousSelectedCity));
+          Object.values(layers).forEach((layer, index) => paintLayer(layer, selectedCity, previousSelectedCity));
         }
         // This is to control layer order as described here:
         // https://github.com/mapbox/mapbox-gl-js/issues/7016#issuecomment-598452713
@@ -217,57 +231,70 @@ function MapComponent({
         }, 'z-index-1');
       });
 
-      map.current.on('click', e => {
-        if (!map.current) {
-          return;
+      Object.values(layers).forEach((layer) => {
+        if (map.current && layer.sourceLayer) {
+          map.current.on('mouseenter', layer.sourceLayer, e => {
+            if (!map.current) {
+              return;
+            }
+            const HOSPITALS_TOOLTIP_ZOOM_THRESHOLD = 5;
+            const STOPS_TOOLTIP_ZOOM_THRESHOLD = 7;
+            if (layer.layerName === 'Transit Stops' && map.current.getZoom() < STOPS_TOOLTIP_ZOOM_THRESHOLD) {
+              return;
+            }
+            if (layer.layerName === 'Hospitals' && map.current.getZoom() < HOSPITALS_TOOLTIP_ZOOM_THRESHOLD) {
+              return;
+            }
+            const layerNames = Object.values(layers).map(l => l.layerName);
+            const features = map.current
+              .queryRenderedFeatures(e.point)
+              .filter(f => layerNames.includes(f.source));
+              if (features.length > 0) {
+                const feature = features[0];
+                const tooltipNode = document.createElement('div');
+                const root = createRoot(tooltipNode);
+                root.render(
+                  <Tooltip
+                    feature={feature}
+                    onDismiss={() => {
+                      tooltipRef.current.remove();
+                    }}
+                    setDetailedRoutes={setDetailedRoutes}
+                  />,
+                );
+    
+                tooltipRef.current
+                  .setLngLat(e.lngLat)
+                  .setDOMContent(tooltipNode)
+                  .addTo(map.current);
+              }
+          });
         }
-        const layerNames = Object.values(layers).map(l => l.layerName);
-        const features = map.current
-          .queryRenderedFeatures(e.point)
-          .filter(f => layerNames.includes(f.source));
-          if (features.length > 0) {
-            const feature = features[0];
-            const tooltipNode = document.createElement('div');
-            const root = createRoot(tooltipNode);
-            
-            root.render(
-              <Tooltip
-                feature={feature}
-                onDismiss={() => {
-                  tooltipRef.current.remove();
-                }}
-                setDetailedRoutes={setDetailedRoutes}
-              />,
-            );
+      })
 
-            tooltipRef.current
-              .setLngLat(e.lngLat)
-              .setDOMContent(tooltipNode)
-              .addTo(map.current);
-          }
-      });
+
     }
-  }, [layers, paintLayer, previousSelectedCity, remoteLayers, selectedCity, setDetailedRoutes]);
+  }, [layers, paintLayer, previousSelectedCity, selectedCity, setDetailedRoutes]);
 
   useEffect(() => {
     if (map.current) {
-      // map.current.setZoom(7);
       if (center) { 
+        map.current.setZoom(10.5);
         map.current.setCenter(center);
       }
       // if (bounds) {
       //   map.current.fitBounds(bounds);
       // }
     }
-  }, [center, bounds]);
+  }, [center]);
 
   useEffect(() => {
     if (isMapLoaded && previousSelectedCity) {
       Object.values(layers).forEach((layer, layerIndex) => {
-        paintLayer(layer, remoteLayers[layerIndex], selectedCity, previousSelectedCity)
+        paintLayer(layer, selectedCity, previousSelectedCity)
       });
     }
-  }, [selectedCity, previousSelectedCity, isMapLoaded, layers, remoteLayers, sourceLayerConfigs, paintLayer]);
+  }, [selectedCity, previousSelectedCity, isMapLoaded, layers, sourceLayerConfigs, paintLayer]);
 
 
   return <div id="map" className="h-96 w-full sm:h-full" />;
