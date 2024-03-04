@@ -29,6 +29,7 @@ export default function Select({
         onChange={onChange}
         isLoading={isLoading === 'loading'}
         placeholder={defaultValue}
+        value={selectedCity.msa_name ? selectedCity : undefined}
         options={options}
         getOptionValue={(option) => option.msa_id}
         getOptionLabel={(option) => option.msa_name}
