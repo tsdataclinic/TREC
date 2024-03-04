@@ -1,10 +1,13 @@
 from enum import Enum
 from fastapi import FastAPI, HTTPException, Response, Query
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from psycopg2 import pool
 from typing import Union, List
 from dotenv import load_dotenv
 import os
+import csv
+from io import StringIO
 
 class Cities(Enum):
   chi = "Chicago"
@@ -184,6 +187,62 @@ async def get_all_available_routes():
   app.state.db_pool.putconn(connection)
   # return avail_routes
   return list(avail_routes.values())
+
+@app.get("/download-city-data/{msa_id}")
+async def download_city_data(msa_id: str):
+  connection = app.state.db_pool.getconn()
+  cursor = connection.cursor()
+
+  city_query = f"""
+    SELECT 
+      stop_id,
+      stop_name,
+      flood_risk_category_local,
+      heat_risk_category_local,
+      fire_risk_category_national,
+      access_to_hospital_category,
+      job_access_category,
+      worker_vulnerability_category,
+      ST_X(public.stop_features_new.geometry) as longitude,
+      ST_Y(public.stop_features_new.geometry) as latitude,
+      msa_name as city,
+      msa_id as city_msa_id
+    FROM public.stop_features_new, public.cities
+    WHERE public.stop_features_new.city = '{msa_id}'
+    AND public.cities.msa_id ='{msa_id}'
+  """
+
+  cursor.execute(city_query)
+  rows = cursor.fetchall()
+  cursor.close()
+  app.state.db_pool.putconn(connection) 
+  
+  cityname_parts = rows[0][-2].split(",")
+  cityname = cityname_parts[0].replace(" ", "_") + "_" + cityname_parts[1]
+  filename = f"""TREC_{cityname}.csv"""
+  csv_data = StringIO()
+  csv_writer = csv.writer(csv_data)
+  
+  # Write header
+  csv_writer.writerow([
+      'stop_id',
+      'stop_name',
+      'flood_risk_category_local',
+      'heat_risk_category_local',
+      'fire_risk_category_national',
+      'access_to_hospital_category',
+      'job_access_category',
+      'worker_vulnerability_category',
+      'longitude',
+      'latitude',
+      'city_name',
+      'city_msa_id'
+  ])
+  csv_writer.writerows(rows)
+
+  response = StreamingResponse(iter([csv_data.getvalue()]), media_type="text/csv")
+  response.headers["Content-Disposition"] = f"attachment; filename="+filename+""
+  return response
 
 @app.get("/cities")
 async def get_all_cities():

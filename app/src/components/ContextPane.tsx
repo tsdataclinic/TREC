@@ -1,6 +1,6 @@
 import { Layer, PROPERTY_LABELS, SelectedRoute } from './MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faCircleInfo, faArrowRotateLeft, faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faCircleInfo, faArrowRotateLeft, faShuffle, faDownload, } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './ui/Dropdown';
 import { Cities } from '../libs/cities';
 import { RouteRecord } from '../hooks/useAvailableRoutes';
@@ -22,6 +22,7 @@ type Props = {
   selectedRoutes: SelectedRoute[];
   setSelectedRoutes: React.Dispatch<React.SetStateAction<Array<SelectedRoute>>>;
   setIsInstructionalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  downloadCityDataURI: string | undefined;
 };
 
 function ContextPane({
@@ -37,7 +38,8 @@ function ContextPane({
   routes,
   selectedRoutes,
   setSelectedRoutes,
-  setIsInstructionalModalOpen
+  setIsInstructionalModalOpen,
+  downloadCityDataURI
 }: Props): JSX.Element {
   return (
     <div
@@ -71,6 +73,18 @@ function ContextPane({
             />
             <label>Random city</label>
           </Button>
+          <a
+            aria-disabled={downloadCityDataURI ? false : true}
+            className={`flex items-center px-5 ${downloadCityDataURI ? '' : 'text-gray-600 cursor-not-allowed' }`}
+            href={downloadCityDataURI}>
+            <FontAwesomeIcon
+              className=""
+              size="1x"
+              cursor={'pointer'}
+              icon={faDownload}
+            />
+            Download city data
+          </a>
           {/* <Button
             onClick={() => {
               // setSelectedCity(selectedCity);

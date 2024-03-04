@@ -212,7 +212,7 @@ export default function MainPage(): JSX.Element {
         selectedRoutes={selectedRoutes}
         setSelectedRoutes={setSelectedRoutes}
         setIsInstructionalModalOpen={setIsInstructionalModalOpen}
-        
+        downloadCityDataURI={selectedCity.msa_id ? `${BACKEND_URI}/download-city-data/${selectedCity.msa_id}` : undefined}
       />
       {detailedRoutes.city !== '' && (
         <RouteSummaryPane
