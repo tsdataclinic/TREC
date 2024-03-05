@@ -81,16 +81,16 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
     // render empty div if there are no properties
     return <div />;
   }
-  // debugger;
 
   return (
     <div id={`tooltip-${id}`} className="relative w-72 px-4 py-2">
       {/* show hospital or flooding details if there's a FEATURE_CLASS, Flooding_Category, Class property in the data */}
-      {properties['FEATURE_CLASS'] || properties['FEATURE_NAME'] || properties['Flooding_Category'] || properties['CLASS'] ? 
+      {properties['FEATURE_CLASS'] || properties['FEATURE_NAME'] || properties['Flooding_Category'] || properties['CLASS'] || properties['msa_name'] ? 
         <div>
           {properties['FEATURE_NAME'] && <h3 className="font-bold text-base pb-2">{properties['FEATURE_NAME']}</h3> }
           {properties['Flooding_Category'] && <h3 className="font-bold text-base pb-2">{properties['Flooding_Category']}</h3> }
           {properties['CLASS'] && <h3 className="font-bold text-base pb-2">{properties['CLASS']}</h3> }
+          {properties['msa_name'] && <h3 className="font-bold text-base pb-2">{properties['msa_name']}</h3> }
           <button
             onClick={onDismiss}
             className="absolute text-base font-xl -top-2.5 -right-2.5 hover:bg-slate-200 w-6 cursor-pointer transition-colors pb-0.5"

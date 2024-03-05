@@ -244,6 +244,35 @@ async def download_city_data(msa_id: str):
   response.headers["Content-Disposition"] = f"attachment; filename="+filename+""
   return response
 
+@app.get("/cities-extents.geojson")
+async def get_cities_extents():
+  connection = app.state.db_pool.getconn()
+  cursor = connection.cursor()
+
+  extent_query = f"""
+    SELECT
+      jsonb_build_object(
+      'type', 'FeatureCollection',
+      'features', jsonb_agg(feature)
+      ) AS geojson
+    FROM (
+      SELECT
+      jsonb_build_object(
+        'type', 'Feature',
+        'geometry', ST_AsGeoJSON(ST_Buffer(public.cities.geometry::geography, 24000)::geometry, 4326)::jsonb,
+        'properties', jsonb_build_object('msa_id', public.cities.msa_id, 'msa_name', public.cities.msa_name)
+      ) AS feature
+      FROM public.cities
+      GROUP BY public.cities.geometry, public.cities.msa_id, public.cities.msa_name
+    ) AS features;
+  """
+
+  cursor.execute(extent_query)
+  fc = cursor.fetchall()[0][0]
+  cursor.close()
+  app.state.db_pool.putconn(connection)
+  return fc
+
 @app.get("/cities")
 async def get_all_cities():
   connection = app.state.db_pool.getconn()
@@ -262,7 +291,7 @@ async def get_all_cities():
   cities = [{
     'msa_id': r[0],
     'msa_name': r[1],
-    'center': r[2],
+    'center': r[2]
   } for r in cursor.fetchall()]
   cursor.close()
   app.state.db_pool.putconn(connection)
