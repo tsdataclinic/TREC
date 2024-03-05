@@ -150,7 +150,7 @@ export function useSourceLayerConfigs(
           sourceLayer: 'cities-extents',
           layerType: 'fill',
           minzoom: 1,
-          maxzoom: 7,
+          maxzoom: 6,
           layoutProperties: [],
           paintProperties: [
             { name: 'fill-color', value: 'gray' },
