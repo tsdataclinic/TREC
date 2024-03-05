@@ -9,6 +9,7 @@ import json
 import argparse
 import pandas as pd
 import geopandas as gpd
+import shutil
 
 
 def concat_results(config, msa_ids):
@@ -57,6 +58,9 @@ def main():
     for msa_id in msa_ids:
         try:
             output_path = f"{config['base_path']}/cities/{msa_id}/results/stop_features.geojson"
+            feeds_path = f"{config['base_path']}/cities/{msa_id}/transit_feeds/"
+            if os.path.exists(feeds_path):
+                shutil.rmtree(feeds_path)
             if not os.path.exists(output_path) or opts.overwrite:
                 print(f"Running Data pipeline for: {msa_id}")
                 get_raw_data(config, msa_id)
