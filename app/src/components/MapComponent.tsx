@@ -15,6 +15,7 @@ type MapProps = {
   remoteLayers?: Array<RemoteLayer>;
   sourceLayerConfigs: Record<string, any>;
   selectedCity: CityRecord;
+  setSelectedCity: React.Dispatch<React.SetStateAction<CityRecord>>;
   previousSelectedCity?: CityRecord;
   center?: [number, number];
   bounds?: [[number, number], [number, number]]
@@ -25,6 +26,7 @@ function MapComponent({
   layers,
   sourceLayerConfigs,
   selectedCity,
+  setSelectedCity,
   previousSelectedCity,
   center,
   bounds,
@@ -74,9 +76,10 @@ function MapComponent({
             });
           }
           else if (layer.layerURL && layer.layerURL.includes('geojson')) {
-            // map.current.addSource(layer.layerName, {
-            //   type: 'geojson',
-            // });
+            map.current.addSource(layer.layerName, {
+              type: 'geojson',
+              data: layer.layerURL
+            });
           } else if (layer.layerURL && layer.layerURL.includes('mapbox://')) {
             map.current.addSource(layer.layerName, {
               type: 'vector',
@@ -105,6 +108,8 @@ function MapComponent({
                   type: slConfig.layerType,
                   source: layer.layerName,
                   'source-layer': layer.sourceLayer,
+                  minzoom: slConfig.minzoom ? slConfig.minzoom : undefined,
+                  maxzoom: slConfig.maxzoom ? slConfig.maxzoom : undefined,
                 }, 'z-index-1');
               }
               else if (layer.rasterURL) {
@@ -127,6 +132,8 @@ function MapComponent({
                     id: slConfig.layerId,
                     type: slConfig.layerType,
                     source: layer.layerName,
+                    minzoom: slConfig.minzoom ? slConfig.minzoom : undefined,
+                    maxzoom: slConfig.maxzoom ? slConfig.maxzoom : undefined,
                   }, 'z-index-1');
                 }
               } else {
@@ -237,14 +244,6 @@ function MapComponent({
             if (!map.current) {
               return;
             }
-            const HOSPITALS_TOOLTIP_ZOOM_THRESHOLD = 5;
-            const STOPS_TOOLTIP_ZOOM_THRESHOLD = 7;
-            if (layer.layerName === 'Transit Stops' && map.current.getZoom() < STOPS_TOOLTIP_ZOOM_THRESHOLD) {
-              return;
-            }
-            if (layer.layerName === 'Hospitals' && map.current.getZoom() < HOSPITALS_TOOLTIP_ZOOM_THRESHOLD) {
-              return;
-            }
             const layerNames = Object.values(layers).map(l => l.layerName);
             const features = map.current
               .queryRenderedFeatures(e.point)
@@ -269,12 +268,35 @@ function MapComponent({
                   .addTo(map.current);
               }
           });
+          map.current.on('click', e => {
+            if (!map.current) {
+              return;
+            }
+
+            const layerNames = ['City Extents'];
+            const features = map.current
+              .queryRenderedFeatures(e.point)
+              .filter(f => layerNames.includes(f.source));
+              if (features.length > 0) {
+                const feature = features[0];
+                if (feature.properties) {
+                  setSelectedCity({
+                    ...feature.properties.msa_id,
+                    center: [e.lngLat.lng, e.lngLat.lat]
+                  })
+                  map.current.flyTo({
+                    center: [e.lngLat.lng, e.lngLat.lat],
+                    zoom: 10.5
+                  });
+                }
+              }
+          });
         }
       })
 
 
     }
-  }, [layers, paintLayer, previousSelectedCity, selectedCity, setDetailedRoutes]);
+  }, [layers, paintLayer, previousSelectedCity, selectedCity, setDetailedRoutes, setSelectedCity]);
 
   useEffect(() => {
     if (map.current) {
@@ -282,9 +304,6 @@ function MapComponent({
         map.current.setZoom(10.5);
         map.current.setCenter(center);
       }
-      // if (bounds) {
-      //   map.current.fitBounds(bounds);
-      // }
     }
   }, [center]);
 

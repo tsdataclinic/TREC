@@ -3,11 +3,7 @@ import ContextPane from './ContextPane';
 import RouteSummaryPane from './RouteSidebar';
 import Filter from './Filter';
 import MapComponent from './MapComponent';
-import {
-  useRemoteLayers,
-} from '../hooks/useRemoteLayer';
 import { useSourceLayerConfigs } from '../utils/sourceLayerConfigs';
-import { useRouteSummary } from '../hooks/useRouteSummary';
 import * as Fathom from "fathom-client";
 import { Cities } from '../libs/cities';
 import { CityRecord, useAvailableCities } from '../hooks/useAvailableCities';
@@ -80,6 +76,14 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     sourceLayer: 'hospitals_new',
     isVisible: true,
     hideToggle: false,
+  },
+  '3': {
+    id: 3,
+    layerName: 'City Extents',
+    layerURL: `${BACKEND_URI}/cities-extents.geojson`,
+    sourceLayer: 'cities-extents',
+    isVisible: true,
+    hideToggle: true,
   }
 };
 
@@ -225,7 +229,7 @@ export default function MainPage(): JSX.Element {
       <MapComponent
         center={availableCities && availableCities.find((region) => region.msa_id === selectedCity?.msa_id)?.center}
         layers={layers}
-        // remoteLayers={remoteLayers}
+        setSelectedCity={setSelectedCity}
         sourceLayerConfigs={sourceLayerConfigs}
         setDetailedRoutes={setDetailedRoutes}
         selectedCity={selectedCity}
