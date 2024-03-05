@@ -279,11 +279,13 @@ function MapComponent({
               .filter(f => layerNames.includes(f.source));
               if (features.length > 0) {
                 const feature = features[0];
-                if (feature.properties) {
-                  setSelectedCity({
-                    ...feature.properties.msa_id,
+                if (e.lngLat && feature.properties) {
+                  const setCity = {
+                    msa_id: feature.properties.msa_id,
+                    msa_name: feature.properties.msa_name,
                     center: [e.lngLat.lng, e.lngLat.lat]
-                  })
+                  } as CityRecord;
+                  setSelectedCity(setCity)
                   map.current.flyTo({
                     center: [e.lngLat.lng, e.lngLat.lat],
                     zoom: 10.5
