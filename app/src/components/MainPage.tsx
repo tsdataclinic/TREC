@@ -12,6 +12,7 @@ import { useRemoteRouteFilter } from '../hooks/useRemoteRouteFilter';
 import usePrevious from '../hooks/usePrevious';
 import { useRemoteRouteSummary } from '../hooks/useRemoteRouteSummary';
 import Modal from './ui/Modal';
+import { useCityFromPoint } from '../hooks/useCityFromPoint';
 
 const BACKEND_URI = process.env.REACT_APP_PROD_BACKEND_URI ?? process.env.REACT_APP_DEV_BACKEND_URI;
 const BACKEND_TILESERVER_URI = process.env.REACT_APP_PROD_TILESERVER_URI ?? process.env.REACT_APP_DEV_TILESERVER_URI;
@@ -93,6 +94,8 @@ export default function MainPage(): JSX.Element {
   const {data: availableCities, status: availableCitiesLoadingStatus} = useAvailableCities();
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
   const [isInstructionalModalOpen, setIsInstructionalModalOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState([0, 0]);
+  const {data: cityFromPoint, status: cityFromPointLoadingStatus} = useCityFromPoint(mapCenter);
   const [selectedCity, setSelectedCity] = useState<CityRecord>({
     msa_id: '',
     msa_name: '',
@@ -227,6 +230,7 @@ export default function MainPage(): JSX.Element {
         />
       )}
       <MapComponent
+        setMapCenter={setMapCenter}
         center={availableCities && availableCities.find((region) => region.msa_id === selectedCity?.msa_id)?.center}
         layers={layers}
         setSelectedCity={setSelectedCity}

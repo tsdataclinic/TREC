@@ -273,6 +273,33 @@ async def get_cities_extents():
   app.state.db_pool.putconn(connection)
   return fc
 
+@app.get("/city-from-point/{lng}/{lat}")
+async def city_from_point(lng: float, lat: float):
+  connection = app.state.db_pool.getconn()
+  cursor = connection.cursor()
+
+  city_query = f"""
+    SELECT 
+      msa_id,
+      msa_name,
+      ARRAY[ST_X(geometry), ST_Y(geometry)] AS coordinates
+    FROM public.cities
+    ORDER BY geometry <-> ST_SetSRID(ST_MakePoint({lng}, {lat}), 4326)::geometry
+    
+    LIMIT 1;
+  """
+
+  cursor.execute(city_query)
+  cities = [{
+    'msa_id': r[0],
+    'msa_name': r[1],
+    'center': r[2]
+  } for r in cursor.fetchall()]
+  cursor.close()
+  app.state.db_pool.putconn(connection)
+
+  return cities 
+
 @app.get("/cities")
 async def get_all_cities():
   connection = app.state.db_pool.getconn()

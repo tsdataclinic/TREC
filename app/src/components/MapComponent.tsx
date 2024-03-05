@@ -19,6 +19,7 @@ type MapProps = {
   previousSelectedCity?: CityRecord;
   center?: [number, number];
   bounds?: [[number, number], [number, number]]
+  setMapCenter: React.Dispatch<React.SetStateAction<number[]>>;
   setDetailedRoutes: React.Dispatch<React.SetStateAction<SelectedRoute>>;
 };
 
@@ -30,6 +31,7 @@ function MapComponent({
   previousSelectedCity,
   center,
   bounds,
+  setMapCenter,
   setDetailedRoutes,
 }: MapProps): JSX.Element {
   let map = useRef<mapboxgl.Map | null>(null);
@@ -238,8 +240,16 @@ function MapComponent({
         }, 'z-index-1');
       });
 
+      map.current.on('moveend', () => {
+        if (!map.current) return;
+        const mapboxCenter = map.current?.getCenter();
+        console.log(mapboxCenter)
+        setMapCenter([mapboxCenter.lng, mapboxCenter.lat]);
+      });
+
       Object.values(layers).forEach((layer) => {
         if (map.current && layer.sourceLayer) {
+          // tooltip for tile layers
           map.current.on('mouseenter', layer.sourceLayer, e => {
             if (!map.current) {
               return;
@@ -268,6 +278,7 @@ function MapComponent({
                   .addTo(map.current);
               }
           });
+          // tooltip for city
           map.current.on('click', e => {
             if (!map.current) {
               return;
@@ -296,16 +307,17 @@ function MapComponent({
 
 
     }
-  }, [layers, paintLayer, previousSelectedCity, selectedCity, setDetailedRoutes, setSelectedCity]);
+  }, [layers, paintLayer, previousSelectedCity, selectedCity, setDetailedRoutes, setMapCenter, setSelectedCity]);
 
   useEffect(() => {
     if (map.current) {
       if (center) { 
         map.current.setZoom(10.5);
         map.current.setCenter(center);
+        setMapCenter(center);
       }
     }
-  }, [center]);
+  }, [center, setMapCenter]);
 
   useEffect(() => {
     if (isMapLoaded && previousSelectedCity) {
