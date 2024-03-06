@@ -101,11 +101,11 @@ export default function Slider({
   orientation,
 }: Props): JSX.Element {
   const containerClassName = classNames('flex', {
-    'flex-col items-center': orientation === 'horizontal',
-    'flex-row-reverse h-full items-center': orientation === 'vertical',
+    'flex-col justify-between items-center': orientation === 'horizontal',
+    'h-full justify-end items-center align-middle': orientation === 'vertical',
   });
   const labelClassName = classNames('text-xs', {
-    'transform -ml-12 -rotate-90 relative left-4': orientation === 'vertical',
+    'transform -ml-12 [writing-mode:vertical-rl]': orientation === 'vertical',
   });
 
   return (
