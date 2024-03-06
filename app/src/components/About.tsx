@@ -4,7 +4,7 @@ import InfoPage from './InfoPage';
 
 const AboutPage = () => {
     return <InfoPage title={'About'} menuItems={['TREC', 'About Data Clinic', 'Contribute']}>
-        <div className="mb-36" id="TREC">
+        <div className="mb-12" id="TREC">
             <div>
                 In the fall of 2022, Data Clinic took part in{' '}
                 <a
@@ -70,7 +70,7 @@ const AboutPage = () => {
             </div>
         </div>
 
-        <div className="mb-36" id="About Data Clinic">
+        <div className="mb-12" id="About Data Clinic">
             <div>
                 <a href="https://www.twosigma.com/data-clinic/">Data Clinic</a> is the data and tech-for-good arm of <a href="https://www.twosigma.com/">Two Sigma</a>, a
                 financial sciences company headquartered in NYC.
@@ -100,7 +100,7 @@ const AboutPage = () => {
                 <a href="mailto:dataclinic@twosigma.com">dataclinic@twosigma.com</a>
             </div>
         </div>
-        <div className="mb-36" id="Contribute">
+        <div className="mb-12" id="Contribute">
             <p>We want TREC to support your needs. That means that we need a lot of voices helping us shape the features we develop.</p>
             <p>If you would like to suggest a feature or improvement, please either <a href="https://github.com/tsdataclinic/trec/issues">open an issue on GitHub</a> or reach out to us by <a href="mailto:dataclinic@twosigma.com">email</a></p>
             <p>If you want to contribute in a technical capacity, head over to our <a href="https://github.com/tsdataclinic/trec">GitHub page</a> to open issues, suggest features, contribute pull requests, and find beginner issues.</p>
