@@ -37,7 +37,7 @@ export default function Button({
           "w-full": variant === "full",
 
           // intent-dependent styles (only apply if our variant isn't "unstyled")
-          "bg-blue-500 hover:bg-blue-400 active:bg-blue-500 text-white":
+          "bg-cyan-500 hover:bg-cyan-500 active:bg-cyan-500 text-white":
             intent === "primary",
           "bg-red-500 hover:bg-red-400 active:bg-red-500 text-white":
             intent === "danger",

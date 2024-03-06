@@ -102,11 +102,12 @@ export default function Modal({
           <StyledModalTitle className="text-xl text-slate-800">
             {title}
           </StyledModalTitle>
-          <div className={`${className} overflow-y-scroll`}>{children}</div>
+          {/* overflow-y-scroll */}
+          <div className={`${className}`}>{children}</div>
           </div>
           <div >
             <Dialog.Close asChild>
-              <Button className="w-full p-4 bg-cyan-500 text-white rounded-b-3xl">{onDissmissText}</Button>
+              <Button className="w-full p-4 text-white rounded-b-3xl" intent="primary">{onDissmissText}</Button>
             </Dialog.Close>
           </div>
         </StyledModalContent>
