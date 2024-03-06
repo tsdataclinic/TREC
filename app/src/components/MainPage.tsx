@@ -272,29 +272,29 @@ export default function MainPage(): JSX.Element {
         onDissmissText='Dismiss'
         isCentered={false}
       >
-        <p className="text-cyan-500 text-l font-extrabold">
-        How to use TREC
-        </p>
-        <br />
-        <p>
-        <b>1. Where</b>
-        </p>
-        <p>
-        Choose a US city to explore
-        </p>
-        <p>
-        <b>2. What</b>
-        </p>
-        <p>
-        Select a climate risk and a transit destination to focus on
-        </p>
-        <p>
-        <b>3. Prioritize</b>
-        </p>
-        <p>
-        Adjust the filter to hone in on stations with low, medium, or high risk and access
-        </p>
-        <br />
+        <div className="">
+          <p className="text-cyan-500 text-l font-extrabold mb-3">
+            How to use TREC
+          </p>
+          <p>
+            <b>1. Where</b>
+          </p>
+          <p className="mb-3">
+            Choose a US city to explore
+          </p>
+          <p>
+            <b>2. What</b>
+          </p>
+          <p className="mb-3">
+            Select a climate risk and a transit destination to focus on
+          </p>
+          <p>
+            <b>3. Prioritize</b>
+          </p>
+          <p className="mb-3">
+            Adjust the filter to hone in on stations with low, medium, or high risk and access
+          </p>
+        </div>
       </Modal>
     }
     </>
