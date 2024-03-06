@@ -46,7 +46,7 @@ function ContextPane({
       id="ContextPane"
       className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:overflow-y-hidden sm:h-full sm:max-w-sm sm:w-1/5"
     >
-      <div className="p-5 border-b border-b-slate-400 w-full flex flex-col items-center justify-between">
+      <div className="p-5 border-b border-b-slate-400 w-full flex flex-col items-center justify-between space-y-4">
         <Select
           selectedCity={selectedCity}
           onChange={e => {
@@ -64,47 +64,34 @@ function ContextPane({
                 setSelectedCity(cities[Math.floor(Math.random()*cities.length)]);
               }
             }}
-            className="flex items-center px-5">
+            className="flex items-center space-x-2">
             <FontAwesomeIcon
               className=""
               size="1x"
               cursor={'pointer'}
               icon={faShuffle}
             />
-            <label>Random city</label>
+            <label>Random</label>
           </Button>
           <a
             aria-disabled={downloadCityDataURI ? false : true}
-            className={`flex items-center px-5 ${downloadCityDataURI ? '' : 'text-gray-600 cursor-not-allowed' }`}
+            className={`flex items-center px-2 ${downloadCityDataURI ? '' : 'text-gray-400 cursor-not-allowed' }`}
             href={downloadCityDataURI}>
             <FontAwesomeIcon
-              className=""
+              className="mr-2"
               size="1x"
               cursor={'pointer'}
               icon={faDownload}
             />
             Download city data
           </a>
-          {/* <Button
-            onClick={() => {
-              // setSelectedCity(selectedCity);
-            }}
-            className="flex items-center px-5">
-            <FontAwesomeIcon
-              className=""
-              size="1x"
-              cursor={'pointer'}
-              icon={faArrowRotateLeft}
-            />
-            <label>Recenter city</label>
-          </Button> */}
         </div>
       </div>
 
-      <div className="px-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
+      <div className="p-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers)
-            // .filter(layer => !layer.hideToggle && (layer.city === undefined || layer.city === selectedCity))
+            .filter(layer => !layer.hideToggle)
             .map(layer => {
               return (
                 <div className="space-x-2">
@@ -181,7 +168,7 @@ function ContextPane({
         </div>
         <hr />
         <div className="text-lg flex justify-between">
-          <b>Filter Transit Lines</b>
+          <b>Filter Transit Lines ({selectedRoutes.length} of 3)</b>
           <button onClick={() => setSelectedRoutes([])}>Reset</button>
         </div>
         {selectedRoutes.length > 0 ? (
