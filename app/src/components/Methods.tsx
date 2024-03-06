@@ -3,7 +3,7 @@ import AccordionComponent from './ui/Accordion/Accordion';
 import InfoPage from './InfoPage';
 
 const MethodsPage = () => {
-    return <InfoPage title="Methodology" menuItems={['Methodology', 'Climate Data', 'Transit Data', 'Geographic Data', 'Demographic Data']}>
+    return <InfoPage title="Methods" menuItems={['Methodology', 'Climate Data', 'Transit Data', 'Geographic Data', 'Demographic Data']}>
         <section id="Methodology">
             <div className="">
                 <p>
