@@ -55,6 +55,10 @@ const MethodsPage = () => {
         </section>
         <section className={`${activeSection !== 'Transit Data' && `hidden`}`} id="Transit Data">
             {/* <p className="text-2xl">Transit Data</p> */}
+            <p className="mb-4">GTFS data containing transit stop location and co-located service lines are supplied by service providers in the following Metro Areas and no changes were made to these variables.
+                Data Clinic is not affiliated with any of the service providers.
+                Neither Data Clinic nor the service providers guarantee the accuracy or completeness of the supplied data.
+                See our <a href="https://github.com/tsdataclinic/TREC/tree/main">GitHub repo</a> for the full list of sources and information on the latest date these sources were accessed via <a href="https://www.transit.land/">Transitland</a>.</p>
             <AccordionComponent title={'NORTHEAST'}>
                 <li>Boston</li>
                 <li>Bridgeport</li>
