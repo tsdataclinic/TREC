@@ -47,7 +47,8 @@ const StyledModalContent = styled(Dialog.Content)`
   background: white;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
-  max-height: 85vh;
+  min-height: 15vh;
+  max-height: 75vh;
   border-radius: 25px;
   position: fixed;
   transform: translate(-50%, -50%);
@@ -98,12 +99,11 @@ export default function Modal({
       <Dialog.Portal>
         <StyledOverlay />
         <StyledModalContent className={`w-3/4 md:w-4/12 top-1/2 left-1/2 ${isCentered ? `md:top-1/2 md:left-1/2` : `md:top-3/4 md:left-1/4`}`}>
-          <div className="p-6 space-y-4">
-          <StyledModalTitle className="text-xl text-slate-800">
-            {title}
-          </StyledModalTitle>
-          {/* overflow-y-scroll */}
-          <div className={`${className}`}>{children}</div>
+          <div className={`p-6 space-y-4 h-full block`}>
+            <StyledModalTitle className="text-xl text-slate-800">
+              {title}
+            </StyledModalTitle>
+            <div className="overflow-y-auto max-h-[50vh]">{children}</div>
           </div>
           <div >
             <Dialog.Close asChild>
