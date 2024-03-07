@@ -1,50 +1,17 @@
-.AccordionRoot {
-  background-color: var(--mauve-6);
-  border-top: 1px grey solid;
-  border-bottom: 1px grey solid;
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
-
-.AccordionItem:focus-within {
-  position: relative;
-  z-index: 1;
-}
-
-.AccordionHeader {
-  display: flex;
-  cursor: pointer;
-}
-
-.AccordionTrigger {
-  font-family: inherit;
-  padding: 0 20px;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1.5em;
-}
-
-.AccordionContent {
+.CollapsibleContent {
   overflow: hidden;
 }
-.AccordionContent[data-state='open'] {
+.CollapsibleContent[data-state='open'] {
   animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1);
 }
-.AccordionContent[data-state='closed'] {
+.CollapsibleContent[data-state='closed'] {
   animation: slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1);
 }
 
-.AccordionContentText {
-  padding: 15px 20px;
-}
-
-.AccordionChevron {
+.CollapsibleChevron {
   transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
 }
-.AccordionTrigger[data-state='open'] > .AccordionChevron {
+.CollapsibleTrigger[data-state='open'] > .CollapsibleChevron {
   transform: rotate(180deg);
 }
 
