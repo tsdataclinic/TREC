@@ -1,10 +1,17 @@
-import React from 'react';
-// import AccordionComponent from './ui/Accordion/Accordion';
+import React, { useState } from 'react';
 import InfoPage from './InfoPage';
 
+const ABOUT_MENU_ITEMS = ['TREC', 'About Data Clinic', 'Contribute'];
+
 const AboutPage = () => {
-    return <InfoPage title={'About'} menuItems={['TREC', 'About Data Clinic', 'Contribute']}>
-        <div className="mb-12" id="TREC">
+    const [activeSection, setActiveSection] = useState(ABOUT_MENU_ITEMS[0]);
+
+    return <InfoPage
+        title={'About'}
+        menuItems={ABOUT_MENU_ITEMS}
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}>
+        <section className={`${activeSection !== 'TREC' && 'hidden'} space-y-4`} id="TREC">
             <div>
                 In the fall of 2022, Data Clinic took part in{' '}
                 <a
@@ -68,9 +75,9 @@ const AboutPage = () => {
             <div>
                 <a href="https://github.com/tsdataclinic/trec">TREC Github Repo</a>
             </div>
-        </div>
+        </section>
 
-        <div className="mb-12" id="About Data Clinic">
+        <section className={`${activeSection !== 'About Data Clinic' && 'hidden'} space-y-4`} id="About Data Clinic">
             <div>
                 <a href="https://www.twosigma.com/data-clinic/">Data Clinic</a> is the data and tech-for-good arm of <a href="https://www.twosigma.com/">Two Sigma</a>, a
                 financial sciences company headquartered in NYC.
@@ -99,13 +106,13 @@ const AboutPage = () => {
                 and connect with us via{' '}
                 <a href="mailto:dataclinic@twosigma.com">dataclinic@twosigma.com</a>
             </div>
-        </div>
-        <div className="mb-12" id="Contribute">
+        </section>
+        <section className={`${activeSection !== 'Contribute' && 'hidden'} space-y-4`} id="Contribute">
             <p>We want TREC to support your needs. That means that we need a lot of voices helping us shape the features we develop.</p>
             <p>If you would like to suggest a feature or improvement, please either <a href="https://github.com/tsdataclinic/trec/issues">open an issue on GitHub</a> or reach out to us by <a href="mailto:dataclinic@twosigma.com">email</a></p>
             <p>If you want to contribute in a technical capacity, head over to our <a href="https://github.com/tsdataclinic/trec">GitHub page</a> to open issues, suggest features, contribute pull requests, and find beginner issues.</p>
             <p>To learn more, visit <a href="https://github.com/tsdataclinic/TREC">github.com/tsdataclinic/TREC</a>.</p>
-        </div>
+        </section>
     </InfoPage>
 };
 export default AboutPage;
