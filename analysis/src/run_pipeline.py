@@ -59,7 +59,7 @@ def main():
         try:
             output_path = f"{config['base_path']}/cities/{msa_id}/results/stop_features.geojson"
             feeds_path = f"{config['base_path']}/cities/{msa_id}/transit_feeds/"
-            if os.path.exists(feeds_path):
+            if os.path.exists(feeds_path) and opts.overwrite:
                 shutil.rmtree(feeds_path)
             if not os.path.exists(output_path) or opts.overwrite:
                 print(f"Running Data pipeline for: {msa_id}")
@@ -69,7 +69,9 @@ def main():
             else:
                 print(f"Skipping {msa_id}: stop_features already exists")
         except Exception as e:
-            print(e)
+            with open('pipeline_errors.txt', 'a') as file:
+                file.write(f'{msa_id}: {e} \n')
+            
     
     # print(f"Combining the results")
     # concat_results(config, msa_ids)

@@ -18,12 +18,12 @@ def create_cities_metadata(config, msa_id):
     msa_data = msa_data.drop_duplicates().rename(columns={'MSA Code':'msa_id','MSA Title':'msa_name'})
     msa_data['msa_name'] = [get_msa_display_name(x) for x in msa_data['msa_name']]
     msa_data = msa_data.reset_index(drop=True)
-    geo_path = f"{config['base_path']}/cities/{msa_id}/census/geo/tracts.geojson"
-    extent = create_extent(geo_path)
-    centroid = extent.to_crs(epsg=4326).centroid
-    centroid = gpd.GeoDataFrame(centroid).reset_index().drop(columns='to_merge').rename(columns={0:'geometry'})
-    centroid = centroid.set_geometry('geometry')
+    stops_path = f"{config['base_path']}/cities/{msa_id}/stops.geojson"
+    stops = gpd.read_file(stops_path)
+    centroid = stops.to_crs(epsg=4326).dissolve().centroid
+    centroid = gpd.GeoDataFrame(centroid).rename(columns={0:'geometry'}).set_geometry(col='geometry')
     msa_gdf = gpd.GeoDataFrame(msa_data, geometry=centroid.geometry)
+    
     if config["db_string"] != "":
         write_table_to_db(config["db_string"],msa_gdf,'cities')
 

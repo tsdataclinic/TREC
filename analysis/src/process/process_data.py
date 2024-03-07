@@ -9,10 +9,11 @@ import json
 import argparse
 
 def process_data(config, msa_id):
-    print("Processing City metadata")
-    create_cities_metadata(config, msa_id)
+    
     print("Processing Stops") 
     process_stops(config,msa_id,out=True)
+    print("Processing City metadata")
+    create_cities_metadata(config, msa_id)
     print("Processing Hospitals") 
     process_hospitals(config, msa_id,out=True)
     print("Processing Walksheds") 

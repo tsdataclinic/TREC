@@ -55,8 +55,8 @@ def fix_walkshed(graph, polygons):
     walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds, on='osmid').set_geometry(col='geometry')
     poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
     poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True).to_crs(original_crs)
-
-    return poly_fixed.to_crs(original_crs)
+    
+    return poly_fixed
 
 
 

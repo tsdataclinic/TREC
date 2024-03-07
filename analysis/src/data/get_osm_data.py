@@ -47,7 +47,7 @@ def get_osm_data(config, msa_id):
         graph = ox.project_graph(G, to_crs='epsg:4326')
         print("Graph created. Writing it") 
         with open(out_path + "walk_graph.gpickle", 'wb') as f:
-            pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(graph, f, pickle.HIGHEST_PROTOCOL)
 
 def main():
     parser = argparse.ArgumentParser("OSM Graph builder")
