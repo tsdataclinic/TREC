@@ -185,6 +185,7 @@ function ContextPane({
           </div>
         ) : null}
         <div className="flex-1 sm:overflow-y-scroll">
+          {!selectedCity.msa_name && <div>Select a city to see its transit lines!</div>}
           <ul>
             {routes && 
               routes.map(route => {
