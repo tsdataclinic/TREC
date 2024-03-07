@@ -1,47 +1,45 @@
 import React from 'react';
-import * as Accordion from '@radix-ui/react-accordion';
+import * as Collapsible from '@radix-ui/react-collapsible';
 import classNames from 'classnames';
 import { PlusIcon } from '@radix-ui/react-icons';
 import './AccordionStyles.css';
 
 
-const AccordionTrigger = React.forwardRef<HTMLButtonElement | null, Accordion.AccordionTriggerProps>(({ children, className, ...props } : Accordion.AccordionTriggerProps, forwardedRef: React.ForwardedRef<HTMLButtonElement | null>) => (
-  <Accordion.Header className="AccordionHeader flex flex-col">
-    <Accordion.Trigger
-      className={classNames('AccordionTrigger', className)}
+const CollapsibleTrigger = React.forwardRef<HTMLButtonElement | null, Collapsible.CollapsibleTriggerProps>(({ children, className, ...props } : Collapsible.CollapsibleTriggerProps, forwardedRef: React.ForwardedRef<HTMLButtonElement | null>) => (
+    <Collapsible.Trigger
+      className={classNames('CollapsibleTrigger', className)}
       {...props}
       ref={forwardedRef}
     >
       {children}
-      <PlusIcon className="AccordionChevron" aria-hidden />
-    </Accordion.Trigger>
-  </Accordion.Header>
+      <PlusIcon className="CollapsibleChevron" aria-hidden />
+    </Collapsible.Trigger>
 ));
 
-const AccordionContent = React.forwardRef<HTMLDivElement | null, Accordion.AccordionContentProps>(({ children, className, ...props } : Accordion.AccordionContentProps, forwardedRef: React.ForwardedRef<HTMLDivElement | null>) => (
-  <Accordion.Content
-    className={classNames('AccordionContent', className)}
+const CollapsibleContent = React.forwardRef<HTMLDivElement | null, Collapsible.CollapsibleContentProps>(({ children, className, ...props } : Collapsible.CollapsibleContentProps, forwardedRef: React.ForwardedRef<HTMLDivElement | null>) => (
+  <Collapsible.Content
+    className={classNames('CollapsibleContent', className)}
     {...props}
     ref={forwardedRef}
   >
-    <div className="AccordionContentText">{children}</div>
-  </Accordion.Content>
+    <div className="CollapsibleContentText">{children}</div>
+  </Collapsible.Content>
 ));
 
-export type AccordionComponentProps = {
+export type CollapsibleComponentProps = {
   title: string;
   children: any;
 }
 
-const AccordionComponent = ({ title, children  } : AccordionComponentProps) => (
-    <Accordion.Root className="AccordionRoot border-y-10" type="single" defaultValue="item-1" collapsible>
-      <Accordion.Item className="AccordionItem" value="item-1">
-        <AccordionTrigger>{title}</AccordionTrigger>
-        <AccordionContent>
-          {children}
-        </AccordionContent>
-      </Accordion.Item>
-    </Accordion.Root>
+const AccordionComponent = ({ title, children  } : CollapsibleComponentProps) => (
+    <Collapsible.Root className="CollapsibleRoot py-4 border-t-2 border-separate" defaultValue="item-1">
+      <CollapsibleTrigger className={`flex justify-between items-center w-full`}>
+        {title}
+      </CollapsibleTrigger>
+      <CollapsibleContent className="p-4">
+        {children}
+      </CollapsibleContent>
+    </Collapsible.Root>
   );
 
 export default AccordionComponent;
