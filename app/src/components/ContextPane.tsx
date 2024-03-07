@@ -44,7 +44,7 @@ function ContextPane({
   return (
     <div
       id="ContextPane"
-      className="bg-white w-full min-w-fit h-fit shadow flex flex-col sm:overflow-y-hidden sm:h-full sm:max-w-sm sm:w-1/5"
+      className="bg-white w-full min-w-fit h-fit shadow flex flex-col overflow-y-auto sm:h-full sm:max-w-sm sm:w-1/5 overflow-ellipsis"
     >
       <div className="p-5 border-b border-b-slate-400 w-full flex flex-col items-center justify-between space-y-4">
         <Select
@@ -88,7 +88,7 @@ function ContextPane({
         </div>
       </div>
 
-      <div className="p-4 space-y-4 pt-4 flex flex-col h-full sm:overflow-y-hidden">
+      <div className="p-4 space-y-4 pt-4 flex flex-col h-full">
         <div className="border-b border-b-slate-300 pb-4">
           {Object.values(layers)
             .filter(layer => !layer.hideToggle)
@@ -184,7 +184,7 @@ function ContextPane({
             ))}
           </div>
         ) : null}
-        <div className="flex-1 sm:overflow-y-scroll">
+        <div className="flex-1">
           {!selectedCity.msa_name && <div>Select a city to see its transit lines!</div>}
           <ul>
             {routes && 
@@ -250,7 +250,7 @@ function ContextPane({
             }
           </ul>
         </div>
-        <div>
+        <div className="w-0 bottom-0 left-0 rounded-3xl sticky bg-white">
           <FontAwesomeIcon
               onClick={() => setIsInstructionalModalOpen(true)}
               size="2x"
