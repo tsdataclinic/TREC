@@ -123,14 +123,14 @@ const MethodsPage = () => {
             </AccordionComponent>
         </section>
         <section className={`${activeSection !== 'Geographic Data' && `hidden`}`} id="Geographic Data">
-            <ul className='list-item'>
+            <ul className='list-disc'>
                 <li>Census tract, block geographies retrieved using <a href="https://github.com/censusdis/censusdis">censusdis</a> with data by <a href="https://www.census.gov/">US Census Bureau</a>, <a href="https://ask.census.gov/prweb/PRServletCustom/app/ECORRAsk2_/YACFBFye-rFIz_FoGtyvDRUGg1Uzu5Mn*/!STANDARD?pzuiactionzzz=CXtpbn0rTEpMcGRYOG1vS0tqTFAwaENUZWpvM1NNWEMzZ3p5aFpnWUxzVmw0TjJpQS85RkNvUXZDRVRQWWtWSDFQaWZj*">Public Domain</a>.</li>
                 <li>Street networks retrieved using <a href="https://github.com/gboeing/osmnx">OSMnx</a> with data by <a href="https://www.openstreetmap.org/about">OpenStreetMap</a>, <a href="http://www.opendatacommons.org/licenses/odbl/">Open Database License, "ODbL" 1.0.</a></li>
                 <li>Hospital location data from <a href="https://www.usgs.gov/u.s.-board-on-geographic-names/download-gnis-data">Geographic Names Information System National File 2021</a>, <a href="https://www.usgs.gov/">United States Geological Survey</a>, <a href="https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits">Public Domain</a>.</li>
             </ul>
         </section>
         <section className={`${activeSection !== 'Demographic Data' && `hidden`}`} id="Demographic Data">
-            <ul>
+            <ul className="list-disc">
                 <li><a href="https://www.census.gov/">U.S. Census Bureau</a>. (2023). <a href="https://lehd.ces.census.gov/data/">LEHD Origin-Destination Employment Statistics Data</a> (2002-2021) [computer file]. Washington, DC: U.S. Census Bureau, Longitudinal-Employer Household Dynamics Program [distributor], accessed on 02-16-2023 at https://lehd.ces.census.gov/data/#lodes. LODES 8..</li>
                 <li>Social vulnerability data from <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html">CDC/ATSDR Social Vulnerability Index 2020 Database US</a> by <a href="https://www.atsdr.cdc.gov/">Centers for Disease Control and Prevention Agency for Toxic Substances and Disease Registry</a>, <a href="https://data.cdc.gov/Health-Statistics/CDC-Social-Vulnerability-Index-SVI-/u6k2-rtt3/data">Public Domain</a>.</li>
             </ul>
