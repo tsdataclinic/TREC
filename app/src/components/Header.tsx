@@ -55,7 +55,7 @@ function ButtonLink(props: {
 function LegalContents() {
   return (
     <>
-      <p>
+      <p className="mb-2">
         TREC is hosted by Two Sigma Investments, LP, and is subject to Two
         Sigma's{' '}
         <a
@@ -75,18 +75,18 @@ function LegalContents() {
         </a>
         , with the following amendments:
       </p>
-      <p>
+      <p className="mb-2">
         The limited nonexclusive license for this website is for noncommercial
         purposes, and is provided for informational purposes.
       </p>
-      <p>
+      <p className="mb-2">
         Note that the dashboard relies upon publicly available data from
         multiple sources that do not always agree. As set forth in the above
         referenced Legal Disclosure, Two Sigma disclaims any and all
         representations and warranties with respect to the website, including
         accuracy, fitness for use, reliability, and non-infringement.
       </p>
-      <p>
+      <p className="mb-2">
         This tool is shared pursuant to the{' '}
         <a
           href="https://www.apache.org/licenses/LICENSE-2.0.html"
