@@ -124,7 +124,7 @@ def process_stops(config, msa_id, out=False):
     stops_out = stops_out.reset_index(drop=True)
     
     # Routes as list
-    routes_list = stops_out.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
+    routes_list = stops_out.groupby('stop_id')['route_short_name'].apply(list).reset_index().rename(columns={'route_short_name':'routes_serviced'})
     agencies_list = stops_out.groupby('stop_id')['agency_id'].apply(list).reset_index().rename(columns={'agency_id':'agency_ids_serviced'})
     agencies_name_list = stops_out.groupby('stop_id')['agency_name'].apply(list).reset_index().rename(columns={'agency_name' : 'agencies_serviced'})
 

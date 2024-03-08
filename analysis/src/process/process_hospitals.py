@@ -64,7 +64,7 @@ def process_hospitals(config, msa_id, out=False):
         print("Hospitals data written to: " + out_path) 
 
         if config["db_string"] != "":
-            write_table_to_db(config["db_string"],hospitals,'hospitals_new')
+            write_table_to_db(config["db_string"],hospitals,'hospitals')
     else:
         return hospitals
 

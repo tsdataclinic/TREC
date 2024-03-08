@@ -28,9 +28,9 @@ COLUMNS_TO_KEEP = ["stop_id",
         "heat_risk_category_national",
         "heat_risk_category_local",
         "heat_risk_score",
-        "fire_risk_category_national",
-        "fire_risk_category_local",
-        "fire_risk_score",
+        "wildfire_risk_category_national",
+        "wildfire_risk_category_local",
+        "wildfire_risk_score",
         "job_access_category",
         "jobs_access_count",
         "worker_vulnerability_category",
@@ -56,14 +56,16 @@ def add_fs_flood_risk(stops, config):
     
     stops = stops.merge(fsf_feature[['GEOID','flood_risk_score','flood_pct_moderate_plus','flood_risk_category_national',
                                      'heat_risk_score','heat_pct_moderate_plus','heat_risk_category_national',
-                                     'fire_risk_score','fire_pct_moderate_plus','fire_risk_category_national',
+                                     'wildfire_risk_score','wildfire_pct_moderate_plus','wildfire_risk_category_national',
                                      ]],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
     
     paths = config["national"]["fsf_climate_risk"]
     for risk in paths.keys():
         stops[f"{risk}_risk_category_local"] = pd.qcut(stops[f"{risk}_risk_score"], 3, labels=False, duplicates='drop')
-        
+        if len(stops[f"{risk}_risk_category_local"].unique()) < 3:
+            stops[f"{risk}_risk_category_local"] = stops[f"{risk}_risk_category_national"]
+
     return stops
 
 
@@ -246,7 +248,7 @@ def get_stops_features(config, msa_id, out=False):
             file.write(stops.to_json())
 
         if config["db_string"] != "":
-            write_table_to_db(config["db_string"],stops,'stop_features_new')
+            write_table_to_db(config["db_string"],stops,'stop_features')
 
     else:
         return stops

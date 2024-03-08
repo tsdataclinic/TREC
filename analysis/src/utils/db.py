@@ -14,7 +14,7 @@ def drop_table(conn_str, table_name):
     # conn.commit()
 
 def get_dtypes(table_name):
-    if table_name == 'stop_features_new':
+    if table_name == 'stop_features':
         return {'geometry': Geometry('POINT', srid=4326),'routes_serviced':ARRAY(VARCHAR)}
     else:
         return {'geometry': Geometry('POINT', srid=4326)}        
