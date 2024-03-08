@@ -23,7 +23,8 @@ pygeos = "*"
 sqlalchemy = "*"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
-psycopg2 = "*"
+geoalchemy2 = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 notebook = "*"

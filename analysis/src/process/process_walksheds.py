@@ -55,8 +55,8 @@ def fix_walkshed(graph, polygons):
     walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds, on='osmid').set_geometry(col='geometry')
     poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
     poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True).to_crs(original_crs)
-
-    return poly_fixed.to_crs(original_crs)
+    
+    return poly_fixed
 
 
 
@@ -144,18 +144,18 @@ def create_walk_shed(points, graph, speed=4.5, trip_time=15, combine=False):
         point_walkshed = point_walkshed.set_crs(points.crs)
         return point_walkshed
     
-def process_walksheds(config, city_key):
+def process_walksheds(config, msa_id):
 
-    graph_path = f"{config['base_path']}/cities/{city_key}/osm/walk_graph.gpickle"
+    graph_path = f"{config['base_path']}/cities/{msa_id}/osm/walk_graph.gpickle"
     with open(graph_path, 'rb') as f:
         graph = pickle.load(f)    
-    out_path = f"{config['base_path']}/cities/{city_key}/osm/walksheds/"
+    out_path = f"{config['base_path']}/cities/{msa_id}/osm/walksheds/"
     
     if not os.path.isdir(out_path):
         os.makedirs(out_path)
 
     print("Processing Hospital walksheds")
-    hospitals_path = f"{config['base_path']}/cities/{city_key}/results/hospitals.geojson"
+    hospitals_path = f"{config['base_path']}/cities/{msa_id}/results/hospitals.geojson"
     points = gpd.read_file(hospitals_path)
     times = [10,20]
     for t in times:
@@ -164,7 +164,7 @@ def process_walksheds(config, city_key):
 
 
     print("Processing Transit walksheds")
-    stops_path = f"{config['base_path']}/cities/{city_key}/stops.geojson"
+    stops_path = f"{config['base_path']}/cities/{msa_id}/stops.geojson"
     points = gpd.read_file(stops_path)
     transit_walkshed = create_walk_shed(points, graph, combine=False)
     transit_walkshed_fixed = fix_walkshed(graph,transit_walkshed)

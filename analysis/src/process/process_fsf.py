@@ -29,7 +29,7 @@ def process_fsf(config):
    fsf_risk_dfs = []
    for risk in paths.keys():
       print(f"Processing {risk} risk")
-      fsf = pd.read_csv(paths[risk])
+      fsf = pd.read_csv(f"{config['base_path']}/national/{paths[risk]}")
 
       fsf["GEOID"] = fsf["fips"].astype(str).str.zfill(11)
       fsf = fsf.drop("fips", axis = 1)
@@ -66,7 +66,7 @@ def process_fsf(config):
       
       fsf[f"{risk}_pct_moderate_plus"] = fsf[f"{risk}_pct_moderate"] + fsf[f"{risk}_pct_major"] + fsf[f"{risk}_pct_severe"] + fsf[f"{risk}_pct_extreme"]
       fsf[f"{risk}_pct_moderate_plus"] = fsf[f"{risk}_pct_moderate_plus"].fillna(0)
-      fsf[f"{risk}_risk_category"] = pd.qcut(fsf[f"{risk}_pct_moderate_plus"], 3, labels=False, duplicates='drop')
+      fsf[f"{risk}_risk_category_national"] = pd.qcut(fsf_sum[f'{risk}_risk_score'], 3, labels=False, duplicates='drop')
    # fsf["risk_category"] = fsf.risk_category.cat.codes
       fsf_risk_dfs.append(fsf)
    
