@@ -70,7 +70,8 @@ def process_fsf(config):
    # fsf["risk_category"] = fsf.risk_category.cat.codes
       fsf_risk_dfs.append(fsf)
    
-   fsf_risk_features = reduce(lambda df1,df2: pd.merge(df1,df2,on='GEOID'), fsf_risk_dfs)
+   fsf_risk_features = reduce(lambda df1,df2: pd.merge(df1,df2,on='GEOID', how = "outer"), fsf_risk_dfs)
+   fsf_risk_features = fsf_risk_features.fillna(0)
    return fsf_risk_features
 
 if __name__ == "__main__":

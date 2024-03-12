@@ -63,7 +63,7 @@ def add_fs_flood_risk(stops, config):
     paths = config["national"]["fsf_climate_risk"]
     for risk in paths.keys():
         stops[f"{risk}_risk_category_local"] = pd.qcut(stops[f"{risk}_risk_score"], 3, labels=False, duplicates='drop')
-        if len(stops[f"{risk}_risk_category_local"].unique()) < 3:
+        if stops[f"{risk}_risk_category_local"].value_counts().div(stops.shape[0]).min() < .25:
             stops[f"{risk}_risk_category_local"] = stops[f"{risk}_risk_category_national"]
     
     stops = stops.rename(columns={"fire_risk_category_national":'wildfire_risk_category_national',
