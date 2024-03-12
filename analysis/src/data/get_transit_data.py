@@ -8,6 +8,23 @@ from utils.geo import create_extent
 import requests
 import pandas as pd
 
+FEEDS_TO_EXCLUDE = ['f-9-flixbus','f-megabus~us','f-dr-peterpanbuslines','f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle',
+                    'f-d-groometransportation~us','f-dr-coachcompany~ma~us','f-f-viarail~traindecharlevoix','f-brightline~trails','f-drk-seastreak',
+                    'f-dr5x-wwwnicebuscom','f-drk-wwwshorelineeastcom','f-academy~express~staten~island','f-fullington~trailways~ny',
+                    'f-trailways~nyp~ny','f-trailways~adp~ny','f-adirondack~trailways~adu','f-adirondack~trailways~fab','f-catalina~express',
+                    'f-9qh0-anaheim~ca~us','f-chapman~university','f-9q5-airportvaletexpress~ca~us','f-9qb-airportexpressinc~ca~us',
+                    'f-9q9h-stanford~marguerite','f-9qc7-unitransdavis','f-9qf-laketahoe~ca~us','f-nlte~nv~us',
+                    'f-san~benito~county~express~dial~a~ride~paratransit~on~demand~flex','f-turlock~transit~dial~a~ride~flex',
+                    'f-9wv-coloradoshuttle~co~us','f-dsi~co~us','f-gardenofthegods~co~us','f-9xj5sg-universitycoloradoboulder~co~us',
+                    'f-9xh-cme~co~us','f-express-arrow','f-homejames~co~us','f-greenride~co~us','f-university~of~connecticut',
+                    'f-leprechaun~connection','f-adirondack~trailways~adt','f-dq-newyorkshuttle','f-virginia~breeze','f-brightline~fl~us',
+                    'f-dhvrs-bullrunner','f-djq-sunshinebuscompany~fl~us','f-dnh01-cliffshuttles~emoryuniversity',
+                    'f-dn5b-georgiatechtrolley~stingershuttles','f-dp-945963','f-university~of~chicago','f-drt3-yankee','f-drt3-123bc~ma~us',
+                    'f-drs-truenorthtransit~ma~us','f-drt0-limoliner~ma~us','f-drmr-bloombus','f-drm-dattco','f-unh~nh~us',
+                    'f-princeton~tigertransit','f-adi rondack~trailways~adt','f-adirondack~trailways~nyt','f-trailways~phk~ny',
+                    'f-adirondack~trailways~phk','f-newburgh~beacon~shuttle~ny','f-trailways~nyt~ny','f-adirondack~trailways~nyt',
+                    'f-adirondack~trailways~nyu','f-birnie~bus','f-miller~transportation~in~ky','f-9rb-oregonexpressshuttle',
+                    'f-jefferson~mn~us','f-c23p1-seattlechildrenshospitalshuttle','f-c23n-microsoftshuttles','f-snowgoosetransit~wa~us']
 
 def get_feeds_in_msa(minx,miny,maxx,maxy,config):
     """
@@ -79,15 +96,7 @@ def get_transit_feeds(config, msa_id):
     print(bounds)
     feeds = get_feeds_in_msa(bounds.minx[0],bounds.miny[0],bounds.maxx[0],bounds.maxy[0], config)
     feeds = feeds.dropna(subset=['onestop_id'])
-    feeds = feeds[~feeds.onestop_id.isin(['f-9-flixbus','f-megabus~us','f-dr-peterpanbuslines',
-                                                  'f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle',
-                                                  'f-d-groometransportation~us','f-dr-coachcompany~ma~us',
-                                                  'f-f-viarail~traindecharlevoix','f-brightline~trails',
-                                                  'f-drk-seastreak','f-dr5x-wwwnicebuscom','f-drk-wwwshorelineeastcom',
-                                                  'f-academy~express~staten~island','f-fullington~trailways~ny',
-                                                  'f-trailways~nyp~ny','f-trailways~adp~ny','f-adirondack~trailways~adu',
-                                                  'f-adirondack~trailways~fab','f-catalina~express'
-                                                  ])]
+    feeds = feeds[~feeds.onestop_id.isin(FEEDS_TO_EXCLUDE)]
     feeds = feeds.drop_duplicates()
     
     for i,row in feeds.iterrows():

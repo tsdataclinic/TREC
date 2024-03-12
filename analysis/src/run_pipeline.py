@@ -51,9 +51,9 @@ def main():
 
     if opts.overwrite:
         print("Dropping tables")
-        drop_table(config['db_string'],'stop_features')
+        # drop_table(config['db_string'],'stop_features')
         drop_table(config['db_string'],'hospitals')
-        # drop_table(config['db_string'],'cities')
+        drop_table(config['db_string'],'cities_new')
         
     for msa_id in msa_ids:
         try:
