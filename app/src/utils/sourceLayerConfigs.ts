@@ -39,9 +39,9 @@ export function useSourceLayerConfigs(
     output = {
       'Transit Stops': [
         {
-          sourceId: 'stop_features_new',
-          sourceLayer: 'stop_features_new',
-          layerId: 'stop_features_new',
+          sourceId: 'stop_features',
+          sourceLayer: 'stop_features',
+          layerId: 'stop_features',
           layerType: 'circle',
           minzoom: 6,
           maxzoom: 20,
@@ -125,9 +125,9 @@ export function useSourceLayerConfigs(
       ],
       Hospitals: [
         {
-          sourceId: 'hospitals_new',
-          sourceLayer: 'hospitals_new',
-          layerId: 'hospitals_new',
+          sourceId: 'hospitals',
+          sourceLayer: 'hospitals',
+          layerId: 'hospitals',
           layerType: 'symbol',
           minzoom: 6,
           maxzoom: 20,
