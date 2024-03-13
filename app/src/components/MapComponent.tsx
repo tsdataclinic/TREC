@@ -74,6 +74,7 @@ function MapComponent({
               url: layer.rasterURL,
               tileSize: 256
             });
+            
           }
           else if (layer.layerURL && layer.layerURL.includes('geojson')) {
             map.current.addSource(layer.layerName, {
@@ -242,11 +243,11 @@ function MapComponent({
 
       Object.values(layers).forEach((layer) => {
         if (map.current && layer.sourceLayer) {
-          map.current.on('click', layer.sourceLayer, e => {
+          map.current.on('mouseenter', layer.sourceLayer, e => {
             if (!map.current) {
               return;
             }
-            const layerNames = Object.values(layers).map(l => l.layerName);
+            const layerNames = ['City Extents'];
             const features = map.current
               .queryRenderedFeatures(e.point)
               .filter(f => layerNames.includes(f.source));
@@ -275,23 +276,42 @@ function MapComponent({
               return;
             }
 
-            const layerNames = ['City Extents'];
+            const layerNames = Object.values(layers).map(l => l.layerName);
             const features = map.current
               .queryRenderedFeatures(e.point)
               .filter(f => layerNames.includes(f.source));
               if (features.length > 0) {
                 const feature = features[0];
                 if (e.lngLat && feature.properties) {
-                  const setCity = {
-                    msa_id: feature.properties.msa_id,
-                    msa_name: feature.properties.msa_name,
-                    center: [e.lngLat.lng, e.lngLat.lat]
-                  } as CityRecord;
-                  setSelectedCity(setCity)
-                  map.current.flyTo({
-                    center: [e.lngLat.lng, e.lngLat.lat],
-                    zoom: 10.5
-                  });
+                  if (feature.source === 'City Extents') {
+                    const setCity = {
+                      msa_id: feature.properties.msa_id,
+                      msa_name: feature.properties.msa_name,
+                      center: [e.lngLat.lng, e.lngLat.lat]
+                    } as CityRecord;
+                    setSelectedCity(setCity)
+                    map.current.flyTo({
+                      center: [e.lngLat.lng, e.lngLat.lat],
+                      zoom: 10.5
+                    });
+                  } else {
+                    const tooltipNode = document.createElement('div');
+                    const root = createRoot(tooltipNode);
+                    root.render(
+                      <Tooltip
+                        feature={feature}
+                        onDismiss={() => {
+                          tooltipRef.current.remove();
+                        }}
+                        setDetailedRoutes={setDetailedRoutes}
+                      />,
+                    );
+        
+                    tooltipRef.current
+                      .setLngLat(e.lngLat)
+                      .setDOMContent(tooltipNode)
+                      .addTo(map.current);
+                  }
                 }
               }
           });
