@@ -158,11 +158,14 @@ export function useSourceLayerConfigs(
           markers: [],
         },
       ],
-      'FEMA Flood Layer': [
+      'FEMA National Flood Hazard Layer': [
         {
-          sourceId: 'national_fema_raster_combined_clipped',
-          layerId: 'national_fema_raster_combined_clipped',
+          sourceId: 'national_fema_raster_combined-2jbrzb',
+          layerId: 'national_fema_raster_combined-2jbrzb',
+          sourceLayer: 'national_fema_raster_combined-2jbrzb',
           layerType: 'raster',
+          minzoom: 7,
+          maxzoom: 20,
           layoutProperties: [],
           paintProperties: [
             // { name: 'fill-color', value: 'rgba(104, 207, 255, .95)' },

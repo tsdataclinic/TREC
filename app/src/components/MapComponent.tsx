@@ -118,7 +118,9 @@ function MapComponent({
                   type: slConfig.layerType,
                   source: layer.layerName,
                   'source-layer': layer.sourceLayer,
-                }, 'z-index-1');
+                  minzoom: slConfig.minzoom ? slConfig.minzoom : undefined,
+                  maxzoom: slConfig.maxzoom ? slConfig.maxzoom : undefined,
+                }, 'z-index-2');
               }
               else if (layer.layerURL && layer.layerURL.includes('geojson')) {
                 if (layer.layerName === 'Hospitals') {
@@ -240,7 +242,7 @@ function MapComponent({
 
       Object.values(layers).forEach((layer) => {
         if (map.current && layer.sourceLayer) {
-          map.current.on('mouseenter', layer.sourceLayer, e => {
+          map.current.on('click', layer.sourceLayer, e => {
             if (!map.current) {
               return;
             }

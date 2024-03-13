@@ -44,9 +44,9 @@ function Filter({
   return (
     <div
       id="Filter"
-      className="bg-white w-60 h-60 flex flex-col mt-5 mx-auto sm:bottom-16 sm:fixed sm:z-10 sm:right-4 drop-shadow"
+      className="w-60 h-80 flex flex-col justify-between mt-5 mx-auto sm:bottom-16 sm:fixed sm:z-10 sm:right-4 drop-shadow"
     >
-      <div className="grid grid-cols-4 grid-rows-4 h-full p-5">
+      <div className="bg-white grid grid-cols-4 grid-rows-4 h-5/6 p-5">
         <div className="row-span-3">
           <Slider
             value={filters[selectedProperties[0]]}
@@ -71,6 +71,17 @@ function Filter({
             orientation="horizontal"
             label={PROPERTY_LABELS[selectedProperties[1]]}
           />
+        </div>
+      </div>
+      <div className="bg-white mt-5 h-1/6 drop-shadow text-xs">
+        <div>FEMA Flood Hazard</div>
+        <div className="flex flex-row justify-start">
+          <span className="inline-block w-[15px] h-[15px] bg-[#808080] border-[1px] border-black"></span>
+          1% chance of exceeding 100-year flood
+        </div>
+        <div className="flex flex-row justify-start">
+        <span className="inline-block w-[15px] h-[15px] bg-white border-[1px] border-black"></span>
+          0.2% chance of exceeding 500-year flood
         </div>
       </div>
     </div>
