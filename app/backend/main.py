@@ -104,7 +104,7 @@ async def get_route_summary(msa_id: str, route: str):
     stops_on_route_result = cursor.fetchall()
     summary_values = [0,0,0]
     for s in stops_on_route_result:
-      summary_values[s[0]] = s[1]
+      summary_values[int(s[0])] = s[1]
     output[col] = summary_values
 
   cursor.close()
