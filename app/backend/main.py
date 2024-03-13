@@ -58,7 +58,7 @@ async def get_route_summary(msa_id: str, route: str):
   col_names = [
     "flood_risk_category_local",
     "heat_risk_category_local",
-    "fire_risk_category_national",
+    "wildfire_risk_category_national",
     "access_to_hospital_category",
     "job_access_category",
     "worker_vulnerability_category",
@@ -70,7 +70,7 @@ async def get_route_summary(msa_id: str, route: str):
     "route": route,
     "flood_risk_category_local": [0, 0, 0],
     "heat_risk_category_local": [0, 0, 0],
-    "fire_risk_category_national": [0, 0, 0],
+    "wildfire_risk_category_national": [0, 0, 0],
     "access_to_hospital_category": [0, 0, 0],
     "job_access_category": [0, 0, 0],
     "worker_vulnerability_category": [0, 0, 0],
@@ -82,9 +82,9 @@ async def get_route_summary(msa_id: str, route: str):
   agency_query = f"""
       SELECT
         agencies_serviced
-      FROM public.stop_features_new
-      WHERE '{route}' = any(public.stop_features_new.routes_serviced)
-      AND public.stop_features_new.city = '{msa_id}'
+      FROM public.stop_features
+      WHERE '{route}' = any(public.stop_features.routes_serviced)
+      AND public.stop_features.city = '{msa_id}'
     """
   cursor.execute(agency_query)
   agency = cursor.fetchone()[0]
@@ -95,7 +95,7 @@ async def get_route_summary(msa_id: str, route: str):
     stops_on_route_query = f"""
       SELECT
         {col}, count({col})
-      FROM public.stop_features_new
+      FROM public.stop_features
       WHERE '{route}' = any(routes_serviced)
       AND city = '{msa_id}'
       GROUP BY {col}
@@ -121,7 +121,7 @@ async def stops_on_route(cities: Union[List[str], None] = Query(default=None), r
     SELECT
       stop_id,
       routes_serviced
-    FROM public.stop_features_new 
+    FROM public.stop_features 
     WHERE
       '{routes[0]}'::text = ANY(routes_serviced)
       AND 
@@ -149,12 +149,12 @@ async def get_all_available_routes():
 
   routes_query = f"""
     SELECT
-      DISTINCT unnest(public.stop_features_new.routes_serviced) AS route,
-      public.stop_features_new.route_type,
+      DISTINCT unnest(public.stop_features.routes_serviced) AS route,
+      public.stop_features.route_type,
       public.cities.msa_name,
-      public.stop_features_new.city as msa_id
-    FROM public.stop_features_new 
-    JOIN public.cities ON public.stop_features_new.city = public.cities.msa_id
+      public.stop_features.city as msa_id
+    FROM public.stop_features 
+    JOIN public.cities ON public.stop_features.city = public.cities.msa_id
     ORDER by route asc
   """
   
@@ -199,16 +199,16 @@ async def download_city_data(msa_id: str):
       stop_name,
       flood_risk_category_local,
       heat_risk_category_local,
-      fire_risk_category_national,
+      wildfire_risk_category_national,
       access_to_hospital_category,
       job_access_category,
       worker_vulnerability_category,
-      ST_X(public.stop_features_new.geometry) as longitude,
-      ST_Y(public.stop_features_new.geometry) as latitude,
+      ST_X(public.stop_features.geometry) as longitude,
+      ST_Y(public.stop_features.geometry) as latitude,
       msa_name as city,
       msa_id as city_msa_id
-    FROM public.stop_features_new, public.cities
-    WHERE public.stop_features_new.city = '{msa_id}'
+    FROM public.stop_features, public.cities
+    WHERE public.stop_features.city = '{msa_id}'
     AND public.cities.msa_id ='{msa_id}'
   """
 
@@ -229,7 +229,7 @@ async def download_city_data(msa_id: str):
       'stop_name',
       'flood_risk_category_local',
       'heat_risk_category_local',
-      'fire_risk_category_national',
+      'wildfire_risk_category_national',
       'access_to_hospital_category',
       'job_access_category',
       'worker_vulnerability_category',
