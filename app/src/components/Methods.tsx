@@ -21,6 +21,14 @@ const MethodsPage = () => {
                     Flood and heat risks are bucketed relative to the local <a href="https://en.wikipedia.org/wiki/Metropolitan_statistical_area">Metro Area</a>, and Wildfire risk is bucketed nationally.
                 </p>
                 <p>
+                    <p><b>Floodplains</b></p>
+                    The floodplains we display come from the <a href="https://fema.gov">Federal Emergency Management Agency</a>'s <a href="https://fema.gov/flood-maps/national-flood-hazard-layer">National Flood Hazard Layer</a>. We process a <a href="https://fema.maps.arcgis.com/home/item.html?id=2b245b7f816044d7a779a61a5844be23">simplified version</a> of this data into a national raster file for displaying on TREC.
+                    
+                    The final raster contains two levels of flood risk: a higher risk 1% (100-year) flood risk category and a lower risk 0.2% (500-year) risk category.
+
+                    Areas outside of these categories are those designated as having minimal flood hazard.
+                </p>
+                <p>
                     <p><b>Hospital Access</b></p>
                     We calculate walk sheds, using walk graphs from <a href="https://www.openstreetmap.org/about">OSM</a> and assumptions on average walking pace, centered on each hospital in the <a href="https://www.usgs.gov/u.s.-board-on-geographic-names/download-gnis-data">GNIS Database</a>. Stops within a 10 minute walk are categorized as high access, those between 10-20 minutes as medium access, and all others as low access.
                 </p>
