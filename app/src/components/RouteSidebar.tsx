@@ -34,7 +34,7 @@ function RouteSummaryPane({
                 <div className="flex flex-col pl-7 space-y-2">
                     {status === 'loading' ? 'Loading...' : detailedRoutes.routeType}
                 </div>
-                <div className="flex flex-col pl-7 space-y-2">
+                <div className="flex flex-col pl-7 space-y-2 w-20">
                     {status === 'loading' ? 'Loading...' : routeSummary.agency }
                 </div>
             </div>
