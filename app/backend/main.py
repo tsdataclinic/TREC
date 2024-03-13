@@ -83,7 +83,7 @@ async def get_route_summary(msa_id: str, route: str):
       SELECT
         agencies_serviced
       FROM public.stop_features
-      WHERE '{route}' = any(public.stop_features.routes_serviced)
+      WHERE '{route}' = any(string_to_array(public.stop_features.routes_serviced_str, ','))
       AND public.stop_features.city = '{msa_id}'
     """
   cursor.execute(agency_query)
@@ -96,7 +96,7 @@ async def get_route_summary(msa_id: str, route: str):
       SELECT
         {col}, count({col})
       FROM public.stop_features
-      WHERE '{route}' = any(routes_serviced)
+      WHERE '{route}' = any(string_to_array(public.stop_features.routes_serviced_str, ','))
       AND city = '{msa_id}'
       GROUP BY {col}
     """
@@ -123,14 +123,14 @@ async def stops_on_route(cities: Union[List[str], None] = Query(default=None), r
       routes_serviced
     FROM public.stop_features 
     WHERE
-      '{routes[0]}'::text = ANY(routes_serviced)
+      '{routes[0]}'::text = ANY(string_to_array(public.stop_features.routes_serviced_str, ','))
       AND 
       '{cities[0]}' = city
   """
 
   for i in range(1, len(cities)):
     stops_query += f"""
-      OR ('{routes[i]}'::text = ANY(routes_serviced) AND '{cities[i]}' = city)
+      OR ('{routes[i]}'::text = ANY(string_to_array(public.stop_features.routes_serviced_str, ',')) AND '{cities[i]}' = city)
     """
   
   cursor.execute(stops_query)
@@ -149,7 +149,7 @@ async def get_all_available_routes():
 
   routes_query = f"""
     SELECT
-      DISTINCT unnest(public.stop_features.routes_serviced) AS route,
+      DISTINCT unnest(string_to_array(public.stop_features.routes_serviced_str, ',')) AS route,
       public.stop_features.route_type,
       public.cities.msa_name,
       public.stop_features.city as msa_id
