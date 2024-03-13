@@ -56,7 +56,7 @@ export const PROPERTY_LABELS: Record<string, string> = {
   worker_vulnerability_category: 'Vulnerable workers',
   flood_risk_category_local: 'Flood Risk',
   heat_risk_category_local: 'Heat Risk',
-  fire_risk_category_national: 'Wildfire Risk',
+  wildfire_risk_category_national: 'Wildfire Risk',
 };
 
 // TODO - use reducer
@@ -110,7 +110,7 @@ export default function MainPage(): JSX.Element {
   const [availableProperties, setAvailableProperties] = useState<Set<string>>(
     new Set([
       'flood_risk_category_local',
-      'fire_risk_category_national',
+      'wildfire_risk_category_national',
       'heat_risk_category_local',
       'access_to_hospital_category',
       'job_access_category',
@@ -123,7 +123,7 @@ export default function MainPage(): JSX.Element {
   ]);
   const [filters, setFilters] = useState<Record<string, any>>({
     flood_risk_category_local: [0, 2],
-    fire_risk_category_national: [0, 2],
+    wildfire_risk_category_national: [0, 2],
     heat_risk_category_local: [0, 2],
     access_to_hospital_category: [0, 2],
     job_access_category: [0, 2],

@@ -127,11 +127,11 @@ function Tooltip({ feature, onDismiss, setDetailedRoutes }: Props): JSX.Element 
             riskLevel={properties['heat_risk_category_local']}
           />
         </DataRow>
-        <DataRow label={PROPERTY_LABELS['fire_risk_category_national']}>
+        <DataRow label={PROPERTY_LABELS['wildfire_risk_category_national']}>
           <RiskSquares
             color="blue"
             maxRisk={2}
-            riskLevel={properties['fire_risk_category_national']}
+            riskLevel={properties['wildfire_risk_category_national']}
           />
         </DataRow>
         <DataRow label={PROPERTY_LABELS['access_to_hospital_category']}>

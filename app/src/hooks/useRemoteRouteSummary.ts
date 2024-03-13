@@ -8,7 +8,7 @@ export type RouteSummaryResponse = {
     "count": number,
     "flood_risk_category_local": [number, number, number],
     "heat_risk_category_local": [number, number, number],
-    "fire_risk_category_national": [number, number, number],
+    "wildfire_risk_category_national": [number, number, number],
     "access_to_hospital_category": [number, number, number],
     "job_access_category": [number, number, number],
     "worker_vulnerability_category": [number, number, number],
