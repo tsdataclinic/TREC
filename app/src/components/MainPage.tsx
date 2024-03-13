@@ -84,6 +84,14 @@ const AVAILABLE_LAYERS: Record<string, Layer> = {
     sourceLayer: 'cities-extents',
     isVisible: true,
     hideToggle: true,
+  },
+  '4': {
+    id: 4,
+    layerName: 'FEMA National Flood Hazard Layer',
+    rasterURL: `mapbox://kaushik121.71rs28el`,
+    sourceLayer: 'national_fema_raster_combined-2jbrzb',
+    isVisible: false,
+    hideToggle: false,
   }
 };
 
