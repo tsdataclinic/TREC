@@ -73,15 +73,19 @@ function Filter({
           />
         </div>
       </div>
-      <div className="bg-white mt-5 h-1/6 drop-shadow text-xs">
-        <div>FEMA Flood Hazard</div>
-        <div className="flex flex-row justify-start">
-          <span className={`inline-block w-[15px] h-[15px] bg-[#52dfff] border-[1px] border-black`}></span>
-          1% chance of exceeding 100-year flood
+      <div className="p-3 bg-white mt-5 drop-shadow text-[10px] flex flex-col text-center ">
+        <div className="font-bold">
+          FEMA National Flood Hazard Layer
         </div>
-        <div className="flex flex-row justify-start">
-        <span className={`inline-block w-[15px] h-[15px] bg-[#d4f7ff] border-[1px] border-black`}></span>
-          0.2% chance of exceeding 500-year flood
+        <div>
+          <div className="flex flex-row justify-start">
+            <span className={`inline-block w-[15px] h-[15px] bg-[#52dfff] border-[1px] border-black`}></span>
+            <p className="ml-1">1% chance of exceeding 100-year flood</p>
+          </div>
+          <div className="flex flex-row justify-start">
+          <span className={`inline-block w-[15px] h-[15px] bg-[#d4f7ff] border-[1px] border-black`}></span>
+            <p className="ml-1">0.2% chance of exceeding 500-year flood</p>
+          </div>
         </div>
       </div>
     </div>
