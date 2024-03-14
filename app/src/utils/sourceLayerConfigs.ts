@@ -11,6 +11,9 @@ export enum COLORS {
   'darkgreen' = 'rgba(100,165,189,1)',
   'mediumgreen' = 'rgba(150,195,196,1)',
   'lightgreen' = 'rgba(210,237,242,1)',
+  'darkblue' = 'rgba(0,150,184,1)',
+  'mediumblue' = 'rgba(82, 223, 255,1)',
+  'lightblue' = 'rgba(212, 247, 255,1)',
 }
 
 export type SLConfigType = {
@@ -168,7 +171,14 @@ export function useSourceLayerConfigs(
           maxzoom: 20,
           layoutProperties: [],
           paintProperties: [
-            // { name: 'fill-color', value: 'rgba(104, 207, 255, .95)' },
+            { name: 'raster-color', value: [
+              'case',
+              ['==', ['raster-value'], 0],
+              `${COLORS.mediumblue}`,
+              ['==', ['raster-value'], 1],
+              `${COLORS.lightblue}`,
+              `${COLORS.mediumblue}`,
+            ]},
           ],
           markers: [],
         },

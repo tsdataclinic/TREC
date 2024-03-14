@@ -76,11 +76,11 @@ function Filter({
       <div className="bg-white mt-5 h-1/6 drop-shadow text-xs">
         <div>FEMA Flood Hazard</div>
         <div className="flex flex-row justify-start">
-          <span className="inline-block w-[15px] h-[15px] bg-[#808080] border-[1px] border-black"></span>
+          <span className={`inline-block w-[15px] h-[15px] bg-[#52dfff] border-[1px] border-black`}></span>
           1% chance of exceeding 100-year flood
         </div>
         <div className="flex flex-row justify-start">
-        <span className="inline-block w-[15px] h-[15px] bg-white border-[1px] border-black"></span>
+        <span className={`inline-block w-[15px] h-[15px] bg-[#d4f7ff] border-[1px] border-black`}></span>
           0.2% chance of exceeding 500-year flood
         </div>
       </div>
