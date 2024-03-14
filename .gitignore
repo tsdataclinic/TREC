@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 .DS_Store
-config_local.json
 ###### create react-app 
 
 # dependencies
@@ -159,12 +158,13 @@ config_local.json
 analysis/cache/
 analysis/src/cache/
 analysis/data/
-analysis/notebooks/cache/
-analysis/notebooks/
+analysis/test_notebooks/cache/
+analysis/test_notebooks/
 /app/public/results/*
 /app/public/results/*/*
 build.tar.gz
-
+pipeline_errors.txt
+config_local.json
 *.csv
 *.sql
 *.tiff
