@@ -151,10 +151,10 @@ async def get_all_available_routes():
     SELECT
       DISTINCT unnest(string_to_array(public.stop_features.routes_serviced_str, ',')) AS route,
       public.stop_features.route_type,
-      public.cities.msa_name,
+      public.cities_new.msa_name,
       public.stop_features.city as msa_id
     FROM public.stop_features 
-    JOIN public.cities ON public.stop_features.city = public.cities.msa_id
+    JOIN public.cities_new ON public.stop_features.city = public.cities_new.msa_id
     ORDER by route asc
   """
   
@@ -207,9 +207,9 @@ async def download_city_data(msa_id: str):
       ST_Y(public.stop_features.geometry) as latitude,
       msa_name as city,
       msa_id as city_msa_id
-    FROM public.stop_features, public.cities
+    FROM public.stop_features, public.cities_new
     WHERE public.stop_features.city = '{msa_id}'
-    AND public.cities.msa_id ='{msa_id}'
+    AND public.cities_new.msa_id ='{msa_id}'
   """
 
   cursor.execute(city_query)
@@ -259,11 +259,11 @@ async def get_cities_extents():
       SELECT
       jsonb_build_object(
         'type', 'Feature',
-        'geometry', ST_AsGeoJSON(ST_Buffer(public.cities.geometry::geography, 24000)::geometry, 4326)::jsonb,
-        'properties', jsonb_build_object('msa_id', public.cities.msa_id, 'msa_name', public.cities.msa_name)
+        'geometry', ST_AsGeoJSON(ST_Buffer(public.cities_new.geometry::geography, 24000)::geometry, 4326)::jsonb,
+        'properties', jsonb_build_object('msa_id', public.cities_new.msa_id, 'msa_name', public.cities_new.msa_name)
       ) AS feature
-      FROM public.cities
-      GROUP BY public.cities.geometry, public.cities.msa_id, public.cities.msa_name
+      FROM public.cities_new
+      GROUP BY public.cities_new.geometry, public.cities_new.msa_id, public.cities_new.msa_name
     ) AS features;
   """
 
@@ -283,7 +283,7 @@ async def get_all_cities():
       msa_id,
       msa_name,
       ARRAY[ST_X(geometry), ST_Y(geometry)] AS coordinates
-    FROM public.cities
+    FROM public.cities_new
     ORDER by msa_name asc
   """
 
