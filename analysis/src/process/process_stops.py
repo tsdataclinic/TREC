@@ -46,7 +46,7 @@ def make_stops(folder_path):
 
     # Get route types
     routes["route_id"] = routes["route_id"].astype(str)
-    routes_types = routes[["route_id", "route_type", "agency_id", "agency_name"]].drop_duplicates()
+    routes_types = routes[["route_id","route_short_name", "route_type", "agency_id", "agency_name"]].drop_duplicates()
     routes_types = routes_types.replace({"route_type" : ROUTE_DICT})
     
     # Get most common services for each line
@@ -57,7 +57,7 @@ def make_stops(folder_path):
     
     # Final df
     trips_with_stops = trips_to_include.merge(stop_times)
-    stops_with_trips = trips_with_stops.merge(stops).merge(routes_types)[["route_id", "stop_id", "route_type", "stop_name", "stop_lat", "stop_lon", "agency_id", "agency_name"]].drop_duplicates().reset_index(drop = True)
+    stops_with_trips = trips_with_stops.merge(stops).merge(routes_types)[["route_id", "stop_id", "route_type","route_short_name", "stop_name", "stop_lat", "stop_lon", "agency_id", "agency_name"]].drop_duplicates().reset_index(drop = True)
     stops_with_trips = stops_with_trips[stops_with_trips.route_type=='Bus']
 
     # Add geometry
@@ -118,13 +118,16 @@ def process_stops(config, msa_id, out=False):
             stops = tag_with_tracts(stops, tract_path)
             
             stops_out = pd.concat([stops_out, stops])
-        except:
-            pass
+        except Exception as e:
+            print(e)
     
     stops_out = stops_out.reset_index(drop=True)
     
     # Routes as list
-    routes_list = stops_out.groupby('stop_id')['route_short_name'].apply(list).reset_index().rename(columns={'route_short_name':'routes_serviced'})
+    if 'route_short_name' in stops_out.columns:
+        routes_list = stops_out.groupby('stop_id')['route_short_name'].apply(list).reset_index().rename(columns={'route_short_name':'routes_serviced'})
+    else:
+        routes_list = stops_out.groupby('stop_id')['route_id'].apply(list).reset_index().rename(columns={'route_id':'routes_serviced'})
     agencies_list = stops_out.groupby('stop_id')['agency_id'].apply(list).reset_index().rename(columns={'agency_id':'agency_ids_serviced'})
     agencies_name_list = stops_out.groupby('stop_id')['agency_name'].apply(list).reset_index().rename(columns={'agency_name' : 'agencies_serviced'})
 

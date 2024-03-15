@@ -53,7 +53,7 @@ def main():
         print("Dropping tables")
         drop_table(config['db_string'],'stop_features')
         drop_table(config['db_string'],'hospitals')
-        # drop_table(config['db_string'],'cities')
+        drop_table(config['db_string'],'cities')
         
     for msa_id in msa_ids:
         try:
@@ -61,6 +61,7 @@ def main():
             feeds_path = f"{config['base_path']}/cities/{msa_id}/transit_feeds/"
             if os.path.exists(feeds_path) and opts.overwrite:
                 shutil.rmtree(feeds_path)
+                # pass
             if not os.path.exists(output_path) or opts.overwrite:
                 print(f"Running Data pipeline for: {msa_id}")
                 get_raw_data(config, msa_id)

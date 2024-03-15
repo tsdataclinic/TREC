@@ -56,16 +56,21 @@ def add_fs_flood_risk(stops, config):
     
     stops = stops.merge(fsf_feature[['GEOID','flood_risk_score','flood_pct_moderate_plus','flood_risk_category_national',
                                      'heat_risk_score','heat_pct_moderate_plus','heat_risk_category_national',
-                                     'wildfire_risk_score','wildfire_pct_moderate_plus','wildfire_risk_category_national',
+                                     'fire_risk_score','fire_pct_moderate_plus','fire_risk_category_national',
                                      ]],how='left',
                         left_on = "GEOID_2020", right_on = "GEOID")
     
     paths = config["national"]["fsf_climate_risk"]
     for risk in paths.keys():
         stops[f"{risk}_risk_category_local"] = pd.qcut(stops[f"{risk}_risk_score"], 3, labels=False, duplicates='drop')
-        if len(stops[f"{risk}_risk_category_local"].unique()) < 3:
+        min_pct = stops[f"{risk}_risk_category_local"].value_counts().div(stops.shape[0]).min()
+        num_categories = len(stops[f"{risk}_risk_category_local"].unique())
+        if num_categories < 3 or min_pct < 0.1:
             stops[f"{risk}_risk_category_local"] = stops[f"{risk}_risk_category_national"]
-
+    
+    stops = stops.rename(columns={"fire_risk_category_national":'wildfire_risk_category_national',
+                                  "fire_risk_category_local":'wildfire_risk_category_local',
+                                  "fire_risk_score":'wildfire_risk_score'})
     return stops
 
 

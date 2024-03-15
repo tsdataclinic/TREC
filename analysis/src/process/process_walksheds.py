@@ -14,8 +14,29 @@ ox.__version__
 import pickle
 import json
 
+def add_buffer(nodes, polygons, buffer_dist):
+    projected_crs = "EPSG:3857"  # Choose an appropriate projected CRS for your data
+    print(f"Adding buffer: {buffer_dist}")
+    walkshed_lines = polygons.loc[polygons.geometry.geometry.type != 'Polygon']
+    unique_nodes = walkshed_lines.osmid.unique()
+    isochrone_polys = []
 
-def fix_walkshed(graph, polygons):
+    for n in unique_nodes:
+        buffer = nodes[nodes.osmid == n].geometry.buffer(buffer_dist)
+        node_points = nodes.sjoin(gpd.GeoDataFrame(geometry=buffer, crs=projected_crs), how='inner', predicate='intersects').geometry
+        bounding_poly = gpd.GeoSeries(node_points).unary_union.convex_hull
+        isochrone_polys.append(bounding_poly)
+
+    walksheds = gpd.GeoDataFrame(geometry=isochrone_polys, crs=projected_crs)
+    walksheds['osmid'] = unique_nodes
+    walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds, on='osmid').set_geometry(col='geometry')
+    poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
+    poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True)
+    
+    return poly_fixed
+
+
+def fix_walkshed(graph, polygons, buffer_dist=1250):
     """
     Fixes walksheds for instances where the walk graph around a stop is disconnected. 
     Manual fix where a buffer of 0.01125 degrees around a stop is used. TODO: Better solution to issue
@@ -31,31 +52,21 @@ def fix_walkshed(graph, polygons):
     GeoDataFrame
         Walkshed polygon with lines and points replaced by polygons
     """
+    
     projected_crs = "EPSG:3857"  # Choose an appropriate projected CRS for your data
     original_crs = polygons.crs
     nodes = ox.graph_to_gdfs(graph, nodes=True, edges=False).reset_index().set_crs(original_crs).to_crs(projected_crs)
     polygons = polygons.to_crs(projected_crs)
 
-    walkshed_lines = polygons.loc[polygons.geometry.geometry.type != 'Polygon']
-    unique_nodes = walkshed_lines.osmid.unique()
-    isochrone_polys = []
-
     # The buffer distance should be set according to the unit of the projected CRS
-    buffer_distance = 1250  # Example value; set according to your needs
+    buffer_distance = buffer_dist  # Example value; set according to your needs
+    poly_fixed = add_buffer(nodes, polygons, buffer_distance)
+    while len(poly_fixed.loc[poly_fixed.geometry.geometry.type != 'Polygon']) > 0:
+        buffer_distance = buffer_distance+250
+        poly_fixed = add_buffer(nodes, poly_fixed, buffer_distance)
     
-    for n in unique_nodes:
-        buffer = nodes[nodes.osmid == n].geometry.buffer(buffer_distance)
-        node_points = nodes.sjoin(gpd.GeoDataFrame(geometry=buffer, crs=projected_crs), how='inner', predicate='intersects').geometry
-        bounding_poly = gpd.GeoSeries(node_points).unary_union.convex_hull
-        isochrone_polys.append(bounding_poly)
+    poly_fixed = poly_fixed.to_crs(original_crs)
 
-    walksheds = gpd.GeoDataFrame(geometry=isochrone_polys, crs=projected_crs)
-    walksheds['osmid'] = unique_nodes
-
-    walkshed_lines_fixed = walkshed_lines.drop(columns=['geometry']).merge(walksheds, on='osmid').set_geometry(col='geometry')
-    poly_a = polygons[~polygons.id.isin(walkshed_lines_fixed.id)]
-    poly_fixed = pd.concat([poly_a, walkshed_lines_fixed], ignore_index=True).to_crs(original_crs)
-    
     return poly_fixed
 
 

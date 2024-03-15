@@ -25,7 +25,7 @@ def create_cities_metadata(config, msa_id):
     msa_gdf = gpd.GeoDataFrame(msa_data, geometry=centroid.geometry)
     
     if config["db_string"] != "":
-        write_table_to_db(config["db_string"],msa_gdf,'cities_new')
+        write_table_to_db(config["db_string"],msa_gdf,'cities')
 
 
 
