@@ -1,3 +1,5 @@
+This project is no longer maintained by Two Sigma. We continue to encourage independent development.
+
 <p align="center">
   <img src="public/images/site-logo.png" width="400"/>
 </p>
